@@ -13,8 +13,21 @@ func (u URLBuilder) APIV1() APIV1 {
     return APIV1{URL: "https://api.godaddy.com/v1"}
 }
 
-type domainsEndpoint struct {
+// APIV1 does a thing
+type APIV1 struct {
     URL string
+}
+
+// Domains does a thing
+func (a APIV1) Domains() DomainsEndpoint {
+    e := domainsEndpoint{URL: a.URL + "/domains"}
+    return e;
+}
+
+// Domain does a thing
+func (a APIV1) Domain(d string) DomainsEndpoint {
+    e := domainsEndpoint{URL: a.URL + "/domains/" + d}
+    return e;
 }
 
 // DomainsEndpoint makes domainsEndpoint public
@@ -22,6 +35,10 @@ type DomainsEndpoint interface {
     Agreements() string
     Available() string
     Contacts() DomainContacts
+}
+
+type domainsEndpoint struct {
+    URL string
 }
 
 func (d domainsEndpoint) Agreements() string {
@@ -47,21 +64,4 @@ func (dc domainContacts) Validate() string {
 // DomainContacts does a thing
 type DomainContacts interface{
     Validate() string
-}
-
-// APIV1 does a thing
-type APIV1 struct {
-    URL string
-}
-
-// Domains does a thing
-func (a APIV1) Domains() DomainsEndpoint {
-    e := domainsEndpoint{URL: a.URL + "/domains"}
-    return e;
-}
-
-// Domain does a thing
-func (a APIV1) Domain(d string) DomainsEndpoint {
-    e := domainsEndpoint{URL: a.URL + "/domains/" + d}
-    return e;
 }
