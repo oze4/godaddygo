@@ -37,8 +37,3 @@ var dnsRecordTypes = [...]string{
 func (drt DNSRecordType) String() string {
 	return dnsRecordTypes[drt-1]
 }
-
-func lazy() string {
-	recerd := A
-	return recerd.String()
-}
