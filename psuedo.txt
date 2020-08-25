@@ -1,8 +1,0 @@
-- Client
-  - Initialize two types of clients
-    - one for the OTE godaddy api url 
-      -  https://api.ote-godaddy.com
-    - one for prod godaddy api url
-      - https://api.godaddy.com
-
-- Structs for each 'endpoint' https://developer.godaddy.com/doc
