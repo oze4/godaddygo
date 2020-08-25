@@ -2,3 +2,8 @@ pkg/endpoints/
 bin/
 psuedo.txt
 __test/
+
+# Temporary
+pkg/
+internal/
+cmd/
