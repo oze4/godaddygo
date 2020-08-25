@@ -9,18 +9,21 @@ type domainsEndpoint struct {
     URL string
 }
 
+// DomainsEndpoint makes domainsEndpoint public
+type DomainsEndpoint interface {}
+
 type stepThree struct {
     URL string
 }
 
 // Domains does a thing
-func (a APIV1) Domains() domainsEndpoint {
+func (a APIV1) Domains() DomainsEndpoint {
     e := domainsEndpoint{URL: a.URL + "/domains"}
     return e;
 }
 
 // Domain does a thing
-func (a APIV1) Domain(d string) domainsEndpoint {
+func (a APIV1) Domain(d string) DomainsEndpoint {
     e := domainsEndpoint{URL: a.URL + "/domains/" + d}
     return e;
 }
