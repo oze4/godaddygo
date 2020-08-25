@@ -1,5 +1,8 @@
 package godaddygo
 
+// URLBuilder struct
+type URLBuilder struct{}
+
 // APIV1 does a thing
 type APIV1 struct {
     URL string
@@ -14,6 +17,16 @@ type DomainsEndpoint interface {}
 
 type stepThree struct {
     URL string
+}
+
+// NewURLBuilder returns a new URLBuilder struct
+func NewURLBuilder() URLBuilder {
+    return URLBuilder{}
+}
+
+// APIV1 return api v1 endpoints
+func (u URLBuilder) APIV1() APIV1 {
+    return APIV1{URL: "https://api.godaddy.com/v1"}
 }
 
 // Domains does a thing
