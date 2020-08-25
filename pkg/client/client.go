@@ -1,4 +1,4 @@
-package godaddygo
+package client
 
 // GDGClient doe a thing
 func GDGClient() {
