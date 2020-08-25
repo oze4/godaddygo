@@ -1,3 +1,4 @@
 pkg/endpoints/
 bin/
 psuedo.txt
+__test/
