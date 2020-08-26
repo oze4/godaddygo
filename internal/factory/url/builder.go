@@ -13,14 +13,14 @@ func NewBuilder() Builder {
 // Production return production API endpoints
 func (b Builder) Production() Production {
 	return Production{
-		GoDaddy{URL: "https://api.godaddy.com"},
+		GoDaddy{url: "https://api.godaddy.com"},
 	}
 }
 
 // OTE returns development API endpoints
 func (b Builder) OTE() OTE {
 	return OTE{
-		GoDaddy{URL: "https://api.ote-godaddy.com"},
+		GoDaddy{url: "https://api.ote-godaddy.com"},
 	}
 }
 
@@ -32,7 +32,7 @@ type Production struct {
 // V1 returns the V1 section of the GoDaddy API
 func (p Production) V1() V1 {
 	return V1 {
-		GoDaddy{URL: p.URL + "/v1"},
+		GoDaddy{url: p.url + "/v1"},
 	}
 }
 

@@ -14,13 +14,22 @@ type Domain struct {
 // Contacts builds out the contacts piece of the URL
 func (d Domain) Contacts() GoDaddy {
 	// return d.url + "/contacts"
-	return GoDaddy{URL: d.URL, DomainName: d.DomainName}
+	return GoDaddy{url: d.url, domainName: d.domainName}
 }
 
 // Privacy builds out the privacy piece of the URL
 func (d Domain) Privacy() Privacy {
 	// return Privacy{url: d.url + "/privacy"}
 	return Privacy{
-		GoDaddy{URL: d.URL + "/privacy", DomainName: d.DomainName},
+		GoDaddy{url: d.url + "/privacy", domainName: d.domainName},
 	}
+}
+
+func a() {
+	u := NewBuilder().Production().V1().Domain("ostrike.com")
+	t(u.GoDaddy)
+}
+
+func t(g GoDaddy) {
+
 }

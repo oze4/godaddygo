@@ -15,8 +15,8 @@ type V1 struct {
 func (a V1) Domain(d string) Domain {
     return Domain{
 		GoDaddy{
-			URL: a.URL + "/domains/", 
-			DomainName: d,
+			url: a.url + "/domains/", 
+			domainName: d,
 		},
 	}
 }

@@ -5,7 +5,6 @@ import (
 )
 
 // NewClient creates a new GoDaddy client.
-func NewClient(apiKey, apiSecret, apiMode string) godaddy.Client {
-    opts := godaddy.NewOptions(apiKey, apiSecret, apiMode)
-    return godaddy.Client{Options: opts}
+func NewClient(apiKey, apiSecret string) godaddy.Client {
+    return godaddy.NewClient(apiKey, apiSecret)
 }
