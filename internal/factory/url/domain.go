@@ -1,19 +1,19 @@
 package url
 
-// DomainEndpoint makes domainEndpoint public
-type DomainEndpoint interface {
+// Domain makes domainEndpoint public
+type Domain interface {
 	Contacts() string
 	Privacy() Privacy
 }
 
-type domainEndpoint struct {
+type domain struct {
 	url string
 }
 
-func (d domainEndpoint) Contacts() string {
+func (d domain) Contacts() string {
 	return d.url + "/contacts"
 }
 
-func (d domainEndpoint) Privacy() Privacy {
+func (d domain) Privacy() Privacy {
 	return privacy{url: d.url + "/privacy"}
 }

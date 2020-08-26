@@ -3,6 +3,6 @@ psuedo.txt
 __test/
 
 # Temporary
-pkg/
+#pkg/
 #internal/
 cmd/
