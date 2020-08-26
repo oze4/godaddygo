@@ -4,5 +4,5 @@ __test/
 
 # Temporary
 pkg/
-internal/
+#internal/
 cmd/
