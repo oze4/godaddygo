@@ -6,20 +6,24 @@ package url
 //    Domains() Domains
 //}
 
-// APIV1 represents GoDaddy's API version 1
-type APIV1 struct {
-	url string
+// V1 represents GoDaddy's API version 1
+type V1 struct {
+	GoDaddy
 }
 
 // Domain is most likely what you're looking for. It allows you to modify domains you control
-func (a APIV1) Domain(d string) Domain {
-    e := Domain{url: a.url + "/domains/" + d}
-    return e
+func (a V1) Domain(d string) Domain {
+    return Domain{
+		GoDaddy{
+			URL: a.URL + "/domains/", 
+			DomainName: d,
+		},
+	}
 }
 
 // Domains is meant for general stuff and does not require authentication (TODO: verify that)
 // Like searching for available domains, or viewing public info on existing domains.
-func (a APIV1) Domains() Domains {
-	e := Domains{url: a.url + "/domains"}
-	return e
-}
+//func (a V1) Domains() Domains {
+//	e := Domains{url: a.url + "/domains"}
+//	return e
+//}
