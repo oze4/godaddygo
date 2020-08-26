@@ -1,8 +1,9 @@
 package url
 
 // Privacy is a thing
-type Privacy interface{}
+// type Privacy interface{}
 
-type privacy struct {
+// Privacy is a thing
+type Privacy struct {
 	url string
 }
