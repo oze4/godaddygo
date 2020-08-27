@@ -1,10 +1,5 @@
 package core
 
-// API specifies the production base URL for the GoDaddy API (https://api.godaddy.com)
-// type API interface {
-// 	V1() V1
-// }
-
 // APIInterface specifies the production base URL for the GoDaddy API (https://api.godaddy.com)
 type APIInterface interface {
 	V1Getter
@@ -25,9 +20,9 @@ func (a *api) V1() V1Interface {
 func NewProduction(key, secret string) APIInterface {
 	return &api{
 		&request{
-			apiKey: key,
+			apiKey:    key,
 			apiSecret: secret,
-			url: "https://api.godaddy.com",
+			url:       "https://api.godaddy.com",
 		},
 	}
 }

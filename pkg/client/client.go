@@ -15,12 +15,12 @@ type Client struct {
 }
 
 // NewProduction targets GoDaddy's production API (https://api.godaddy.com)
-func (c Client) NewProduction() core.API {
+func (c *Client) NewProduction() core.APIInterface {
 	return core.NewProduction(c.APIKey, c.APISecret)
 }
 
 // NewDevelopment targets GoDaddy's development API (https://api.ote-godaddy.com)
-func (c Client) NewDevelopment() core.API {
+func (c *Client) NewDevelopment() core.APIInterface {
 	panic("The OTE (development) section of this library is under construction!")
 	// return core.NewDevelopment()
 }
