@@ -6,6 +6,6 @@ type V1 struct {
 }
 
 // Domain is most likely what you're looking for. It allows you to modify domains you control
-func (a V1) Domain(d string) Domain {
-    return Domain{name: d, url: a.url + "/domains/" + d}
+func (v V1) Domain(d string) Domain {
+    return Domain{name: d, url: v.url + "/domains/" + d}
 }
