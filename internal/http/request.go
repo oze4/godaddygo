@@ -18,7 +18,7 @@ func (r goDaddyRequest) Do() interface{} {
 
 // NewGoDaddyRequest returns a new GoDaddy request
 func NewGoDaddyRequest(url, domainName, requestMethod string) GoDaddyRequest {
-	if r := ValidateRequestMethod(requestMethod); r != true {
+	if r := ValidateMethod(requestMethod); r != true {
 		panic("Unacceptable requestMethod (" + requestMethod + ") supplied!")
 	}
 
@@ -27,23 +27,4 @@ func NewGoDaddyRequest(url, domainName, requestMethod string) GoDaddyRequest {
 		domainName: domainName,
 		method:     requestMethod,
 	}
-}
-
-// RequestMethodTypes hold acceptable method types
-var RequestMethodTypes = map[string]string{
-	"GET":    "GET",
-	"POST":   "POST",
-	"PUT":    "PUT",
-	"PATCH":  "PATCH",
-	"DELETE": "DELETE",
-}
-
-// ValidateRequestMethod validates userland request methods
-func ValidateRequestMethod(m string) bool {
-	for t := range RequestMethodTypes {
-		if m == t {
-			return true
-		}
-	}
-	return false
 }
