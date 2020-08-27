@@ -1,4 +1,4 @@
-package url
+package core
 
 // Contacts builds the contacts piece of the URL
 type Contacts struct {

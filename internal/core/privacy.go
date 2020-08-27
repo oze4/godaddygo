@@ -1,4 +1,4 @@
-package url
+package core
 
 // Privacy is a thing
 type Privacy struct {

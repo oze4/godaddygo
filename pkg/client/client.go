@@ -1,18 +1,28 @@
 package client
 
 import (
-	"encoding/json"
-	"log"
+	// "encoding/json"
+	// "log"
 
-	"github.com/oze4/godaddygo/internal/endpoints/domains"
-	"github.com/oze4/godaddygo/internal/factory/url"
-	"github.com/oze4/godaddygo/internal/http"
+	// "github.com/oze4/godaddygo/internal/endpoints/domains"
+	"github.com/oze4/godaddygo/internal/core"
+	// "github.com/oze4/godaddygo/internal/http"
 )
 
 // Client is what allows you to interact with the GoDaddy API
 type Client struct {
 	Options    Options
-	URLBuilder url.Builder // I'm not sure if we should expose this or not..
+}
+
+// NewProduction targets GoDaddy's production API (https://api.godaddy.com)
+func (c Client) NewProduction() core.API {
+	return core.NewProduction()
+}
+
+// NewDevelopment targets GoDaddy's development API (https://api.ote-godaddy.com)
+func (c Client) NewDevelopment() core.API {
+	panic("The OTE (development) section of this library is under construction!")
+	// return core.NewDevelopment()
 }
 
 // NewClient creates a new GoDaddy client.
@@ -35,6 +45,7 @@ func NewOptions(apiKey, apiSecret string) Options {
 	}
 }
 
+/*
 // GetDomainInformation gets domain information
 func (c Client) GetDomainInformation(d string) domains.DomainInformation {
 	u := url.NewBuilder().Production().V1().Domain(d).Details()
@@ -55,3 +66,4 @@ func (c Client) GetDomainInformation(d string) domains.DomainInformation {
 
 	return di
 }
+*/

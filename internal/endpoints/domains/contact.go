@@ -12,6 +12,3 @@ type Contact struct {
 	Organization   string         `json:"organization"`
 	Phone          string         `json:"phone"`
 }
-
-// AddressMailing is a property on Contact
-type AddressMailing interface{}
