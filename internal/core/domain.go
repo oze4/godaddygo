@@ -12,26 +12,36 @@ import (
 	"github.com/oze4/godaddygo/internal/endpoints/domains"
 )
 
-// Domain makes domainEndpoint public
-type Domain struct {
+// Domain represents the `domains` GoDaddy API endpoint
+type Domain interface {
+	Contacts() Contacts
+	Privacy() Privacy
+	Agreements([]string, bool, bool) string
+	Available() string
+	Records() Records
+	GetDetails() (*domains.DomainDetails, error)
+}
+
+// domain implements Domain
+type domain struct {
 	url  string
 	name string
 }
 
 // Contacts builds out the contacts piece of the URL
-func (d Domain) Contacts() Contacts {
+func (d *domain) Contacts() Contacts {
 	// return d.url + "/contacts"
 	return Contacts{url: d.url}
 }
 
 // Privacy builds out the privacy piece of the URL
-func (d Domain) Privacy() Privacy {
+func (d *domain) Privacy() Privacy {
 	// return Privacy{url: d.url + "/privacy"}
 	return Privacy{url: d.url + "/privacy"}
 }
 
 // Agreements builds the agreements piece of the URL
-func (d Domain) Agreements(domains []string, privacyRequested, forTransfer bool) string {
+func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool) string {
 	dl := strings.Join(domains, ",")
 	p := strconv.FormatBool(privacyRequested)
 	f := strconv.FormatBool(forTransfer)
@@ -39,18 +49,18 @@ func (d Domain) Agreements(domains []string, privacyRequested, forTransfer bool)
 }
 
 // Available builds the available piece of the URL
-func (d Domain) Available() string {
+func (d *domain) Available() string {
 	//TODO: parameterize checkType and forTransfer in the URL (like func Agreements)
 	return d.url + "/available?domain=" + d.name + "&checkType=FAST&forTransfer=false"
 }
 
 // Records builds the DNS record piece of the URL
-func (d Domain) Records() Records {
+func (d *domain) Records() Records {
 	return Records{}
 }
 
 // GetDetails gets info on a domain
-func (d Domain) GetDetails() (*domains.DomainDetails, error) {
+func (d *domain) GetDetails() (*domains.DomainDetails, error) {
 	req := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(req)
 
@@ -91,11 +101,11 @@ func (d Domain) GetDetails() (*domains.DomainDetails, error) {
 }
 
 // Delete deletes a domain
-func (d Domain) Delete() {
+func (d *domain) Delete() {
 	//TODO: Delete logic here
 }
 
 // Update updates a domain
-func (d Domain) Update() {
+func (d *domain) Update() {
 	//TODO: Update logic here
 }
