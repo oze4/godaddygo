@@ -11,12 +11,12 @@ import (
 
 // Client is what allows you to interact with the GoDaddy API
 type Client struct {
-	Options    Options
+	Options
 }
 
 // NewProduction targets GoDaddy's production API (https://api.godaddy.com)
 func (c Client) NewProduction() core.API {
-	return core.NewProduction()
+	return core.NewProduction(c.APIKey, c.APISecret)
 }
 
 // NewDevelopment targets GoDaddy's development API (https://api.ote-godaddy.com)
