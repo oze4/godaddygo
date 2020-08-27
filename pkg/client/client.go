@@ -7,7 +7,7 @@ import (
 // Client is what allows you to interact with the GoDaddy API
 type Client struct {
 	Options    Options
-	URLBuilder url.Builder
+	URLBuilder func (url.Builder) // I'm not sure if we should expose this or not..
 }
 
 // NewClient creates a new GoDaddy client.

@@ -1,11 +1,6 @@
 package url
 
 // Contacts builds the contacts piece of the URL
-// type Contacts interface {
-// 	Validate() string
-// }
-
-// Contacts builds the contacts piece of the URL
 type Contacts struct {
 	url string
 }
