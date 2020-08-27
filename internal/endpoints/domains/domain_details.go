@@ -4,9 +4,9 @@ import (
 	"time"
 )
 
-// DomainInformation holds information about a GoDaddy domain.
+// DomainDetails holds information about a GoDaddy domain.
 // This is the response when you `GET` info about a domain.
-type DomainInformation struct {
+type DomainDetails struct {
 	AuthCode               string        `json:"authCode"`
 	ContactAdmin           Contact       `json:"contactAdmin"`
 	ContactBilling         Contact       `json:"contactBilling"`
