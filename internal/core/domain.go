@@ -8,12 +8,17 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/valyala/fasthttp"
 	"github.com/oze4/godaddygo/internal/endpoints/domains"
+	"github.com/valyala/fasthttp"
 )
 
-// Domain represents the `domains` GoDaddy API endpoint
-type Domain interface {
+// DomainGetter returns
+type DomainGetter interface {
+	Domain(string) DomainInterface
+}
+
+// DomainInterface represents the `domains` GoDaddy API endpoint
+type DomainInterface interface {
 	Contacts() Contacts
 	Privacy() Privacy
 	Agreements([]string, bool, bool) string
@@ -22,7 +27,7 @@ type Domain interface {
 	GetDetails() (*domains.DomainDetails, error)
 }
 
-// domain implements Domain
+// domain implements DomainInterface
 type domain struct {
 	url  string
 	name string
@@ -64,7 +69,7 @@ func (d *domain) GetDetails() (*domains.DomainDetails, error) {
 	req := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(req)
 
-	req.Header.Add("Authorization", "sso "+apiKey+":"+apiSecret)
+	req.Header.Add("Authorization", "sso "+"UPDATE_API_KEY"+":"+"UPDATE_API_SECRET")
 	// fasthttp does not automatically request a gzipped response. We must explicitly ask for it.
 	// req.Header.Set("Accept-Encoding", "gzip")
 

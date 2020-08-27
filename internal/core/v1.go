@@ -7,14 +7,14 @@ type V1Getter interface {
 
 // V1Interface does a thing
 type V1Interface interface {
-	Domain(domainName string) Domain
+	DomainGetter
 }
 
 type v1 struct {
-	url string
+	*request
 }
 
 // Domain is most likely what you're looking for. It allows you to modify domains you control
-func (v *v1) Domain(domainName string) Domain {
+func (v *v1) Domain(domainName string) DomainInterface {
 	return &domain{name: domainName, url: v.url + "/domains/" + domainName}
 }

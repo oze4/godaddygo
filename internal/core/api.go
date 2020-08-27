@@ -5,12 +5,6 @@ package core
 // 	V1() V1
 // }
 
-// Global scoped for now
-var (
-	apiKey    string
-	apiSecret string
-)
-
 // APIInterface specifies the production base URL for the GoDaddy API (https://api.godaddy.com)
 type APIInterface interface {
 	V1Getter
@@ -18,19 +12,24 @@ type APIInterface interface {
 
 // api implements APIInterface
 type api struct {
-	url string
+	*request
 }
 
 // V1 returns the V1 section of the GoDaddy API
 func (a *api) V1() V1Interface {
-	return &v1{url: a.url + "/v1"}
+	a.url = a.url + "/v1"
+	return &v1{a.request}
 }
 
 // NewProduction targets GoDaddy's production API (https://api.godaddy.com)
 func NewProduction(key, secret string) APIInterface {
-	apiKey = key
-	apiSecret = secret
-	return &api{url: "https://api.godaddy.com"}
+	return &api{
+		&request{
+			apiKey: key,
+			apiSecret: secret,
+			url: "https://api.godaddy.com",
+		},
+	}
 }
 
 // NewDevelopment targets GoDaddy's development API (https://api.ote-godaddy.com)

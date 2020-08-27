@@ -1,6 +1,6 @@
 package domains
 
-// AddressMailing holds contact address info 
+// AddressMailing holds contact address info
 type AddressMailing struct {
 	Address    string `json:"address1"`
 	Address2   string `json:"address2"`
