@@ -8,10 +8,10 @@ type Verifications struct {
 
 // DomainName holds info about domain name
 type DomainName struct {
-    Status string `json:"status"`
+	Status string `json:"status"`
 }
 
 // RealName holds real name info about a domain.
 type RealName struct {
-    Status string `json:"status"`
+	Status string `json:"status"`
 }

@@ -12,15 +12,15 @@ type goDaddyRequest struct {
 }
 
 func (r goDaddyRequest) Do() interface{} {
-    //TODO: Add logic here for sending HTTP requests with fasthttp
+	//TODO: Add logic here for sending HTTP requests with fasthttp
 	return new(interface{})
 }
 
 // NewGoDaddyRequest returns a new GoDaddy request
 func NewGoDaddyRequest(url, domainName, requestMethod string) GoDaddyRequest {
-    if r := ValidateRequestMethod(requestMethod); r != true {
-        panic("Unacceptable requestMethod (" + requestMethod + ") supplied!")
-    }
+	if r := ValidateRequestMethod(requestMethod); r != true {
+		panic("Unacceptable requestMethod (" + requestMethod + ") supplied!")
+	}
 
 	return goDaddyRequest{
 		url:        url,

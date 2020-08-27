@@ -7,13 +7,13 @@ import (
 // Client is what allows you to interact with the GoDaddy API
 type Client struct {
 	Options    Options
-	URLBuilder func (url.Builder) // I'm not sure if we should expose this or not..
+	URLBuilder func(url.Builder) // I'm not sure if we should expose this or not..
 }
 
 // NewClient creates a new GoDaddy client.
 func NewClient(apiKey, apiSecret string) Client {
-    opts := NewOptions(apiKey, apiSecret)
-    return Client{Options: opts}
+	opts := NewOptions(apiKey, apiSecret)
+	return Client{Options: opts}
 }
 
 // Options hold the options for a new client
