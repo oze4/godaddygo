@@ -42,9 +42,9 @@ func (d Domain) Records() Records {
 	return Records{domain: d}
 }
 
-// Get gets info on a domain
-func (d Domain) Get() {
-	//TODO: Get logic here
+// Details gets info on a domain
+func (d Domain) Details() string {
+	return d.url
 }
 
 // Delete deletes a domain
