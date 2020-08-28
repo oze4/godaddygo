@@ -17,17 +17,16 @@ type client struct {
 
 // NewProduction targets GoDaddy's production API (https://api.godaddy.com)
 func (c *client) NewProduction() api.Gateway {
-	return api.NewProductionAPI(c.apiKey, c.apiSecret)
+	return api.NewProduction(c.apiKey, c.apiSecret)
 }
 
 // NewDevelopment targets GoDaddy's development API (https://api.ote-godaddy.com)
 func (c *client) NewDevelopment() api.Gateway {
 	panic("The OTE (development) section of this library is under construction!")
-	// return core.NewDevelopmentAPI()
+	// return api.NewDevelopment(c.apiKey, c.apiSecret)
 }
 
 // NewClient creates a new GoDaddy client.
 func NewClient(o *options) Client {
-	r := &client{options: o}
-	return r
+	return &client{options: o}
 }

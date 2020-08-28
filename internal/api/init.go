@@ -1,7 +1,7 @@
 package api
 
-// NewProductionAPI targets GoDaddy's production API (https://api.godaddy.com)
-func NewProductionAPI(key, secret string) Gateway {
+// NewProduction targets GoDaddy's production API (https://api.godaddy.com)
+func NewProduction(key, secret string) Gateway {
 	return &gateway{
 		&request{
 			apiKey:    key,
@@ -11,8 +11,8 @@ func NewProductionAPI(key, secret string) Gateway {
 	}
 }
 
-// NewDevelopmentAPI targets GoDaddy's development API (https://api.ote-godaddy.com)
-func NewDevelopmentAPI() Gateway {
+// NewDevelopment targets GoDaddy's development API (https://api.ote-godaddy.com)
+func NewDevelopment() Gateway {
 	panic("The OTE (development) section of this library is under construction!")
 	// return &api{url: "https://api.ote-godaddy.com"}
 }
