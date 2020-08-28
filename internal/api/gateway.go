@@ -11,7 +11,7 @@ type gateway struct {
 }
 
 // V1 returns the V1 section of the GoDaddy API
-func (a *gateway) V1() V1Interface {
+func (a *gateway) V1() V1 {
 	a.url = a.url + "/v1"
 	return &v1{a.request}
 }

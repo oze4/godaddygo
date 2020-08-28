@@ -14,11 +14,11 @@ import (
 
 // DomainGetter returns
 type DomainGetter interface {
-	Domain(string) DomainInterface
+	Domain(string) Domain
 }
 
-// DomainInterface represents the `domains` GoDaddy API endpoint
-type DomainInterface interface {
+// Domain represents the `domains` GoDaddy API endpoint
+type Domain interface {
 	Contacts() Contacts
 	Privacy() Privacy
 	Agreements([]string, bool, bool) string
@@ -27,7 +27,7 @@ type DomainInterface interface {
 	GetDetails() (domains.DomainDetails, error)
 }
 
-// domain implements DomainInterface
+// domain implements Domain [interface]
 type domain struct {
 	url  string
 	name string
@@ -41,7 +41,6 @@ func (d *domain) Contacts() Contacts {
 
 // Privacy builds out the privacy piece of the URL
 func (d *domain) Privacy() Privacy {
-	// return Privacy{url: d.url + "/privacy"}
 	return Privacy{url: d.url + "/privacy"}
 }
 

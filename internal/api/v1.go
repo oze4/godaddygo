@@ -2,11 +2,11 @@ package api
 
 // V1Getter does a thing
 type V1Getter interface {
-	V1() V1Interface
+	V1() V1
 }
 
-// V1Interface does a thing
-type V1Interface interface {
+// V1 does a thing
+type V1 interface {
 	DomainGetter
 }
 
@@ -14,7 +14,7 @@ type v1 struct {
 	*request
 }
 
-// Domain is most likely what you're looking for. It allows you to modify domains you control
-func (v *v1) Domain(domainName string) DomainInterface {
-	return &domain{name: domainName, url: v.url + "/domains/" + domainName}
+// Domain provides domain related info and tasks for the `domains` GoDaddy API endpoint
+func (v *v1) Domain(name string) Domain {
+	return &domain{name: name, url: v.url + "/domains/" + name}
 }
