@@ -7,19 +7,22 @@ Interact with the GoDaddy API via Golang
    - [Type-checking](#type-checking)
  - [Examples](#examples)
  - [Roadmap](#roadmap)
+   - [Endpoints](#endpoints)
 
-## Installation
+---
+
+## :fire: Installation
 
 `go get -u github.com/oze4/godaddygo`
 
-## Details and Usage
+## :clipboard: Details and Usage
 
  - *The main package, (`github.com/oze4/godaddygo`) provides everything you need to interact with the GoDaddy API*. 
  - \***However**\*, if you would like to type-check using types which are returned from `godaddygo`, you will need to use a specific package for "that" endpoint
  - We mirrored the endpoints found in the [GoDaddy docs](https://developer.godaddy.com/doc)
  - **For user-land-type-checking, each endpoint has it's own package located at:** `github.com/oze4/godaddygo/pkg/<endpoint>`
 
-#### Type-checking
+### Type-checking
 
 If you wanted to type-check using the data type for domain details, you would do:
 
@@ -37,11 +40,19 @@ func SomeFunc(dd domains.DomainDetails) { // <-- type-check using `DomainDetails
 }
 ```
 
-## Roadmap
+## :computer: Examples
 
-This library is currently under construction and in alpha. **It should not be used at all right now**
+```golang
+// TODO
+```
+
+## :construction: Roadmap
+
+**:exclamation:THIS LIBRARY SHOULD \*\*NOT BE USED AT ALL\*\* RIGHT NOW!**:exclamation:as it is under heavy construction
 
 ### Endpoints
+
+Please see [here](https://developer.godaddy.com/doc) for more information on GoDaddy API endpoints
 
 :no_entry_sign:<small>Not Available</small>
 **|**
