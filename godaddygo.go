@@ -14,7 +14,6 @@ import (
 type ClientInterface interface {
 	NewProduction() core.APIInterface
 	NewDevelopment() core.APIInterface
-
 }
 
 // client implements ClientInterface
@@ -72,6 +71,7 @@ func t() {
 	fmt.Println(apiv1Development)
 	fmt.Println(apiv1Production)
 }
+
 /*
 // GetDomainInformation gets domain information
 func (c Client) GetDomainInformation(d string) domains.DomainInformation {
