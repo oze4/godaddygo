@@ -1,4 +1,4 @@
-package core
+package api
 
 // Request implements RequestInterface
 type Request interface {

@@ -1,4 +1,4 @@
-package core
+package api
 
 // V1Getter does a thing
 type V1Getter interface {
