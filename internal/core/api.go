@@ -27,8 +27,8 @@ func NewProductionAPI(key, secret string) APIInterface {
 	}
 }
 
-// NewDevelopment targets GoDaddy's development API (https://api.ote-godaddy.com)
-func NewDevelopment() APIInterface {
+// NewDevelopmentAPI targets GoDaddy's development API (https://api.ote-godaddy.com)
+func NewDevelopmentAPI() APIInterface {
 	panic("The OTE (development) section of this library is under construction!")
 	// return &api{url: "https://api.ote-godaddy.com"}
 }

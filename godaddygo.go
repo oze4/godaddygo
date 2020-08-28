@@ -1,7 +1,7 @@
 package godaddygo
 
 import (
-	"fmt"
+	// "fmt"
 	// "encoding/json"
 	// "log"
 
@@ -33,8 +33,8 @@ func (c *client) NewDevelopment() core.APIInterface {
 }
 
 // NewClient creates a new GoDaddy client.
-func NewClient(o options) ClientInterface {
-	r := &client{&o}
+func NewClient(o Options) ClientInterface {
+	r := &client{&options{o.APIKey(), o.APISecret()}}
 	return r
 }
 
@@ -63,13 +63,6 @@ func NewOptions(apiKey, apiSecret string) Options {
 		apiKey:    apiKey,
 		apiSecret: apiSecret,
 	}
-}
-func t() {
-	apiv1Production := NewClient(options{"", ""}).NewProduction().V1()
-	apiv1Development := NewClient(options{"", ""}).NewDevelopment().V1()
-
-	fmt.Println(apiv1Development)
-	fmt.Println(apiv1Production)
 }
 
 /*
