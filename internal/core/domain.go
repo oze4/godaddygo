@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/oze4/godaddygo/internal/endpoints/domains"
+	"github.com/oze4/godaddygo/pkg/endpoints/domains"
 	"github.com/valyala/fasthttp"
 )
 
