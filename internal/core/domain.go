@@ -24,7 +24,7 @@ type DomainInterface interface {
 	Agreements([]string, bool, bool) string
 	Available() string
 	Records() Records
-	GetDetails() (*domains.DomainDetails, error)
+	GetDetails() (domains.DomainDetails, error)
 }
 
 // domain implements DomainInterface
@@ -65,7 +65,7 @@ func (d *domain) Records() Records {
 }
 
 // GetDetails gets info on a domain
-func (d *domain) GetDetails() (*domains.DomainDetails, error) {
+func (d *domain) GetDetails() (details domains.DomainDetails, err error) {
 	req := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(req)
 
@@ -76,14 +76,14 @@ func (d *domain) GetDetails() (*domains.DomainDetails, error) {
 	resp := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseResponse(resp)
 
-	err := fasthttp.Do(req, resp)
+	err = fasthttp.Do(req, resp)
 	if err != nil {
 		m := fmt.Sprintf("Client get failed: %s\n", err)
-		return nil, errors.New(m)
+		return details, errors.New(m)
 	}
 	if resp.StatusCode() != fasthttp.StatusOK {
 		m := fmt.Sprintf("Expected status code %d but got %d\n", fasthttp.StatusOK, resp.StatusCode())
-		return nil, errors.New(m)
+		return details, errors.New(m)
 	}
 
 	// Do we need to decompress the response?
@@ -98,11 +98,11 @@ func (d *domain) GetDetails() (*domains.DomainDetails, error) {
 	}
 
 	dd := &domains.DomainDetails{}
-	if e := json.Unmarshal(body, dd); e != nil {
-		return nil, e
+	if err = json.Unmarshal(body, dd); err != nil {
+		return details, err
 	}
 
-	return dd, nil
+	return *dd, nil
 }
 
 // Delete deletes a domain
