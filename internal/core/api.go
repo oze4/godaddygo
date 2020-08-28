@@ -16,8 +16,8 @@ func (a *api) V1() V1Interface {
 	return &v1{a.request}
 }
 
-// NewProduction targets GoDaddy's production API (https://api.godaddy.com)
-func NewProduction(key, secret string) APIInterface {
+// NewProductionAPI targets GoDaddy's production API (https://api.godaddy.com)
+func NewProductionAPI(key, secret string) APIInterface {
 	return &api{
 		&request{
 			apiKey:    key,
