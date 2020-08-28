@@ -2,11 +2,11 @@
 
 Interact with the GoDaddy API via Golang
 
- - [Installation](#installation)
- - [Details & Usage](#details-and-usage)
+ - [Installation](#fire-installation)
+ - [Details & Usage](#clipboard-details-and-usage)
    - [Type-checking](#type-checking)
- - [Examples](#examples)
- - [Roadmap](#roadmap)
+ - [Examples](#computer-examples)
+ - [Roadmap](#construction-roadmap)
    - [Endpoints](#endpoints)
 
 ---
