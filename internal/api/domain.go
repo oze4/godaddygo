@@ -35,7 +35,7 @@ type domain struct {
 
 // Contacts builds out the contacts piece of the URL
 func (d *domain) Contacts() Contacts {
-	d.URL = d.Request.URL + "/contacts"
+	d.URL = d.URL + "/contacts"
 	return &contacts{d.Request}
 }
 
