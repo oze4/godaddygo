@@ -13,19 +13,19 @@ type Client interface {
 
 // client implements Client
 type client struct {
-	*options
+	Options
 }
 
 // NewClient creates a new GoDaddy client.
-func NewClient(opts options) Client {
-	return &client{&opts}
+func NewClient(opts Options) Client {
+	return &client{opts}
 }
 
 // NewProduction targets GoDaddy's production API (https://api.godaddy.com)
 func (c *client) NewProduction() api.Gateway {
 	h := &http.Request{
-		APIKey:    c.apiKey,
-		APISecret: c.apiSecret,
+		APIKey:    c.APIKey(),
+		APISecret: c.APISecret(),
 		URL:       "https://api.godaddy.com",
 	}
 
