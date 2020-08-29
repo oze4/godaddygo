@@ -42,3 +42,7 @@ func (c *client) NewDevelopment() api.Gateway {
 func (c *client) NewRequest() *http.Request {
 	return &http.Request{}
 }
+
+func testfuncdeleteme() {
+	
+}
