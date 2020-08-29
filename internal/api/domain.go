@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/oze4/godaddygo/pkg/endpoints/domains"
+	"github.com/oze4/godaddygo/pkg/http"
 	"github.com/valyala/fasthttp"
 )
 
@@ -19,48 +20,52 @@ type DomainGetter interface {
 
 // Domain represents the `domains` GoDaddy API endpoint
 type Domain interface {
-	Contacts() Contacts
-	Privacy() Privacy
-	Agreements([]string, bool, bool) string
-	Available() string
-	Records() Records
+	ContactsGetter
+	PrivacyGetter
+	RecordsGetter
+	Agreements([]string, bool, bool) *http.Request
+	Available() *http.Request
 	GetDetails() (domains.DomainDetails, error)
 }
 
 // domain implements Domain [interface]
 type domain struct {
-	url  string
-	name string
+	*http.Request
 }
 
 // Contacts builds out the contacts piece of the URL
 func (d *domain) Contacts() Contacts {
-	// return d.url + "/contacts"
-	return Contacts{url: d.url}
+	d.URL = d.Request.URL + "/contacts"
+	return &contacts{d.Request}
 }
 
 // Privacy builds out the privacy piece of the URL
 func (d *domain) Privacy() Privacy {
-	return Privacy{url: d.url + "/privacy"}
+	d.URL = d.Request.URL + "/privacy"
+	return &privacy{d.Request}
 }
 
 // Agreements builds the agreements piece of the URL
-func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool) string {
+func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool) *http.Request {
 	dl := strings.Join(domains, ",")
 	p := strconv.FormatBool(privacyRequested)
 	f := strconv.FormatBool(forTransfer)
-	return d.url + "/agreements?tlds=" + dl + "&privacy=" + p + "&forTransfer=" + f
+	d.URL = d.URL + "/agreements?tlds=" + dl + "&privacy=" + p + "&forTransfer=" + f
+	return d.Request
+	// return d.URL + "/agreements?tlds=" + dl + "&privacy=" + p + "&forTransfer=" + f
 }
 
 // Available builds the available piece of the URL
-func (d *domain) Available() string {
+func (d *domain) Available() *http.Request {
 	//TODO: parameterize checkType and forTransfer in the URL (like func Agreements)
-	return d.url + "/available?domain=" + d.name + "&checkType=FAST&forTransfer=false"
+	d.URL = d.URL + "/available?domain=" + d.Host + "&checkType=FAST&forTransfer=false"
+	return d.Request
 }
 
 // Records builds the DNS record piece of the URL
 func (d *domain) Records() Records {
-	return Records{}
+	d.URL = d.URL + "/records"
+	return &records{d.Request}
 }
 
 // GetDetails gets info on a domain

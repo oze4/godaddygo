@@ -15,9 +15,21 @@ type client struct {
 	*options
 }
 
+// NewClient creates a new GoDaddy client.
+func NewClient(o *options) Client {
+	return &client{options: o}
+}
+
 // NewProduction targets GoDaddy's production API (https://api.godaddy.com)
 func (c *client) NewProduction() api.Gateway {
-	return api.NewProduction(c.apiKey, c.apiSecret)
+	api.
+	/*
+	return api.NewGatewayWithRequest(&request{
+		apiKey:    key,
+		apiSecret: secret,
+		url:       "https://api.godaddy.com",
+	})
+	*/
 }
 
 // NewDevelopment targets GoDaddy's development API (https://api.ote-godaddy.com)
@@ -26,7 +38,7 @@ func (c *client) NewDevelopment() api.Gateway {
 	// return api.NewDevelopment(c.apiKey, c.apiSecret)
 }
 
-// NewClient creates a new GoDaddy client.
-func NewClient(o *options) Client {
-	return &client{options: o}
+// NewRequest returns a new request object
+func (c *client) NewRequest() api.Request {
+    return &request{}
 }

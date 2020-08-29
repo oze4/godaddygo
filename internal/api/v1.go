@@ -1,5 +1,9 @@
 package api
 
+import (
+	"github.com/oze4/godaddygo/pkg/http"
+)
+
 // V1Getter does a thing
 type V1Getter interface {
 	V1() V1
@@ -11,10 +15,12 @@ type V1 interface {
 }
 
 type v1 struct {
-	*request
+	*http.Request
 }
 
 // Domain provides domain related info and tasks for the `domains` GoDaddy API endpoint
 func (v *v1) Domain(name string) Domain {
-	return &domain{name: name, url: v.url + "/domains/" + name}
+	v.Host = name
+	v.URL = v.URL + "/domains/" + name
+	return &domain{v.Request}
 }
