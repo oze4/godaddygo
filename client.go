@@ -17,8 +17,8 @@ type client struct {
 }
 
 // NewClient creates a new GoDaddy client.
-func NewClient(o *options) Client {
-	return &client{options: o}
+func NewClient(opts options) Client {
+	return &client{&opts}
 }
 
 // NewProduction targets GoDaddy's production API (https://api.godaddy.com)
