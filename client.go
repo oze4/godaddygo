@@ -24,9 +24,9 @@ func NewClient(opts options) Client {
 // NewProduction targets GoDaddy's production API (https://api.godaddy.com)
 func (c *client) NewProduction() api.Gateway {
 	h := &http.Request{
-		APIKey: c.apiKey,
+		APIKey:    c.apiKey,
 		APISecret: c.apiSecret,
-		URL: "https://api.godaddy.com",
+		URL:       "https://api.godaddy.com",
 	}
 
 	return api.InitProduction(h)
@@ -40,5 +40,5 @@ func (c *client) NewDevelopment() api.Gateway {
 
 // NewRequest returns a new request object
 func (c *client) NewRequest() *http.Request {
-    return &http.Request{}
+	return &http.Request{}
 }

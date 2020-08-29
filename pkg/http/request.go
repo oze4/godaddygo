@@ -10,7 +10,7 @@ package http
 
 // Request holds request data
 type Request struct {
-	APIKey     string
+	APIKey    string
 	APISecret string
 	Method    string
 	URL       string
