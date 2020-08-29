@@ -21,6 +21,11 @@ type records struct {
 // func (r Records) Type() Type {}
 
 func (r *records) GetAll() *http.Request {
+	r.attach()
 	r.Method = "GET"
 	return r.Request
+}
+
+func (r *records) attach() {
+	r.URL = r.URL + "/records"
 }

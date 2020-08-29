@@ -5,7 +5,7 @@ import (
 )
 
 // InitProduction targets GoDaddy's production API (https://api.godaddy.com)
-func InitProduction(r *http.Request, key, secret string) Gateway {
+func InitProduction(r *http.Request) Gateway {
 	return &gateway{r}
 }
 

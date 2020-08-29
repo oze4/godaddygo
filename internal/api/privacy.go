@@ -12,6 +12,7 @@ type PrivacyGetter interface {
 // Privacy is a thing
 type Privacy interface {
 	Purchase() *http.Request
+	Delete() *http.Request
 }
 
 // privacy implements Privacy
@@ -20,13 +21,18 @@ type privacy struct {
 }
 
 func (p *privacy) Purchase() *http.Request {
+	p.attach()
+	p.URL = p.URL + "/purchase"
 	p.Method = "POST"
-	p.URL = p.URL + "privacy/purchase"
 	return p.Request
 }
 
 func (p *privacy) Delete() *http.Request {
+	p.attach()
 	p.Method = "DELETE"
-	p.URL = p.URL + "/privacy"
 	return p.Request
+}
+
+func (p *privacy) attach() {
+	p.URL = p.URL + "/privacy"
 }
