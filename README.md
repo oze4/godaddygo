@@ -5,7 +5,7 @@ Interact with the GoDaddy API via Golang
 - [Installation](#fire-installation)
 - [Details & Usage](#clipboard-details-and-usage)
   - [Type-checking](#type-checking)
-- [Examples](#computer-examples)
+- [Examples](/examples)
 - [Roadmap](#construction-roadmap)
   - [Endpoints](#endpoints)
 
@@ -48,10 +48,6 @@ func SomeFunc(dd domains.DomainDetails) { // <-- type-check using `DomainDetails
   // ...
 }
 ```
-
-## :computer: Examples
-
-Please see [examples folder](/examples)
 
 ## :construction: Roadmap
 
