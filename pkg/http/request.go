@@ -1,11 +1,13 @@
 package http
 
 import (
-	"fmt"
 	"errors"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"strings"
 
 	"github.com/oze4/godaddygo/internal/validator"
-	"github.com/valyala/fasthttp"
 )
 
 // RequestMethods holds all acceptable request methods
@@ -34,26 +36,34 @@ func (r *Request) Do() (bodyBytes []byte, err error) {
 		return nil, errors.New("Invalid request method")
 	}
 
-	req := fasthttp.AcquireRequest()
-	resp := fasthttp.AcquireResponse()
-	defer fasthttp.ReleaseRequest(req)   // <- do not forget to release
-	defer fasthttp.ReleaseResponse(resp) // <- do not forget to release
-
-	req.SetRequestURI(r.URL)
-	req.Header.SetMethodBytes([]byte(r.Method))
-	authStr := r.makeAuthString()
-	fmt.Println(authStr)
-	req.Header.Add("Authorization", authStr)
-	req.Header.SetContentType("application/json")
-
-	if err = fasthttp.Do(req, resp); err != nil {
+	parsedURL, err := url.Parse(r.URL)
+	if err != nil {
 		return nil, err
 	}
 
-	bodyBytes = resp.Body()
-	println(string(bodyBytes))
+	req := &http.Request{
+		URL:    parsedURL,
+		Method: r.Method,
+		Header: map[string][]string{
+			"Authorization": {r.makeAuthString()},
+			"Content-Type":  {"application/json"},
+		},
+		Body: ioutil.NopCloser(strings.NewReader(string(r.Body))),
+	}
 
-	return bodyBytes, nil
+	result, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	bod, err := ioutil.ReadAll(result.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	result.Body.Close()
+	
+	return bod, nil
 }
 
 func (r *Request) makeAuthString() string {
