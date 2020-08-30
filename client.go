@@ -23,13 +23,11 @@ func NewClient(opts Options) Client {
 
 // NewProduction targets GoDaddy's production API (https://api.godaddy.com)
 func (c *client) NewProduction() api.Gateway {
-	h := &http.Request{
+	return api.InitProduction(&http.Request{
 		APIKey:    c.APIKey,
 		APISecret: c.APISecret,
 		URL:       "https://api.godaddy.com",
-	}
-
-	return api.InitProduction(h)
+	})
 }
 
 // NewDevelopment targets GoDaddy's development API (https://api.ote-godaddy.com)
@@ -41,8 +39,4 @@ func (c *client) NewDevelopment() api.Gateway {
 // NewRequest returns a new request object
 func (c *client) NewRequest() *http.Request {
 	return &http.Request{}
-}
-
-func testfuncdeleteme() {
-	
 }

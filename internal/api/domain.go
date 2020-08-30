@@ -27,6 +27,7 @@ type domain struct {
 	*http.Request
 }
 
+// attach adds this endpoint to the URL
 func (d *domain) attach(attachDomainName bool) {
 	if attachDomainName {
 		d.URL = d.URL + "/domains/" + d.Host
