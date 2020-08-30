@@ -2,21 +2,22 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/oze4/godaddygo"
 )
 
 func main() {
-    MyAPIKey := "-"                // Make sure to supply appropriate key [prod or dev]
-    MyAPISecret := "-"             // ...same here
-    DomainToTarget := "google.com" // Domain to check availability for
+	MyAPIKey := "-"                // Make sure to supply appropriate key [prod or dev]
+	MyAPISecret := "-"             // ...same here
+	DomainToTarget := "google.com" // Domain to check availability for
 
-    // Create client options
+	// Create client options
 	clientOptions := godaddygo.Options{
-		APIKey:    MyAPIKey, 
+		APIKey:    MyAPIKey,
 		APISecret: MyAPISecret,
-    }
-    
-    // Create client
+	}
+
+	// Create client
 	client := godaddygo.NewClient(clientOptions)
 
 	// Target the production API
@@ -33,16 +34,16 @@ func main() {
 	domain := prodv1.Domain(DomainToTarget)
 
 	// Check availability
-    domAvailability, err := domain.IsAvailable()
-    // Outputs a struct like:
-    //     type Available struct {
-    //         Available  bool   `json:"available,omitempty"`
-    //         Currency   string `json:"currency,omitempty"`
-    //         Definitive bool   `json:"definitive,omitempty"`
-    //         Domain     string `json:"domain,omitempty"`
-    //         Period     int    `json:"period,omitempty"`
-    //         Price      int    `json:"price,omitempty"`
-    //     }
+	domAvailability, err := domain.IsAvailable()
+	// Outputs a struct like:
+	//     type Available struct {
+	//         Available  bool   `json:"available,omitempty"`
+	//         Currency   string `json:"currency,omitempty"`
+	//         Definitive bool   `json:"definitive,omitempty"`
+	//         Domain     string `json:"domain,omitempty"`
+	//         Period     int    `json:"period,omitempty"`
+	//         Price      int    `json:"price,omitempty"`
+	//     }
 	if err != nil {
 		panic(err.Error())
 	}
