@@ -30,9 +30,9 @@ type domain struct {
 func (d *domain) attach(attachDomainName bool) {
 	if attachDomainName {
 		d.URL = d.URL + "/domains/" + d.Host
-		return
+	} else {
+		d.URL = d.URL + "/domains"
 	}
-	d.URL = d.URL + "/domains"
 }
 
 // Contacts builds out the contacts piece of the URL
