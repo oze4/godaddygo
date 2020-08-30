@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"errors"
 	"io/ioutil"
 	"net/http"
@@ -51,10 +52,14 @@ func (r *Request) Do() (bodyBytes []byte, err error) {
 		Body: ioutil.NopCloser(strings.NewReader(string(r.Body))),
 	}
 
+	fmt.Println(req)
+
 	result, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Println(result.StatusCode)
 
 	bod, err := ioutil.ReadAll(result.Body)
 	if err != nil {
@@ -62,7 +67,7 @@ func (r *Request) Do() (bodyBytes []byte, err error) {
 	}
 
 	result.Body.Close()
-	
+
 	return bod, nil
 }
 
