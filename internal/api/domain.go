@@ -21,7 +21,7 @@ type Domain interface {
 	RecordsGetter
 	Agreements([]string, bool, bool) *http.Request
 	IsAvailable() (*domainsEndpoint.Available, error)
-	GetDetails() *http.Request
+	GetDetails() (*domainsEndpoint.DomainDetails, error)
 }
 
 // domain implements Domain [interface]
@@ -53,7 +53,8 @@ func (d *domain) Privacy() Privacy {
 // Agreements builds the agreements piece of the URL
 func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool) *http.Request {
 	d.attach(false)
-	dl := strings.Join(domains, ",")
+	doms := append(domains, d.Host)
+	dl := strings.Join(doms, ",")
 	p := strconv.FormatBool(privacyRequested)
 	f := strconv.FormatBool(forTransfer)
 	d.URL = "/agreements?tlds=" + dl + "&privacy=" + p + "&forTransfer=" + f
@@ -80,17 +81,22 @@ func (d *domain) IsAvailable() (*domainsEndpoint.Available, error) {
 	return &avail, nil
 }
 
-// Records builds the DNS record piece of the URL
-func (d *domain) Records() Records {
-	d.attach(true)
-	return &records{d.Request}
-}
-
 // GetDetails gets info on a domain
-func (d *domain) GetDetails() *http.Request {
+func (d *domain) GetDetails() (*domainsEndpoint.DomainDetails, error) {
 	d.attach(true)
 	d.Method = "GET"
-	return d.Request
+	
+	res, err := d.Request.Do()
+	if err != nil {
+		return nil, err
+	}
+
+	var details domainsEndpoint.DomainDetails
+	if err := json.Unmarshal(res, &details); err != nil {
+		return nil, err
+	}
+
+	return &details, nil
 }
 
 // Delete deletes a domain
@@ -106,4 +112,10 @@ func (d *domain) Update(body []byte) *http.Request {
 	d.Method = "PATCH"
 	d.Body = body
 	return d.Request
+}
+
+// Records builds the DNS record piece of the URL
+func (d *domain) Records() Records {
+	d.attach(true)
+	return &records{d.Request}
 }
