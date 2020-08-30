@@ -29,7 +29,7 @@ func main() {
    // Set our domain
    domain := prodv1.Domain(DomainToTarget)
 
-   // Check availability
+   // Get domain details
    domainDetails, err := domain.GetDetails()
    if err != nil {
        panic(err.Error())
