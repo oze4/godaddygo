@@ -45,11 +45,12 @@ func (r *Request) Do() (bodyBytes []byte, err error) {
 	req := &http.Request{
 		URL:    parsedURL,
 		Method: r.Method,
-		Header: map[string][]string{
-			"Authorization": {r.makeAuthString()},
-			"Content-Type":  {"application/json"},
-		},
-		Body: ioutil.NopCloser(strings.NewReader(string(r.Body))),
+	}
+
+	req.Header["Authorization"] = []string{r.makeAuthString()}
+
+	if r.Body != nil {
+		req.Body = ioutil.NopCloser(strings.NewReader(string(r.Body)))
 	}
 
 	fmt.Println(req)
