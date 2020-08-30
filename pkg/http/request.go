@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"errors"
 
 	"github.com/oze4/godaddygo/internal/validator"
@@ -40,7 +41,10 @@ func (r *Request) Do() (bodyBytes []byte, err error) {
 
 	req.SetRequestURI(r.URL)
 	req.Header.SetMethodBytes([]byte(r.Method))
-	req.Header.Set("Authorization", r.makeAuthString())
+	authStr := r.makeAuthString()
+	fmt.Println(authStr)
+	req.Header.Add("Authorization", authStr)
+	req.Header.SetContentType("application/json")
 
 	if err = fasthttp.Do(req, resp); err != nil {
 		return nil, err
