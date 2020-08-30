@@ -20,7 +20,7 @@ type Domain interface {
 	PrivacyGetter
 	RecordsGetter
 	Agreements([]string, bool, bool) *http.Request
-	Available() (*domainsEndpoint.Available, error)
+	IsAvailable() (*domainsEndpoint.Available, error)
 	GetDetails() *http.Request
 }
 
@@ -60,8 +60,8 @@ func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool
 	return d.Request
 }
 
-// Available builds the available piece of the URL
-func (d *domain) Available() (avail *domainsEndpoint.Available, err error) {
+// IsAvailable checks if the supplied domain name is available for purchase
+func (d *domain) IsAvailable() (*domainsEndpoint.Available, error) {
 	d.attach(false)
 	d.Method = "GET"
 	//TODO: parameterize checkType and forTransfer in the URL (like func Agreements)
@@ -72,11 +72,12 @@ func (d *domain) Available() (avail *domainsEndpoint.Available, err error) {
 		return nil, err
 	}
 
+	var avail domainsEndpoint.Available
 	if err := json.Unmarshal(res, &avail); err != nil {
 		return nil, err
 	}
 
-	return avail, nil
+	return &avail, nil
 }
 
 // Records builds the DNS record piece of the URL

@@ -2,7 +2,7 @@ package http
 
 import (
 	"errors"
-	"fmt"
+	//"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -70,8 +70,7 @@ func (r *Request) Do() ([]byte, error) {
 		return nil, err
 	}
 
-	// defer resp.Body.Close()
-	fmt.Println(resp.StatusCode)
+	defer resp.Body.Close()
 
 	// Read response body
 	result, err := ioutil.ReadAll(resp.Body)
@@ -80,7 +79,7 @@ func (r *Request) Do() ([]byte, error) {
 	}
 
 	// Close the response body
-	resp.Body.Close()
+	// resp.Body.Close()
 
 	// Return response body as bytes
 	return result, nil
