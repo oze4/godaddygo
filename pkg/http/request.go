@@ -1,6 +1,7 @@
 package http
 
 import (
+	"encoding/json"
 	"errors"
 	"io"
 	"io/ioutil"
@@ -75,6 +76,12 @@ func (r *Request) Do() ([]byte, error) {
 	result, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.StatusCode <= 199 && resp.StatusCode >= 300 {
+		var respMap map[string]string
+		_ = json.Unmarshal(result, &respMap)
+		return nil, errors.New(respMap["code"])
 	}
 
 	// Return response body as bytes
