@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/oze4/godaddygo/pkg/http"
 	domainsEndpoint "github.com/oze4/godaddygo/pkg/endpoints/domains"
+	"github.com/oze4/godaddygo/pkg/http"
 )
 
 // DomainGetter returns

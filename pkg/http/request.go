@@ -3,10 +3,18 @@ package http
 import (
 	"errors"
 
-	"github.com/valyala/fasthttp"
-	"github.com/oze4/godaddygo/pkg/endpoints/domains"
 	"github.com/oze4/godaddygo/internal/validator"
+	"github.com/valyala/fasthttp"
 )
+
+// RequestMethods holds all acceptable request methods
+var RequestMethods = map[string]string{
+	"GET":    "GET",
+	"POST":   "POST",
+	"DELETE": "DELETE",
+	"PATCH":  "PATCH",
+	"PUT":    "PUT",
+}
 
 // Request holds request data
 type Request struct {
@@ -20,14 +28,14 @@ type Request struct {
 
 // Do sends the http request
 func (r *Request) Do() (bodyBytes []byte, err error) {
-	valid := validator.Validate(r.Method, domains.DNSRecordTypes)
+	valid := validator.Validate(r.Method, RequestMethods)
 	if valid != true {
 		return nil, errors.New("Invalid request method")
 	}
 
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
-	defer fasthttp.ReleaseRequest(req) // <- do not forget to release
+	defer fasthttp.ReleaseRequest(req)   // <- do not forget to release
 	defer fasthttp.ReleaseResponse(resp) // <- do not forget to release
 
 	req.SetRequestURI(r.URL)
