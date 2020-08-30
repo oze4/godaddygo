@@ -78,7 +78,7 @@ func (r *Request) Do() ([]byte, error) {
 		return nil, err
 	}
 
-	if resp.StatusCode <= 199 && resp.StatusCode >= 300 {
+	if resp.StatusCode <= 199 || resp.StatusCode >= 300 {
 		var respMap map[string]string
 		_ = json.Unmarshal(result, &respMap)
 		return nil, errors.New(respMap["code"])
