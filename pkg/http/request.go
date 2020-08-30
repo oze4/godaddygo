@@ -2,12 +2,10 @@ package http
 
 import (
 	"errors"
-	//"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 
-	//"net/url"
 	"strings"
 
 	"github.com/oze4/godaddygo/internal/validator"
@@ -70,6 +68,7 @@ func (r *Request) Do() ([]byte, error) {
 		return nil, err
 	}
 
+	// Express intent to close body once we are through with it
 	defer resp.Body.Close()
 
 	// Read response body
@@ -77,9 +76,6 @@ func (r *Request) Do() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// Close the response body
-	// resp.Body.Close()
 
 	// Return response body as bytes
 	return result, nil

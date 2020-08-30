@@ -2,12 +2,12 @@
 
 Interact with the GoDaddy API via Golang
 
- - [Installation](#fire-installation)
- - [Details & Usage](#clipboard-details-and-usage)
-   - [Type-checking](#type-checking)
- - [Examples](#computer-examples)
- - [Roadmap](#construction-roadmap)
-   - [Endpoints](#endpoints)
+- [Installation](#fire-installation)
+- [Details & Usage](#clipboard-details-and-usage)
+  - [Type-checking](#type-checking)
+- [Examples](#computer-examples)
+- [Roadmap](#construction-roadmap)
+  - [Endpoints](#endpoints)
 
 ---
 
@@ -17,7 +17,7 @@ Interact with the GoDaddy API via Golang
 
 ## :clipboard: Details and Usage
 
- - To import:
+- To import:
 
 ```golang
 import (
@@ -26,10 +26,10 @@ import (
 )
 ```
 
- - *The main package, (`github.com/oze4/godaddygo`) provides everything you need to interact with the GoDaddy API*. 
- - **However**, if you would like to type-check using types which are returned from `godaddygo`, you will need to use a specific package for "that" endpoint
- - We mirrored endpoints found in the [GoDaddy docs](https://developer.godaddy.com/doc)
- - :star:**For user-land-type-checking, each endpoint has it's own package located at:** `github.com/oze4/godaddygo/pkg/<endpoint>`
+- _The main package, (`github.com/oze4/godaddygo`) provides everything you need to interact with the GoDaddy API_.
+- **However**, if you would like to type-check using types which are returned from `godaddygo`, you will need to use a specific package for "that" endpoint
+- We mirrored endpoints found in the [GoDaddy docs](https://developer.godaddy.com/doc)
+- :star:**For user-land-type-checking, each endpoint has it's own package located at:** `github.com/oze4/godaddygo/pkg/<endpoint>`
 
 ### Type-checking
 
@@ -51,9 +51,7 @@ func SomeFunc(dd domains.DomainDetails) { // <-- type-check using `DomainDetails
 
 ## :computer: Examples
 
-```golang
-// TODO
-```
+Please see [examples folder](/examples)
 
 ## :construction: Roadmap
 
@@ -69,14 +67,14 @@ Please see [here](https://developer.godaddy.com/doc) for more information on GoD
 **|**
 :white_check_mark:<small>Finished</small>
 
-| Endpoint | Status |
-| --- | --- |
-| Abuse | :no_entry_sign: |
-| Aftermarket | :no_entry_sign: |
-| Agreements | :no_entry_sign: |
-| Certificates | :no_entry_sign: |
-| Countries | :no_entry_sign: |
-| Domains | :construction: |
-| Orders | :no_entry_sign: |
-| Shoppers | :no_entry_sign: |
+| Endpoint      | Status          |
+| ------------- | --------------- |
+| Abuse         | :no_entry_sign: |
+| Aftermarket   | :no_entry_sign: |
+| Agreements    | :no_entry_sign: |
+| Certificates  | :no_entry_sign: |
+| Countries     | :no_entry_sign: |
+| Domains       | :construction:  |
+| Orders        | :no_entry_sign: |
+| Shoppers      | :no_entry_sign: |
 | Subscriptions | :no_entry_sign: |
