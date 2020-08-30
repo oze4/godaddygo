@@ -1,8 +1,8 @@
 package http
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -47,7 +47,7 @@ func (r *Request) Do() (bodyBytes []byte, err error) {
 		Method: r.Method,
 	}
 
-	req.Header["Authorization"] = []string{r.makeAuthString()}
+	req.Header.Add("Authorization", r.makeAuthString())
 
 	if r.Body != nil {
 		req.Body = ioutil.NopCloser(strings.NewReader(string(r.Body)))
