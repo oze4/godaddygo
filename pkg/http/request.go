@@ -99,9 +99,9 @@ func (r *Request) verifyStatusCode(resp *http.Response, bodyBytes []byte) error 
 		_ = json.Unmarshal(bodyBytes, &respMap)
 		var status []string
 		for k, v := range respMap {
-			status = append(status, k + ":" + v)
+			status = append(status, k+":"+v)
 		}
 		return errors.New(strings.Join(status, ","))
 	}
 	return nil
-} 
+}

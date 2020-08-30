@@ -85,7 +85,7 @@ func (d *domain) IsAvailable() (*domainsEndpoint.Available, error) {
 func (d *domain) GetDetails() (*domainsEndpoint.DomainDetails, error) {
 	d.attach(true)
 	d.Method = "GET"
-	
+
 	res, err := d.Request.Do()
 	if err != nil {
 		return nil, err
