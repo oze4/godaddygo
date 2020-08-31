@@ -20,6 +20,7 @@ type records struct {
 	*http.Request
 }
 
+// GetAll returns all DNS records for a particular domain
 func (r *records) GetAll() (*[]domainsEndpoint.DNSRecord, error) {
 	r.attach()
 	r.Method = "GET"
