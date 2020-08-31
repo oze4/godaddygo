@@ -9,7 +9,7 @@ type Gateway interface {
 	V1Getter
 }
 
-// versions implements APIInterface
+// gateway implements Gateway
 type gateway struct {
 	*http.Request
 }
