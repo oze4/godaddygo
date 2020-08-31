@@ -94,14 +94,18 @@ func (r *Request) makeAuthString() string {
 
 // verifyStatusCode ensure we got a good response
 func (r *Request) verifyStatusCode(resp *http.Response, bodyBytes []byte) error {
+	// If status code is not in the 200's
 	if resp.StatusCode <= 199 || resp.StatusCode >= 300 {
 		var respMap map[string]string
-		_ = json.Unmarshal(bodyBytes, &respMap)
 		var status []string
+
+		_ = json.Unmarshal(bodyBytes, &respMap)
 		for k, v := range respMap {
 			status = append(status, k+":"+v)
 		}
+
 		return errors.New(strings.Join(status, ","))
 	}
+
 	return nil
 }
