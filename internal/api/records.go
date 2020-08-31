@@ -2,8 +2,8 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/oze4/godaddygo/pkg/http"
 	domainsEndpoint "github.com/oze4/godaddygo/pkg/endpoints/domains"
+	"github.com/oze4/godaddygo/pkg/http"
 )
 
 // RecordsGetter makes embedding easier
@@ -24,7 +24,7 @@ type records struct {
 func (r *records) GetAll() (*[]domainsEndpoint.DNSRecord, error) {
 	r.attach()
 	r.Method = "GET"
-	
+
 	res, err := r.Request.Do()
 	if err != nil {
 		return nil, err
