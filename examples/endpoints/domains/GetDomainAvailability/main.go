@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/oze4/godaddygo"
+	godaddy "github.com/oze4/godaddygo"
 )
 
 func main() {
@@ -11,24 +11,15 @@ func main() {
 	MyAPISecret := "-"             // ...same here
 	DomainToTarget := "google.com" // Domain to check availability for
 
-	// Create client options
-	clientOptions := godaddygo.Options{
-		APIKey:    MyAPIKey,
-		APISecret: MyAPISecret,
-	}
-
-	// Create client
-	client := godaddygo.NewClient(clientOptions)
-
 	// Target the production API
-	prod := client.NewProduction()
+	prod := godaddy.NewProductionAPI(godaddy.NewOptions(MyAPIKey, MyAPISecret))
 
 	// Target version 1 of the production API
 	prodv1 := prod.V1()
 
 	//// You can do the same thing with the dev API as well:
-	// dev := client.NewDevelopment()
-	// devv1 := dev.V1()
+	// dev := godaddy.NewDevelopmentAPI(godaddy.NewOptions(MyAPIKey, MyAPISecret))
+	// devv1 := dev.V1() // etc...
 
 	// Set our domain
 	domain := prodv1.Domain(DomainToTarget)
