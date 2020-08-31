@@ -6,9 +6,9 @@ import (
 )
 
 func main() {
-	MyAPIKey := "-" // Make sure to supply appropriate key [prod or dev]
-    MyAPISecret := "-" // ...same here
-    
+	MyAPIKey := "-"    // Make sure to supply appropriate key [prod or dev]
+	MyAPISecret := "-" // ...same here
+
 	// *** YOU MUST OWN THIS DOMAIN TO GET DETAILS ***
 	DomainToTarget := "somedomainyouown.com"
 
@@ -29,10 +29,10 @@ func main() {
 	domainDetails, err := domain.GetDetails()
 	if err != nil {
 		panic(err.Error())
-    }
-    
-    // This could all be simplified to:
-    // domainDetails, err := prod.V1().Domain(DomainToTarget).GetDetails()
+	}
+
+	// This could all be simplified to:
+	// domainDetails, err := prod.V1().Domain(DomainToTarget).GetDetails()
 
 	fmt.Println(domainDetails)
 }
