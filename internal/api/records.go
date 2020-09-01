@@ -126,6 +126,30 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 	return nil
 }
 
+// Create creates a new DNS record
+func (r *records) Create(rec *domainsEndpoint.DNSRecord) error {
+	// Check we were given a valid record type (A, AAAA, etc....)
+	if err := validateRecordType(rec.Type); err != nil {
+		return err
+	}
+
+	newdns := []domainsEndpoint.DNSRecord{*rec}
+	bod, err := json.Marshal(newdns)
+	if err != nil {
+		return err
+	}
+
+	r.URL = r.URL + "/records"
+	r.Method = "PATCH"
+	r.Body = bod
+
+	if _, err = r.Request.Do(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // validateRecordType ensures we were given an acceptable DNS record type
 func validateRecordType(recType string) error {
 	if valid := validator.Validate(recType, domainsEndpoint.DNSRecordTypes); valid != true {
