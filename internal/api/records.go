@@ -20,7 +20,7 @@ type Records interface {
 	GetAll() (*[]domainsEndpoint.DNSRecord, error)
 	GetByType(string) (*[]domainsEndpoint.DNSRecord, error)
 	GetByTypeName(string, string) (*[]domainsEndpoint.DNSRecord, error)
-	SetValue(string, string, string) error
+	SetValue(recordType string, recordName string, newValue string) error
 }
 
 // records implements Records
@@ -101,10 +101,12 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 		return err
 	}
 
-	newdns := &domainsEndpoint.DNSRecord{
-		Type: recType,
-		Name: recName,
-		Data: newValue,
+	newdns := []domainsEndpoint.DNSRecord{
+		domainsEndpoint.DNSRecord{
+			Type: recType,
+			Name: recName,
+			Data: newValue,
+		},
 	}
 
 	newdnsByte, err := json.Marshal(newdns)
