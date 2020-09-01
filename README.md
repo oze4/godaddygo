@@ -1,7 +1,3 @@
-# godaddygo
-
-Interact with the GoDaddy API via Golang
-
 This library currently supports:
 
  - Getting domain info
