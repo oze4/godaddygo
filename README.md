@@ -5,6 +5,7 @@ Interact with the GoDaddy API via Golang
 This library currently supports:
 
  - Getting domain info
+ - Check domain availability
  - Getting DNS records
  - Setting DNS records
 
@@ -17,7 +18,7 @@ As of now, the domains endpoint is the only endpoint that is safe to use (or ava
 # Table of Contents
 
 - [Installation](#fire-installation)
-- [Details & Usage](#clipboard-usage)
+- [Usage](#clipboard-usage)
 - [Types](#nail_care-type-checking)
 - [Examples](/examples)
 - [Roadmap](#construction-roadmap)
@@ -44,11 +45,17 @@ import (
 
 func main() {
 	prodV1 := godaddy.NewProductionAPI(godaddy.NewOptions("myApiKey", "myApiSecret")).V1()
-	// devV1 := godaddy.NewDevelopmentAPI(godaddy.NewOptions("apiKey", "apiSecret")).V1()
-	myDomain := prodV1.Domain("somedomainyouown.com")
-	dnsRecords := myDomain.Records().GetAll()
+	
+	// Can also target the development API (see the GoDaddy docs for more details)
+	// devV1 := godaddy.NewDevelopmentAPI(godaddy.NewOptions("myApiKey", "myApiSecret")).V1()
+	
+	// 9 times out of 10 you will need to own the domain for your query
+	// You can check for domain availability without owning the domain, for exmaple
+	myDomain := prodV1.Domain("mydomain.com")
+	myDomainRecords := myDomain.Records()
+	myDomainZone := myDomainRecords.GetAll()
 
-	// ...do something with records
+	// ...do something with `myDomainZone`
 }
 ```
 
