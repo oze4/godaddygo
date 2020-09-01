@@ -65,6 +65,7 @@ func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool
 func (d *domain) IsAvailable() (*domainsEndpoint.Available, error) {
 	d.attach(false)
 	d.Method = "GET"
+	
 	//TODO: parameterize checkType and forTransfer in the URL (like func Agreements)
 	d.URL = d.URL + "/available?domain=" + d.Host + "&checkType=FAST&forTransfer=false"
 
@@ -117,5 +118,5 @@ func (d *domain) Update(body []byte) *http.Request {
 // Records builds the DNS record piece of the URL
 func (d *domain) Records() Records {
 	d.attach(true)
-	return &records{d.Request}
+	return &records{Request: d.Request}
 }
