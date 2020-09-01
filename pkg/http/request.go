@@ -3,6 +3,7 @@ package http
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -13,12 +14,17 @@ import (
 )
 
 // RequestMethods holds all acceptable request methods
+// https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
 var RequestMethods = map[string]string{
-	"GET":    "GET",
-	"POST":   "POST",
-	"DELETE": "DELETE",
-	"PATCH":  "PATCH",
-	"PUT":    "PUT",
+	"GET":     "GET",
+	"HEAD":    "HEAD",
+	"POST":    "POST",
+	"DELETE":  "DELETE",
+	"PATCH":   "PATCH",
+	"OPTIONS": "OPTIONS",
+	"CONNECT": "CONNECT",
+	"PUT":     "PUT",
+	"TRACE":   "TRACE",
 }
 
 // Request holds request data
@@ -37,12 +43,16 @@ type Request struct {
 	Body []byte
 }
 
-// Do sends the http request
+// Do is sends our http request
+// By default, this func does the following:
+//  - Validates REST method
+//  - Adds appropriate GoDaddy authorization header
+//  - Sets `Content-Type` header to `application/json`
 func (r *Request) Do() ([]byte, error) {
 	// Verify we were given a valid REST method
 	valid := validator.Validate(r.Method, RequestMethods)
 	if valid != true {
-		return nil, errors.New("Invalid request method")
+		return nil, fmt.Errorf("Invalid request method: %s", r.Method)
 	}
 
 	// Sort out whether or not there is a Body
@@ -54,11 +64,12 @@ func (r *Request) Do() ([]byte, error) {
 	// Create new REST request
 	req, err := http.NewRequest(r.Method, r.URL, bodyFin)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Error creating new request: %s", err.Error())
 	}
 
-	// Add authorization to our request
+	// Add authorization & content-type headers to our request
 	req.Header.Set("Authorization", r.makeAuthString())
+	req.Header.Set("Content-Type", "application/json")
 
 	// Create new http client to send our request
 	httpclient := &http.Client{}
@@ -66,7 +77,7 @@ func (r *Request) Do() ([]byte, error) {
 	// Send request, check for error
 	resp, err := httpclient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Error sending request: %s", err.Error())
 	}
 
 	// Express intent to close body once we are through with it
@@ -83,7 +94,7 @@ func (r *Request) Do() ([]byte, error) {
 		return nil, err
 	}
 
-	// Return response body as bytes
+	// Return response body as bytes to simplify consumption
 	return result, nil
 }
 
@@ -94,17 +105,20 @@ func (r *Request) makeAuthString() string {
 
 // verifyStatusCode ensure we got a good response
 func (r *Request) verifyStatusCode(resp *http.Response, bodyBytes []byte) error {
-	// If status code is not in the 200's
-	if resp.StatusCode <= 199 || resp.StatusCode >= 300 {
+	// If status code greater than 400 it should be an error
+	// https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+	if resp.StatusCode >= 400 {
 		var respMap map[string]string
-		var status []string
+		if err := json.Unmarshal(bodyBytes, &respMap); err != nil {
+			return fmt.Errorf("Bad request: %d", resp.StatusCode)
+		}
 
-		_ = json.Unmarshal(bodyBytes, &respMap)
+		var status []string
 		for k, v := range respMap {
 			status = append(status, k+":"+v)
 		}
 
-		return errors.New(strings.Join(status, ","))
+		return errors.New(strings.Join(status, " || "))
 	}
 
 	return nil
