@@ -18,6 +18,8 @@ type RecordsGetter interface {
 // specific domain. Get or set DNS records
 type Records interface {
 	GetAll() (*[]domainsEndpoint.DNSRecord, error)
+	GetByType(string) (*[]domainsEndpoint.DNSRecord, error)
+	GetByTypeName(string, string) (*[]domainsEndpoint.DNSRecord, error)
 }
 
 // records implements Records
