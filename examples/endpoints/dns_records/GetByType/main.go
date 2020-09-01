@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	MyAPIKey := "-"     // Make sure to supply appropriate key [prod or dev]
-	MyAPISecret := "-"  // ...same here
+	MyAPIKey := "-"    // Make sure to supply appropriate key [prod or dev]
+	MyAPISecret := "-" // ...same here
 
 	// *** YOU MUST OWN THIS DOMAIN TO GET DETAILS ***
 	DomainToTarget := "somedomainyouown.com"
