@@ -9,7 +9,7 @@ This library currently supports:
  - Getting DNS records
  - Setting DNS records
 
-*TERMINOLOGY*: When we reference endpoints, [this](https://developer.godaddy.com/doc) is what we are referring to.
+Whenever we reference endpoints, [this](https://developer.godaddy.com/doc) is what we are referring to.
 
 As of now, the domains endpoint is the only endpoint that is safe to use (or available for that matter). We plan on slowly integrating other endpoints, but figure the majority of people interested in an SDK for an Domain/DNS provider (GoDaddy) prob want to view or change DNS records.
 
@@ -17,24 +17,24 @@ As of now, the domains endpoint is the only endpoint that is safe to use (or ava
 
 # Table of Contents
 
-- [Installation](#fire-installation)
-- [Usage](#clipboard-usage)
-- [Types](#nail_care-type-checking)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Types](#type-checking)
 - [Examples](/examples)
-- [Roadmap](#construction-roadmap)
+- [Roadmap](#roadmap)
   - [Endpoints](#endpoints)
 
 ---
 
 <br />
 
-## :fire: Installation
+## Installation
 
 `go get -u github.com/oze4/godaddygo`
 
 <br />
 
-## :clipboard: Usage
+## Usage
 
 Things should be fairly self-explanatory, but this is enough to get you started:
 
@@ -61,7 +61,7 @@ func main() {
 
 <br />
 
-## :nail_care: Type Checking
+## Type Checking
 
 - :star:**For user-land-type-checking, each endpoint has it's own package located at:** `github.com/oze4/godaddygo/pkg/endpoints/<endpoint>`
 - _The main package, (`github.com/oze4/godaddygo`) provides everything you need to interact with the GoDaddy API_.
@@ -84,29 +84,23 @@ func SomeFunc(dd domains.DomainDetails) { // <-- type-check using `DomainDetails
 
 <br />
 
-## :construction: Roadmap
+## Roadmap
 
 ### Endpoints
 
 Please see [here](https://developer.godaddy.com/doc) for more information on GoDaddy API endpoints
 
-:no_entry_sign:<small>Not Available</small>
-**|**
-:construction:<small>In Progress</small>
-**|**
-:white_check_mark:<small>Finished</small>
-
 | Endpoint      | Status          |
 | ------------- | --------------- |
-| Abuse         | :no_entry_sign: |
-| Aftermarket   | :no_entry_sign: |
-| Agreements    | :no_entry_sign: |
-| Certificates  | :no_entry_sign: |
-| Countries     | :no_entry_sign: |
-| Domains       | :white_check_mark: Safe to get domain info and DNS records, as well as set DNS records  |
-| Orders        | :no_entry_sign: |
-| Shoppers      | :no_entry_sign: |
-| Subscriptions | :no_entry_sign: |
+| Abuse         | - |
+| Aftermarket   | - |
+| Agreements    | - |
+| Certificates  | - |
+| Countries     | - |
+| Domains       | Safe to get domain info and DNS records, as well as set DNS records  |
+| Orders        | - |
+| Shoppers      | - |
+| Subscriptions | - |
 
 <br />
 <br />
