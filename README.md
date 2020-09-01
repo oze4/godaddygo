@@ -5,7 +5,7 @@ Interact with the GoDaddy API via Golang
 This library currently supports:
 
  - Getting domain info
- - Check domain availability
+ - Checking domain availability
  - Getting DNS records
  - Setting DNS records
 
