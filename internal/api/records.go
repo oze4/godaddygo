@@ -92,10 +92,10 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]domainsEndpoi
 	return &dnsrecords, nil
 }
 
-// UpdateValue allows you to update the value of a DNS record.
+// SetValue allows you to set the value of an existing DNS record.
 // If some.example.com resolved to 1.1.1.1 but I wanted it to be 2.2.2.2
 // I would use this function to update that value
-func (r *records) UpdateValue(recType, recName, newValue string) error {
+func (r *records) SetValue(recType, recName, newValue string) error {
 	// Check we were given a valid record type (A, AAAA, etc....)
 	if err := validateRecordType(recType); err != nil {
 		return err
