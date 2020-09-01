@@ -8,6 +8,8 @@ This library currently supports:
  - Getting DNS records
  - Setting DNS records
 
+*TERMINOLOGY*: When we reference endpoints, [this](https://developer.godaddy.com/doc) is what we are referring to.
+
 As of now, the domains endpoint is the only endpoint that is safe to use (or available for that matter). We plan on slowly integrating other endpoints, but figure the majority of people interested in an SDK for an Domain/DNS provider (GoDaddy) prob want to view or change DNS records.
 
 ---
@@ -94,7 +96,7 @@ Please see [here](https://developer.godaddy.com/doc) for more information on GoD
 | Agreements    | :no_entry_sign: |
 | Certificates  | :no_entry_sign: |
 | Countries     | :no_entry_sign: |
-| Domains       | Safe to get domain info and DNS records, as well as set DNS records  |
+| Domains       | :white_check_mark: Safe to get domain info and DNS records, as well as set DNS records  |
 | Orders        | :no_entry_sign: |
 | Shoppers      | :no_entry_sign: |
 | Subscriptions | :no_entry_sign: |
