@@ -4,16 +4,17 @@ import (
 	"github.com/oze4/godaddygo/pkg/http"
 )
 
-// V1Getter does a thing
+// V1Getter makes embedding easier & more controllable
 type V1Getter interface {
 	V1() V1
 }
 
-// V1 does a thing
+// V1 holds all endpoints for version 1 of GoDaddy API
 type V1 interface {
 	DomainGetter
 }
 
+// v1 implements V1
 type v1 struct {
 	*http.Request
 }
@@ -24,6 +25,7 @@ func (v *v1) Domain(hostname string) Domain {
 	return &domain{v.Request}
 }
 
+// attach appends appropriate data to URL
 func (v *v1) attach(hostname string) {
 	v.URL = v.URL + "/v1"
 	v.Host = hostname
