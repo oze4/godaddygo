@@ -21,6 +21,7 @@ type Records interface {
 	GetByType(string) (*[]domainsEndpoint.DNSRecord, error)
 	GetByTypeName(string, string) (*[]domainsEndpoint.DNSRecord, error)
 	SetValue(recordType string, recordName string, newValue string) error
+	Create(*domainsEndpoint.DNSRecord) error
 }
 
 // records implements Records
