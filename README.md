@@ -18,7 +18,7 @@ As of now, the domains endpoint is the only endpoint that is safe to use (or ava
 
 - [Installation](#fire-installation)
 - [Details & Usage](#clipboard-usage)
-  - [Type-checking](#nail-care-type-checking)
+- [Types](#nail_care-type-checking)
 - [Examples](/examples)
 - [Roadmap](#construction-roadmap)
   - [Endpoints](#endpoints)
