@@ -16,7 +16,7 @@ As of now, the domains endpoint is the only endpoint that is safe to use (or ava
 - [Installation](#installation)
 - [Usage](#usage)
 - [Types](#type-checking)
-- [Examples](/examples)
+- [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
 - [Roadmap](#roadmap)
   - [Endpoints](#endpoints)
 
