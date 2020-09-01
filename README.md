@@ -59,7 +59,7 @@ func main() {
 
 ## Type Checking
 
-- :star:**For user-land-type-checking, each endpoint has it's own package located at:** `github.com/oze4/godaddygo/pkg/endpoints/<endpoint>`
+- **For user-land-type-checking, each endpoint has it's own package located at:** `github.com/oze4/godaddygo/pkg/endpoints/<endpoint>`
 - _The main package, (`github.com/oze4/godaddygo`) provides everything you need to interact with the GoDaddy API_.
 - **However**, if you would like to type-check using types which are returned from `godaddygo`, you will need to use a specific package for "that" endpoint
 - We mirrored endpoints found in the [GoDaddy docs](https://developer.godaddy.com/doc)
