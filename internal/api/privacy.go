@@ -21,18 +21,13 @@ type privacy struct {
 }
 
 func (p *privacy) Purchase() *http.Request {
-	p.attach()
-	p.URL = p.URL + "/purchase"
+	p.URL = p.URL + "/privacy/purchase"
 	p.Method = "POST"
 	return p.Request
 }
 
 func (p *privacy) Delete() *http.Request {
-	p.attach()
+	p.URL = p.URL + "/privacy"
 	p.Method = "DELETE"
 	return p.Request
-}
-
-func (p *privacy) attach() {
-	p.URL = p.URL + "/privacy"
 }

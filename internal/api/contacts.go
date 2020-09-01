@@ -21,11 +21,6 @@ type contacts struct {
 
 // Validate builds the validate piece of the URL
 func (c *contacts) Validate() *http.Request {
-	c.attach()
-	c.URL = c.URL + "/validate"
+	c.URL = c.URL + "/contacts/validate"
 	return c.Request
-}
-
-func (c *contacts) attach() {
-	c.URL = c.URL + "/contacts"
 }

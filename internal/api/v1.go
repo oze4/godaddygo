@@ -20,11 +20,7 @@ type v1 struct {
 
 // Domain provides domain related info and tasks for the `domains` GoDaddy API endpoint
 func (v *v1) Domain(hostname string) Domain {
-	v.attach(hostname)
-	return &domain{v.Request}
-}
-
-func (v *v1) attach(hostname string) {
 	v.URL = v.URL + "/v1"
 	v.Host = hostname
+	return &domain{v.Request}
 }

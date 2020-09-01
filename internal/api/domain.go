@@ -30,7 +30,7 @@ type domain struct {
 }
 
 // attach adds this endpoint to the URL
-func (d *domain) attach(attachDomainName bool) {
+func (d *domain) atttach(attachDomainName bool) {
 	if attachDomainName {
 		d.URL = d.URL + "/domains/" + d.Host
 	} else {
@@ -40,19 +40,19 @@ func (d *domain) attach(attachDomainName bool) {
 
 // Contacts builds out the contacts piece of the URL
 func (d *domain) Contacts() Contacts {
-	d.attach(true)
+	d.URL = d.URL + "/domains/" + d.Host
 	return &contacts{d.Request}
 }
 
 // Privacy builds out the privacy piece of the URL
 func (d *domain) Privacy() Privacy {
-	d.attach(true)
+	d.URL = d.URL + "/domains/" + d.Host
 	return &privacy{d.Request}
 }
 
 // Agreements builds the agreements piece of the URL
 func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool) *http.Request {
-	d.attach(false)
+	d.URL = d.URL + "/domains"
 	doms := append(domains, d.Host)
 	dl := strings.Join(doms, ",")
 	p := strconv.FormatBool(privacyRequested)
@@ -63,7 +63,7 @@ func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool
 
 // IsAvailable checks if the supplied domain name is available for purchase
 func (d *domain) IsAvailable() (*domainsEndpoint.Available, error) {
-	d.attach(false)
+	d.URL = d.URL + "/domains"
 	d.Method = "GET"
 
 	//TODO: parameterize checkType and forTransfer in the URL (like func Agreements)
@@ -84,7 +84,7 @@ func (d *domain) IsAvailable() (*domainsEndpoint.Available, error) {
 
 // GetDetails gets info on a domain
 func (d *domain) GetDetails() (*domainsEndpoint.DomainDetails, error) {
-	d.attach(true)
+	d.URL = d.URL + "/domains/" + d.Host
 	d.Method = "GET"
 
 	res, err := d.Request.Do()
@@ -102,14 +102,14 @@ func (d *domain) GetDetails() (*domainsEndpoint.DomainDetails, error) {
 
 // Delete deletes a domain
 func (d *domain) Delete() *http.Request {
-	d.attach(true)
+	d.URL = d.URL + "/domains/" + d.Host
 	d.Method = "DELETE"
 	return d.Request
 }
 
 // Update updates a domain
 func (d *domain) Update(body []byte) *http.Request {
-	d.attach(true)
+	d.URL = d.URL + "/domains/" + d.Host
 	d.Method = "PATCH"
 	d.Body = body
 	return d.Request
@@ -117,6 +117,6 @@ func (d *domain) Update(body []byte) *http.Request {
 
 // Records builds the DNS record piece of the URL
 func (d *domain) Records() Records {
-	d.attach(true)
-	return &records{Request: d.Request}
+	d.URL = d.URL + "/domains/" + d.Host
+	return &records{d.Request}
 }
