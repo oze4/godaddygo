@@ -20,6 +20,7 @@ type Records interface {
 	GetAll() (*[]domainsEndpoint.DNSRecord, error)
 	GetByType(string) (*[]domainsEndpoint.DNSRecord, error)
 	GetByTypeName(string, string) (*[]domainsEndpoint.DNSRecord, error)
+	SetValue(string, string, string) error
 }
 
 // records implements Records
