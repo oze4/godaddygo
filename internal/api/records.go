@@ -21,7 +21,8 @@ type Records interface {
 	GetByType(string) (*[]domainsEndpoint.DNSRecord, error)
 	GetByTypeName(string, string) (*[]domainsEndpoint.DNSRecord, error)
 	SetValue(recordType string, recordName string, newValue string) error
-	Create(*domainsEndpoint.DNSRecord) error
+	Add(*domainsEndpoint.DNSRecord) error
+	AddMultiple(*[]domainsEndpoint.DNSRecord) error
 }
 
 // records implements Records
@@ -127,8 +128,9 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 	return nil
 }
 
-// Create creates a new DNS record
-func (r *records) Create(rec *domainsEndpoint.DNSRecord) error {
+// Add adds a new DNS record, it will NOT update any existing records
+// a new record WILL be added
+func (r *records) Add(rec *domainsEndpoint.DNSRecord) error {
 	// Check we were given a valid record type (A, AAAA, etc....)
 	if err := validateRecordType(rec.Type); err != nil {
 		return err
@@ -136,6 +138,37 @@ func (r *records) Create(rec *domainsEndpoint.DNSRecord) error {
 
 	newdns := []domainsEndpoint.DNSRecord{*rec}
 	bod, err := json.Marshal(newdns)
+	if err != nil {
+		return err
+	}
+
+	r.URL = r.URL + "/records"
+	r.Method = "PATCH"
+	r.Body = bod
+
+	if _, err = r.Request.Do(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// AddMultiple lets you add multiple DNS records at once, it will NOT 
+// update any existing records a new record WILL be added
+func (r *records) AddMultiple(recs *[]domainsEndpoint.DNSRecord) error {
+	iserr := false
+	for _, rec := range *recs {
+		// Check we were given a valid record type (A, AAAA, etc....)
+		if err := validateRecordType(rec.Type); err != nil {
+			iserr = true
+		}
+	}
+
+	if iserr {
+		return errors.New("Invalid record type found")
+	}
+
+	bod, err := json.Marshal(recs)
 	if err != nil {
 		return err
 	}
