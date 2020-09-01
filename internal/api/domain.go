@@ -54,11 +54,9 @@ func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool
 
 // IsAvailable checks if the supplied domain name is available for purchase
 func (d *domain) IsAvailable() (*domainsEndpoint.Available, error) {
-	d.URL = d.URL + "/domains"
-	d.Method = "GET"
-
 	//TODO: parameterize checkType and forTransfer in the URL (like func Agreements)
-	d.URL = d.URL + "/available?domain=" + d.Host + "&checkType=FAST&forTransfer=false"
+	d.URL = d.URL + "/domains/available?domain=" + d.Host + "&checkType=FAST&forTransfer=false"
+	d.Method = "GET"
 
 	res, err := d.Request.Do()
 	if err != nil {
