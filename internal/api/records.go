@@ -153,7 +153,7 @@ func (r *records) Add(rec *domainsEndpoint.DNSRecord) error {
 	return nil
 }
 
-// AddMultiple lets you add multiple DNS records at once, it will NOT 
+// AddMultiple lets you add multiple DNS records at once, it will NOT
 // update any existing records a new record WILL be added
 func (r *records) AddMultiple(recs *[]domainsEndpoint.DNSRecord) error {
 	iserr := false
