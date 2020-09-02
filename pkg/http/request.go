@@ -35,8 +35,7 @@ type Request struct {
 //  - Sets `Content-Type` header to `application/json`
 func (r *Request) Do() ([]byte, error) {
 	// Verify we were given a valid REST method
-	valid := validator.Validate(r.Method, RequestMethods)
-	if valid != true {
+	if valid := validator.Validate(r.Method, RequestMethods); valid != true {
 		return nil, fmt.Errorf("Invalid request method: %s", r.Method)
 	}
 
