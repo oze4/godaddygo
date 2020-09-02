@@ -32,11 +32,13 @@ Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 
 ## Usage
 
-This library is rather "self-documenting" - we mirror the structure of the GoDaddy API. For example, for this endpoint...
+This library is rather "self-documenting" - we mirror the structure of the GoDaddy API.
+
+Consider the following endpoint, which allows you to add a DNS record to a domain..
 
 ![screenshot_from_godaddy_docs](https://i.imgur.com/tN2IveY.png)
 
-...the code would look like:
+Programmatically, this would look like:
 
 ```golang
 // Simplified
