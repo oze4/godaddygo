@@ -11,7 +11,7 @@ type Gateway interface {
 
 // gateway implements Gateway
 type gateway struct {
-	*http.Request
+	http.Request
 }
 
 // V1 returns the V1 section of the GoDaddy API

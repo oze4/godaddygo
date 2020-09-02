@@ -16,7 +16,7 @@ type V1 interface {
 
 // v1 implements V1
 type v1 struct {
-	*http.Request
+	http.Request
 }
 
 // Domain provides domain related info and tasks for the `domains` GoDaddy API endpoint

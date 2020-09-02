@@ -11,16 +11,16 @@ type ContactsGetter interface {
 
 // Contacts builds the contacts piece of the URL
 type Contacts interface {
-	Validate() *http.Request
+	Validate() http.Request
 }
 
 // contacts implements Contacts
 type contacts struct {
-	*http.Request
+	http.Request
 }
 
 // Validate builds the validate piece of the URL
-func (c *contacts) Validate() *http.Request {
+func (c *contacts) Validate() http.Request {
 	c.URL = c.URL + "/contacts/validate"
 	return c.Request
 }

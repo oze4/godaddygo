@@ -21,14 +21,14 @@ type Records interface {
 	GetByType(string) (*[]domainsEndpoint.DNSRecord, error)
 	GetByTypeName(string, string) (*[]domainsEndpoint.DNSRecord, error)
 	SetValue(recordType string, recordName string, newValue string) error
-	SetValueReturnRequest(recType, recName, newValue string) (*http.Request, error)
+	SetValueReturnRequest(recType, recName, newValue string) (http.Request, error)
 	Add(*domainsEndpoint.DNSRecord) error
 	AddMultiple(*[]domainsEndpoint.DNSRecord) error
 }
 
 // records implements Records
 type records struct {
-	*http.Request
+	http.Request
 }
 
 // GetAll returns all DNS records for a specific domain
@@ -96,10 +96,10 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]domainsEndpoi
 }
 
 // SetValueReturnRequest is for debugging purposes and will be removed shortly
-func (r *records) SetValueReturnRequest(recType, recName, newValue string) (*http.Request, error) {
+func (r *records) SetValueReturnRequest(recType, recName, newValue string) (http.Request, error) {
 	// Check we were given a valid record type (A, AAAA, etc....)
 	if err := validateRecordType(recType); err != nil {
-		return nil, errors.New("Invalid record type: " + recType + " " + err.Error())
+		return http.Request{}, errors.New("Invalid record type: " + recType + " " + err.Error())
 	}
 
 	newdns := []domainsEndpoint.DNSRecord{
@@ -112,7 +112,7 @@ func (r *records) SetValueReturnRequest(recType, recName, newValue string) (*htt
 
 	newdnsByte, err := json.Marshal(newdns)
 	if err != nil {
-		return nil, err
+		return http.Request{}, err
 	}
 
 	r.URL = r.URL + "/records/" + recType + "/" + recName

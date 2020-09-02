@@ -19,14 +19,14 @@ type Domain interface {
 	ContactsGetter
 	PrivacyGetter
 	RecordsGetter
-	Agreements([]string, bool, bool) *http.Request
+	Agreements([]string, bool, bool) http.Request
 	IsAvailable() (*domainsEndpoint.Available, error)
 	GetDetails() (*domainsEndpoint.DomainDetails, error)
 }
 
 // domain implements Domain [interface]
 type domain struct {
-	*http.Request
+	http.Request
 }
 
 // Contacts builds out the contacts piece of the URL
@@ -42,7 +42,7 @@ func (d *domain) Privacy() Privacy {
 }
 
 // Agreements builds the agreements piece of the URL
-func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool) *http.Request {
+func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool) http.Request {
 	d.URL = d.URL + "/domains"
 	doms := append(domains, d.Host)
 	dl := strings.Join(doms, ",")
@@ -90,14 +90,14 @@ func (d *domain) GetDetails() (*domainsEndpoint.DomainDetails, error) {
 }
 
 // Delete deletes a domain
-func (d *domain) Delete() *http.Request {
+func (d *domain) Delete() http.Request {
 	d.URL = d.URL + "/domains/" + d.Host
 	d.Method = "DELETE"
 	return d.Request
 }
 
 // Update updates a domain
-func (d *domain) Update(body []byte) *http.Request {
+func (d *domain) Update(body []byte) http.Request {
 	d.URL = d.URL + "/domains/" + d.Host
 	d.Method = "PATCH"
 	d.Body = body
