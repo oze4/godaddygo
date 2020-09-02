@@ -21,6 +21,7 @@ type Records interface {
 	GetByType(string) (*[]domainsEndpoint.DNSRecord, error)
 	GetByTypeName(string, string) (*[]domainsEndpoint.DNSRecord, error)
 	SetValue(recordType string, recordName string, newValue string) error
+	SetValueReturnRequest(recType, recName, newValue string) (*http.Request, error)
 	Add(*domainsEndpoint.DNSRecord) error
 	AddMultiple(*[]domainsEndpoint.DNSRecord) error
 }
@@ -92,6 +93,33 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]domainsEndpoi
 	}
 
 	return &dnsrecords, nil
+}
+
+// SetValueReturnRequest is for debugging purposes
+func (r *records) SetValueReturnRequest(recType, recName, newValue string) (*http.Request, error) {
+	// Check we were given a valid record type (A, AAAA, etc....)
+	if err := validateRecordType(recType); err != nil {
+		return nil, err
+	}
+
+	newdns := []domainsEndpoint.DNSRecord{
+		domainsEndpoint.DNSRecord{
+			Type: recType,
+			Name: recName,
+			Data: newValue,
+		},
+	}
+
+	newdnsByte, err := json.Marshal(newdns)
+	if err != nil {
+		return nil, err
+	}
+
+	r.URL = r.URL + "/records/" + recType + "/" + recName
+	r.Method = "PUT"
+	r.Body = newdnsByte
+
+	return r.Request, nil
 }
 
 // SetValue allows you to set the value of an existing DNS record.
