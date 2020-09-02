@@ -32,7 +32,20 @@ Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 
 ## Usage
 
-This library is rather "self-documenting", but this is enough to get you started:
+This library is rather "self-documenting" - we mirror the structure of the GoDaddy API. For example, for this endpoint...
+
+![screenshot_from_godaddy_docs](https://i.imgur.com/tN2IveY.png)
+
+...the code would look like:
+
+```golang
+// Simplified
+godaddygo.NewProductionAPI(options).V1().Domain("dom.com").Records().Add(newDNSRecord)
+```
+
+<br />
+
+With that being said, this should be enough to help get you started:
 
 ```golang
 import (
