@@ -99,7 +99,7 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]domainsEndpoi
 func (r *records) SetValueReturnRequest(recType, recName, newValue string) (*http.Request, error) {
 	// Check we were given a valid record type (A, AAAA, etc....)
 	if err := validateRecordType(recType); err != nil {
-		return nil, err
+		return nil, errors.New("Invalid record type: " + recType + " " + err.Error())
 	}
 
 	newdns := []domainsEndpoint.DNSRecord{
