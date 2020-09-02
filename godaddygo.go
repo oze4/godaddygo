@@ -7,7 +7,7 @@ import (
 
 // NewProductionAPI targets GoDaddy's production API (https://api.godaddy.com)
 func NewProductionAPI(o Options) api.Gateway {
-	return api.InitProduction(&http.Request{
+	return api.InitProduction(http.Request{
 		APIKey:    o.APIKey(),
 		APISecret: o.APISecret(),
 	})
@@ -15,7 +15,7 @@ func NewProductionAPI(o Options) api.Gateway {
 
 // NewDevelopmentAPI targets GoDaddy's development API (https://api.ote-godaddy.com)
 func NewDevelopmentAPI(o Options) api.Gateway {
-	return api.InitDevelopment(&http.Request{
+	return api.InitDevelopment(http.Request{
 		APIKey:    o.APIKey(),
 		APISecret: o.APISecret(),
 	})
