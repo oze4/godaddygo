@@ -32,7 +32,9 @@ Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 
 ## Usage
 
-This library is rather "self-documenting" - we mirror the structure of the GoDaddy API.
+This library is rather "self-documenting" - we mirror the structure of the GoDaddy API. 
+
+[View examples here](https://github.com/oze4/godaddygo/tree/master/examples).
 
 Consider the following endpoint, which allows you to add a DNS record to a domain..
 
@@ -77,7 +79,6 @@ func main() {
 - **For user-land-type-checking, each endpoint has it's own package located at:** `github.com/oze4/godaddygo/pkg/endpoints/<endpoint>`
 - _The main package, (`github.com/oze4/godaddygo`) provides everything you need to interact with the GoDaddy API_.
 - **However**, if you would like to type-check using types which are returned from `godaddygo`, you will need to use a specific package for "that" endpoint
-- We mirrored endpoints found in the [GoDaddy docs](https://developer.godaddy.com/doc)
 
 If you wanted to type-check using the data type for domain details, you would do:
 
