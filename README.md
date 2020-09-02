@@ -5,9 +5,9 @@ This library currently supports:
  - Getting DNS records
  - Setting DNS records
 
-Whenever we reference endpoints, [this](https://developer.godaddy.com/doc) is what we are referring to.
+Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddy.com/doc)
 
-As of now, the domains endpoint is the only endpoint that is safe to use (or available for that matter). We plan on slowly integrating other endpoints, but figure the majority of people interested in an SDK for an Domain/DNS provider (GoDaddy) prob want to view or change DNS records.
+Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 
 ---
 
@@ -32,7 +32,7 @@ As of now, the domains endpoint is the only endpoint that is safe to use (or ava
 
 ## Usage
 
-Things should be fairly self-explanatory, but this is enough to get you started:
+This library is rather "self-documenting", but this is enough to get you started:
 
 ```golang
 import (
