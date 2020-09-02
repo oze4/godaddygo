@@ -7,25 +7,10 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-
 	"strings"
 
 	"github.com/oze4/godaddygo/internal/validator"
 )
-
-// RequestMethods holds all acceptable request methods
-// https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
-var RequestMethods = map[string]string{
-	"GET":     "GET",
-	"HEAD":    "HEAD",
-	"POST":    "POST",
-	"DELETE":  "DELETE",
-	"PATCH":   "PATCH",
-	"OPTIONS": "OPTIONS",
-	"CONNECT": "CONNECT",
-	"PUT":     "PUT",
-	"TRACE":   "TRACE",
-}
 
 // Request holds request data
 type Request struct {
@@ -113,6 +98,8 @@ func (r *Request) verifyStatusCode(resp *http.Response, bodyBytes []byte) error 
 			return fmt.Errorf("Bad request: %d", resp.StatusCode)
 		}
 
+		// Outputs error object (map[string]string) as a single line
+		// string in `key:value` notation. This is for legibility
 		var status []string
 		for k, v := range respMap {
 			status = append(status, k+":"+v)
@@ -120,6 +107,5 @@ func (r *Request) verifyStatusCode(resp *http.Response, bodyBytes []byte) error 
 
 		return errors.New(strings.Join(status, " || "))
 	}
-
 	return nil
 }
