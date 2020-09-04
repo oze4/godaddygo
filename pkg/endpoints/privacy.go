@@ -1,4 +1,4 @@
-package api
+package endpoints
 
 import (
 	"errors"
@@ -17,7 +17,7 @@ type Privacy interface {
 
 // privacy implements Privacy
 type privacy struct {
-	currentRequest
+	currentConnection
 }
 
 func (p *privacy) Purchase() error {

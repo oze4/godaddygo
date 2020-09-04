@@ -1,4 +1,4 @@
-package domains
+package endpoints
 
 // DomainName holds info about domain name
 type DomainName struct {

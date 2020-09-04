@@ -1,4 +1,4 @@
-package domains
+package endpoints
 
 // RealName holds real name info about a domain.
 type RealName struct {

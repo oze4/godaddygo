@@ -1,4 +1,4 @@
-package domains
+package endpoints
 
 import (
 	"time"

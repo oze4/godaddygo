@@ -2,110 +2,99 @@ package api
 
 import (
 	"encoding/json"
-	"strconv"
-	"strings"
 
 	domainsEndpoint "github.com/oze4/godaddygo/pkg/endpoints/domains"
 	"github.com/oze4/godaddygo/pkg/http"
+	urls "github.com/oze4/godaddygo/pkg/url"
 )
 
-// DomainGetter returns
-type DomainGetter interface {
-	Domain(string) Domain
-}
-
-// Domain represents the `domains` GoDaddy API endpoint
-type Domain interface {
-	ContactsGetter
-	PrivacyGetter
-	RecordsGetter
-	Agreements([]string, bool, bool) http.Request
-	IsAvailable() (*domainsEndpoint.Available, error)
-	GetDetails() (*domainsEndpoint.DomainDetails, error)
-}
-
-// domain implements Domain [interface]
-type domain struct {
-	http.Request
+// Domain implements Domain [interface]
+type Domain struct {
+	Records Records
+	currentRequest
 }
 
 // Contacts builds out the contacts piece of the URL
-func (d *domain) Contacts() Contacts {
-	d.URL = d.URL + "/domains/" + d.Host
-	return &contacts{d.Request}
+func (d *Domain) Contacts() Contacts {
+	return &contacts{d.currentRequest}
 }
 
 // Privacy builds out the privacy piece of the URL
-func (d *domain) Privacy() Privacy {
-	d.URL = d.URL + "/domains/" + d.Host
-	return &privacy{d.Request}
+func (d *Domain) Privacy() Privacy {
+	return &privacy{d.currentRequest}
 }
 
 // Agreements builds the agreements piece of the URL
-func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool) http.Request {
-	d.URL = d.URL + "/domains"
-	doms := append(domains, d.Host)
-	dl := strings.Join(doms, ",")
-	p := strconv.FormatBool(privacyRequested)
-	f := strconv.FormatBool(forTransfer)
-	d.URL = "/agreements?tlds=" + dl + "&privacy=" + p + "&forTransfer=" + f
-	return d.Request
+func (d *Domain) Agreements(domains []string, privacyRequested, forTransfer bool) error {
+	/*
+		d.URL = d.URL + "/domains"
+		doms := append(domains, d.Host)
+		dl := strings.Join(doms, ",")
+		p := strconv.FormatBool(privacyRequested)
+		f := strconv.FormatBool(forTransfer)
+		d.URL = "/agreements?tlds=" + dl + "&privacy=" + p + "&forTransfer=" + f
+		return d.Request
+	*/
+	return nil
 }
 
 // IsAvailable checks if the supplied domain name is available for purchase
-func (d *domain) IsAvailable() (*domainsEndpoint.Available, error) {
-	//TODO: parameterize checkType and forTransfer in the URL (like func Agreements)
-	d.URL = d.URL + "/domains/available?domain=" + d.Host + "&checkType=FAST&forTransfer=false"
-	d.Method = "GET"
+func (d *Domain) IsAvailable() (domainsEndpoint.Available, error) {
+	req := &http.Request{
+		APIKey:    d.apiKey,
+		APISecret: d.apiSecret,
+		URL:       urls.New(d.isProduction).Domain(d.domainName).IsAvailable(false),
+		Method:    "GET",
+	}
 
-	res, err := d.Request.Do()
+	res, err := req.Do()
 	if err != nil {
-		return nil, err
+		return domainsEndpoint.Available{}, err
 	}
 
 	var avail domainsEndpoint.Available
 	if err := json.Unmarshal(res, &avail); err != nil {
-		return nil, err
+		return domainsEndpoint.Available{}, err
 	}
 
-	return &avail, nil
+	return avail, nil
 }
 
 // GetDetails gets info on a domain
-func (d *domain) GetDetails() (*domainsEndpoint.DomainDetails, error) {
-	d.URL = d.URL + "/domains/" + d.Host
-	d.Method = "GET"
+func (d *Domain) GetDetails() (domainsEndpoint.DomainDetails, error) {
+	req := &http.Request{
+		APIKey:    d.apiKey,
+		APISecret: d.apiSecret,
+		URL:       urls.New(d.isProduction).Domain(d.domainName).Details(),
+		Method:    "GET",
+	}
 
-	res, err := d.Request.Do()
+	resp, err := req.Do()
 	if err != nil {
-		return nil, err
+		return domainsEndpoint.DomainDetails{}, err
 	}
 
 	var details domainsEndpoint.DomainDetails
-	if err := json.Unmarshal(res, &details); err != nil {
-		return nil, err
+	if err := json.Unmarshal(resp, &details); err != nil {
+		return domainsEndpoint.DomainDetails{}, err
 	}
 
-	return &details, nil
+	return details, nil
 }
 
 // Delete deletes a domain
-func (d *domain) Delete() http.Request {
-	d.URL = d.URL + "/domains/" + d.Host
-	d.Method = "DELETE"
-	return d.Request
+func (d *Domain) Delete() error {
+	// d.URL = d.URL + "/domains/" + d.Host
+	// d.Method = "DELETE"
+	// return d.Request
+	return nil
 }
 
 // Update updates a domain
-func (d *domain) Update(body []byte) http.Request {
-	d.URL = d.URL + "/domains/" + d.Host
-	d.Method = "PATCH"
-	d.Body = body
-	return d.Request
-}
-
-// Records builds the DNS record piece of the URL
-func (d *domain) Records() Records {
-	d.URL = d.URL + "/domains/" + d.Host
-	return &records{d.Request}
+func (d *Domain) Update(body []byte) error {
+	// d.URL = d.URL + "/domains/" + d.Host
+	// d.Method = "PATCH"
+	// d.Body = body
+	// return d.Request
+	return nil
 }

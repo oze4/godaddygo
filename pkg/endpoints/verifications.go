@@ -1,4 +1,4 @@
-package domains
+package endpoints
 
 // Verifications holds verification info about a domain.
 type Verifications struct {
