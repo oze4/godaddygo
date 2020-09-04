@@ -1,16 +1,12 @@
 package godaddygo
 
 import (
+    "github.com/oze4/godaddygo/pkg/session"
     "github.com/oze4/godaddygo/pkg/endpoints"
 )
 
-// Client holds required connection info
 type Client interface {
-	IsProduction() bool
-	APIKey() string
-    APISecret() string
-	APIVersion() string
-	// DNSDomainName() string
+    session.Interface
 }
 
 // client implements Client
@@ -18,8 +14,7 @@ type client struct {
 	isProduction  bool
 	apiKey        string
     apiSecret     string
-    apiVersion    string          
-	// dnsDomainName string
+    apiVersion    string
 }
 
 // NewClient creates a new Client

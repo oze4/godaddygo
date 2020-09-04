@@ -3,3 +3,5 @@ __test/
 docs/
 cmd/
 _old/
+/internal/api
+/internal/validator
