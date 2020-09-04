@@ -42,7 +42,7 @@ type Records interface {
 }
 
 type records struct {
-	currentConnection
+	connectionInterface
 }
 
 // GetAll returns all DNS records for a specific domain

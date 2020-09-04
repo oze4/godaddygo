@@ -22,7 +22,7 @@ type Contacts interface {
 
 // contacts implements Contacts
 type contacts struct {
-	currentConnection
+	connectionInterface
 }
 
 // Validate builds the validate piece of the URL

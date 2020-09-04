@@ -6,11 +6,11 @@ type V1 interface {
 }
 
 type v1 struct {
-	currentConnection
+	connectionInterface
 }
 
 // Domain provides domain related info and tasks for the `domains` GoDaddy API endpoint
 func (v v1) Domain(hostname string) Domain {
 	v.SetTargetDomain(hostname)
-	return &domain{v.currentConnection}
+	return &domain{v.connectionInterface}
 }

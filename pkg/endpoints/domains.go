@@ -17,21 +17,21 @@ type Domain interface {
 }
 
 type domain struct {
-	currentConnection
+	connectionInterface
 }
 
 func (d *domain) Records() Records {
-	return &records{d.currentConnection}
+	return &records{d.connectionInterface}
 }
 
 // Contacts builds out the contacts piece of the URL
 func (d *domain) Contacts() Contacts {
-	return &contacts{d.currentConnection}
+	return &contacts{d.connectionInterface}
 }
 
 // Privacy builds out the privacy piece of the URL
 func (d *domain) Privacy() Privacy {
-	return &privacy{d.currentConnection}
+	return &privacy{d.connectionInterface}
 }
 
 // Agreements builds the agreements piece of the URL

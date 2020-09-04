@@ -17,7 +17,7 @@ type Privacy interface {
 
 // privacy implements Privacy
 type privacy struct {
-	currentConnection
+	connectionInterface
 }
 
 func (p *privacy) Purchase() error {

@@ -4,8 +4,5 @@ package session
 type Interface interface {
 	APIKey() string
 	APISecret() string
-	APIVersion() string
 	IsProduction() bool
-	TargetDomain() string
-	SetTargetDomain(n string)
 }

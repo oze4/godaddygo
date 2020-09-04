@@ -2,16 +2,22 @@ package endpoints
 
 import (
 	"errors"
+
 	"github.com/oze4/godaddygo/pkg/session"
 )
 
-// con (short for connection) holds internal connection info
-type currentConnection interface {
+// connectionInterface holds internal connection info
+// embeds session.Interface
+type connectionInterface interface {
 	session.Interface
 	constructRequestURLWithVersion() (string, error)
+	TargetDomain() string
+	SetTargetDomain(n string)
 }
 
-// connection implements currentConnection
+// connection implements connectionInterface
+// (Personal Note: ultimately, we want to implement session.Interface)
+//TODO delete personal note sometime
 type connection struct {
 	apiKey       string
 	apiSecret    string
@@ -21,12 +27,13 @@ type connection struct {
 }
 
 // NewConnection creates a new session
-func NewConnection(isproduction bool, apikey, apisecret, apiversion string) session.Interface {
-	return &connection{
-		apiKey:       apikey,
-		apiSecret:    apisecret,
-		isProduction: isproduction,
-		apiVersion:   apiversion,
+func NewConnection(s session.Interface) Gateway {
+	return &gateway{
+		&connection{
+			isProduction: s.IsProduction(),
+			apiKey:       s.APIKey(),
+			apiSecret:    s.APISecret(),
+		},
 	}
 }
 
