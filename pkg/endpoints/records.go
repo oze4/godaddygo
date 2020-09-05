@@ -54,7 +54,7 @@ func (r *records) GetAll() (*DNSRecord, error) {
 		APIKey:    r.APIKey(),
 		APISecret: r.APISecret(),
 		Method:    "GET",
-		URL:       url + "/domains/" + r.TargetDomain() + "/records",
+		URL:       url + "/domains/" + r.targetDomain() + "/records",
 	}
 
 	resp, err := req.Do()

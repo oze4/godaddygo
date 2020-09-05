@@ -12,9 +12,9 @@ import (
 //    track settings internally
 type connectionBridge interface {
 	session.Interface
-	TargetDomain() string
-	SetTargetDomain(n string)
-	SetAPIVersion(v string)
+	targetDomain() string
+	setTargetDomain(n string)
+	setAPIVersion(v string)
 	getBaseURL() (string, error)
 }
 
@@ -24,7 +24,7 @@ type connection struct {
 	apiSecret    string
 	isProduction bool
 	apiVersion   string
-	targetDomain string
+	domain       string
 }
 
 // NewConnection creates a new session, which gives
@@ -56,15 +56,15 @@ func (c *connection) APIVersion() string {
 	return c.apiVersion
 }
 
-func (c *connection) TargetDomain() string {
-	return c.targetDomain
+func (c *connection) targetDomain() string {
+	return c.domain
 }
 
-func (c *connection) SetTargetDomain(n string) {
-	c.targetDomain = n
+func (c *connection) setTargetDomain(n string) {
+	c.domain = n
 }
 
-func (c *connection) SetAPIVersion(v string) {
+func (c *connection) setAPIVersion(v string) {
 	c.apiVersion = v
 }
 

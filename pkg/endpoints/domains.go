@@ -55,7 +55,7 @@ func (d *domain) IsAvailable() (*Available, error) {
 		return nil, err
 	}
 
-	dom := d.TargetDomain()
+	dom := d.targetDomain()
 	ft := "false"
 
 	req := &http.Request{

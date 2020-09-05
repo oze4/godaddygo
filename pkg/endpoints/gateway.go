@@ -11,6 +11,6 @@ type gateway struct {
 }
 
 func (g *gateway) V1() V1 {
-	g.SetAPIVersion("v1")
+	g.setAPIVersion("v1")
 	return &v1{g.connectionBridge}
 }
