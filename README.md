@@ -9,7 +9,7 @@
 - [Usage](#usage)
   - [Default Client](#default-client)
   - [Custom Client](#custom-client)
-  - [API Structure](#overall-api-structure)
+  - [API Structure](#our-api-structure)
 - [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
 - [Roadmap](#roadmap)
   - [Endpoints](#endpoints)
@@ -103,7 +103,7 @@ func main() {
 }
 ```
 
-### Overal API Structure
+### Our API Structure
 
 Consider the following endpoint, which allows you to add a DNS record to a domain..
 
