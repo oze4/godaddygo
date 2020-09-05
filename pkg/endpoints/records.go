@@ -4,9 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/oze4/godaddygo/internal/validator"
 	"github.com/oze4/godaddygo/pkg/http"
-	// urlFactory "github.com/oze4/godaddygo/pkg/url"
 )
 
 // DNSRecord is a struct that holds data about DNS records
@@ -220,8 +218,17 @@ func (r *records) AddMultiple(recs *DNSRecord) error {
 
 // validateRecordType ensures we were given an acceptable DNS record type
 func validateRecordType(recType string) error {
-	if valid := validator.Validate(recType, DNSRecordTypes); valid != true {
+	if valid := validate(recType, DNSRecordTypes); valid != true {
 		return errors.New("Invalid DNS Record type specified: " + recType + "'")
 	}
 	return nil
+}
+
+func validate(s string, m map[string]string) bool {
+	for t := range m {
+		if s == t {
+			return true
+		}
+	}
+	return false
 }
