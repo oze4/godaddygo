@@ -8,8 +8,8 @@ import (
 
 // connectionBridge holds internal connection info
 //  - Embeds session.Interface
-//  - "Bridges" whatever client we are given to how we 
-//    track settings internally 
+//  - "Bridges" whatever client we are given to how we
+//    track settings internally
 type connectionBridge interface {
 	session.Interface
 	TargetDomain() string
@@ -27,7 +27,7 @@ type connection struct {
 	targetDomain string
 }
 
-// NewConnection creates a new session, which gives 
+// NewConnection creates a new session, which gives
 // us access to storeand retrieve data specific to a
 // "connection" of GoDaddy API endpoints
 func NewConnection(sessionInterface session.Interface) Gateway {
@@ -69,7 +69,7 @@ func (c *connection) SetAPIVersion(v string) {
 }
 
 // getBaseURL builds the "base" of our URL
-// It builds out the host plus version. eg: 
+// It builds out the host plus version. eg:
 // https://api.godaddy.com/v1 for production version 1
 func (c *connection) getBaseURL() (string, error) {
 	if c.apiVersion == "" {
