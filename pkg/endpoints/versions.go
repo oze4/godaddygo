@@ -1,4 +1,4 @@
-package godaddygo
+package endpoints
 
 // V1 targets version 1 of the GoDaddy API
 type V1 interface {

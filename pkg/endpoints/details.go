@@ -1,4 +1,4 @@
-package godaddygo
+package endpoints
 
 import (
 	"time"

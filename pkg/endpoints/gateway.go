@@ -1,4 +1,4 @@
-package godaddygo
+package endpoints
 
 // Gateway allows you to select versions
 type Gateway interface {

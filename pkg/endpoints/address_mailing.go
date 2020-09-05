@@ -1,4 +1,4 @@
-package godaddygo
+package endpoints
 
 // AddressMailing holds contact address info
 type AddressMailing struct {

@@ -1,4 +1,4 @@
-package godaddygo
+package endpoints
 
 // ContactsGetter allows for easy embedding (?)
 type ContactsGetter interface {

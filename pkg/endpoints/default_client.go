@@ -1,4 +1,4 @@
-package godaddygo
+package endpoints
 
 import (
 	"github.com/oze4/godaddygo/pkg/session"
