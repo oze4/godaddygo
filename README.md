@@ -9,6 +9,7 @@
 - [Usage](#usage)
   - [Default Client](#default-client)
   - [Custom Client](#custom-client)
+  - [API Structure](#overall-api-structure)
 - [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
 - [Roadmap](#roadmap)
   - [Endpoints](#endpoints)
