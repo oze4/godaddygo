@@ -1,18 +1,10 @@
-This library currently supports:
-
-- Getting domain info
-- Checking domain availability
-- Getting DNS records
-- Setting DNS records
-
-Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddy.com/doc)
-
-Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
+# godaddygo
 
 ---
 
 # Table of Contents
 
+- [Intro](#intro)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Default Client](#default-client)
@@ -23,7 +15,20 @@ Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 
 ---
 
-<br />
+## Intro
+
+Hello and welcome! Thanks for checking us out :smile:
+
+**This library currently supports**:
+
+- Getting domain info
+- Checking domain availability
+- Getting DNS records
+- Setting DNS records
+
+Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddy.com/doc)
+
+Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 
 ## Installation
 
