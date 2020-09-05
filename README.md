@@ -91,25 +91,15 @@ import (
 )
 
 func main() {
-    // Instead of doing: 
-    //// godaddy := godaddygo.Connect(client)
-    // Which ultimaely just wraps around `endpoints.NewConnection()`,
-    // you would do:
+    // Instead of doing `godaddy := godaddygo.Connect(client)`, which
+    // just wraps around `endpoints.NewConnection`, you would do:
     godaddy := endpoints.NewConnection(myclient) // pretend `myclient` satisfies `session.Interface`
 
-    //
-    // Use `godaddy` here! The rest is the same as using
-    // the default client
-    //
+    // Use `godaddy` here! 
 
-    // For example
-    prodv1 := godaddy.V1() // godaddy.V2() etc..
-    // Target specific domain
-    mydomain := prodv1.Domain("mydomain.com")
-    // Get all DNS records for target domain
-    records, err := mydomain.Records().GetAll()
-
-    // ...
+    //
+    // The rest is the same as using the default client
+    //
 }
 ```
 
