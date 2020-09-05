@@ -1,4 +1,4 @@
-package endpoints
+package godaddygo
 
 // Available holds data about domain availability
 type Available struct {

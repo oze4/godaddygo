@@ -1,4 +1,4 @@
-package endpoints
+package godaddygo
 
 // Verifications holds verification info about a domain.
 type Verifications struct {

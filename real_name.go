@@ -1,4 +1,4 @@
-package endpoints
+package godaddygo
 
 // RealName holds real name info about a domain.
 type RealName struct {

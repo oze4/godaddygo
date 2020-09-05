@@ -1,10 +1,10 @@
-package endpoints
+package godaddygo
 
 import (
+	"encoding/json"
 	"errors"
-	"fmt"
 
-	"github.com/oze4/godaddygo/pkg/http"
+	"github.com/oze4/godaddygo/internal/http"
 )
 
 // DNSRecord is a struct that holds data about DNS records
@@ -34,39 +34,40 @@ var DNSRecordTypes = map[string]string{
 
 // Records implements Records
 type Records interface {
-	GetAll() error
+	GetAll() (*DNSRecord, error)
 	GetByType(recordType string) error
 	GetByTypeName(recordType, recordName string) error
 }
 
 type records struct {
-	connectionInterface
+	connectionBridge
 }
 
 // GetAll returns all DNS records for a specific domain
-func (r *records) GetAll() /* DNSRecord, */ error {
-	req := &http.Request{
-		Method: "GET",
-		URL:    "", //urlFactory.New(r.isProduction).Domain(r.domainName).Records.GetAll(),
+func (r *records) GetAll() (*DNSRecord, error) {
+	url, err := r.getBaseURL()
+	if err != nil {
+		return nil, err
 	}
-	fmt.Println(req)
-	/*
-		r.URL = r.URL + "/records"
-		r.Method = "GET"
 
-		resp, err := r.Request.Do()
-		if err != nil {
-			return nil, err
-		}
+	req := &http.Request{
+		APIKey:    r.APIKey(),
+		APISecret: r.APISecret(),
+		Method:    "GET",
+		URL:       url + "/domains/" + r.TargetDomain() + "/records",
+	}
 
-		var dnsrecords DNSRecord
-		if err := json.Unmarshal(resp, &dnsrecords); err != nil {
-			return nil, err
-		}
+	resp, err := req.Do()
+	if err != nil {
+		return nil, err
+	}
 
-		return &dnsrecords, nil
-	*/
-	return nil
+	var dnsrecords DNSRecord
+	if err := json.Unmarshal(resp, &dnsrecords); err != nil {
+		return nil, err
+	}
+
+	return &dnsrecords, nil
 }
 
 // GetByType returns all DNS records for a specific domain
@@ -222,13 +223,4 @@ func validateRecordType(recType string) error {
 		return errors.New("Invalid DNS Record type specified: " + recType + "'")
 	}
 	return nil
-}
-
-func validate(s string, m map[string]string) bool {
-	for t := range m {
-		if s == t {
-			return true
-		}
-	}
-	return false
 }

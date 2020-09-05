@@ -1,1 +1,0 @@
-# Roadmap for endpoints can be found [here](https://github.com/oze4/godaddygo/blob/master/README.md#endpoints)

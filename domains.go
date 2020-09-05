@@ -1,9 +1,9 @@
-package endpoints
+package godaddygo
 
 import (
 	"encoding/json"
 
-	"github.com/oze4/godaddygo/pkg/http"
+	"github.com/oze4/godaddygo/internal/http"
 )
 
 // Domain implements Domain [interface]
@@ -17,21 +17,21 @@ type Domain interface {
 }
 
 type domain struct {
-	connectionInterface
+	connectionBridge
 }
 
 func (d *domain) Records() Records {
-	return &records{d.connectionInterface}
+	return &records{d.connectionBridge}
 }
 
 // Contacts builds out the contacts piece of the URL
 func (d *domain) Contacts() Contacts {
-	return &contacts{d.connectionInterface}
+	return &contacts{d.connectionBridge}
 }
 
 // Privacy builds out the privacy piece of the URL
 func (d *domain) Privacy() Privacy {
-	return &privacy{d.connectionInterface}
+	return &privacy{d.connectionBridge}
 }
 
 // Agreements builds the agreements piece of the URL
@@ -50,7 +50,7 @@ func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool
 
 // IsAvailable checks if the supplied domain name is available for purchase
 func (d *domain) IsAvailable() (*Available, error) {
-	url, err := d.constructRequestURLWithVersion()
+	url, err := d.getBaseURL()
 	if err != nil {
 		return nil, err
 	}

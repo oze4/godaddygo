@@ -1,4 +1,4 @@
-package endpoints
+package godaddygo
 
 import (
 	"errors"
@@ -17,7 +17,7 @@ type Privacy interface {
 
 // privacy implements Privacy
 type privacy struct {
-	connectionInterface
+	connectionBridge
 }
 
 func (p *privacy) Purchase() error {

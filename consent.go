@@ -1,4 +1,4 @@
-package endpoints
+package godaddygo
 
 // Consent is a struct that does something that I need to read more about
 type Consent struct {

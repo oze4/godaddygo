@@ -1,4 +1,4 @@
-package endpoints
+package godaddygo
 
 // Gateway allows you to select versions
 type Gateway interface {
@@ -7,9 +7,10 @@ type Gateway interface {
 
 // gateway implements Gateway
 type gateway struct {
-	connectionInterface
+	connectionBridge
 }
 
 func (g *gateway) V1() V1 {
-	return &v1{g.connectionInterface}
+	g.SetAPIVersion("v1")
+	return &v1{g.connectionBridge}
 }

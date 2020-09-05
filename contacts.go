@@ -1,4 +1,4 @@
-package endpoints
+package godaddygo
 
 // ContactsGetter allows for easy embedding (?)
 type ContactsGetter interface {
@@ -12,7 +12,7 @@ type Contacts interface {
 
 // contacts implements Contacts
 type contacts struct {
-	connectionInterface
+	connectionBridge
 }
 
 // Validate builds the validate piece of the URL

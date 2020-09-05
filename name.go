@@ -1,4 +1,4 @@
-package endpoints
+package godaddygo
 
 // DomainName holds info about domain name
 type DomainName struct {
