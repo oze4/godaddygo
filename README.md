@@ -1,18 +1,10 @@
-This library currently supports:
-
-- Getting domain info
-- Checking domain availability
-- Getting DNS records
-- Setting DNS records
-
-Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddy.com/doc)
-
-Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
+# godaddygo
 
 ---
 
 # Table of Contents
 
+- [Intro](#intro)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Default Client](#default-client)
@@ -23,7 +15,20 @@ Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 
 ---
 
-<br />
+## Intro
+
+Hello and welcome! Thanks for checking us out :smile:
+
+**This library currently supports**:
+
+- Getting domain info
+- Checking domain availability
+- Getting DNS records
+- Setting DNS records
+
+Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddy.com/doc)
+
+Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 
 ## Installation
 
@@ -32,6 +37,8 @@ Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 ## Usage
 
 ### Default Client:
+
+The `godaddygo` package wraps around the `/pkg/endpoints` package.
 
 ```go
 package main
@@ -71,9 +78,7 @@ func main() {
 
 ### Custom Client
 
-The `godaddygo` package wraps around the `/pkg/endpoints` package - **you do have the ability to write your own client**.
-
-As long as your client satisfies the [`session.Interface`](https://github.com/oze4/godaddygo/blob/master/pkg/session/interface.go#L3) interface, you can pass it to [`endpoints.NewConnection(client)`](https://github.com/oze4/godaddygo/blob/master/pkg/endpoints/connection.go#L23).
+Again, *the `godaddygo` package wraps around the `/pkg/endpoints` package*. **This means you have the ability to write your own client**. As long as your client satisfies the [`session.Interface`](https://github.com/oze4/godaddygo/blob/master/pkg/session/interface.go#L3) interface, you can pass it to [`endpoints.NewConnection(client)`](https://github.com/oze4/godaddygo/blob/master/pkg/endpoints/connection.go#L29).
 
 This would look something like:
 
