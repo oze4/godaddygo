@@ -31,7 +31,6 @@ type client struct {
 	isProduction bool
 	apiKey       string
 	apiSecret    string
-	apiVersion   string
 }
 
 func (c *client) IsProduction() bool {
@@ -44,8 +43,4 @@ func (c *client) APIKey() string {
 
 func (c *client) APISecret() string {
 	return c.apiSecret
-}
-
-func (c *client) APIVersion() string {
-	return c.apiVersion
 }
