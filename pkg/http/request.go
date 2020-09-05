@@ -8,8 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/oze4/godaddygo/internal/validator"
 )
 
 // Request holds request data
@@ -35,7 +33,7 @@ type Request struct {
 //  - Sets `Content-Type` header to `application/json`
 func (r *Request) Do() ([]byte, error) {
 	// Verify we were given a valid REST method
-	if valid := validator.Validate(r.Method, RequestMethods); valid != true {
+	if valid := validate(r.Method, RequestMethods); valid != true {
 		return nil, fmt.Errorf("Invalid request method: %s", r.Method)
 	}
 
@@ -107,4 +105,13 @@ func (r *Request) verifyStatusCode(resp *http.Response, bodyBytes []byte) error 
 		return errors.New(strings.Join(status, " || "))
 	}
 	return nil
+}
+
+func validate(s string, m map[string]string) bool {
+	for t := range m {
+		if s == t {
+			return true
+		}
+	}
+	return false
 }
