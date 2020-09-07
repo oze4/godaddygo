@@ -1,15 +1,16 @@
-package endpoints
+package privacy
 
 import (
 	"errors"
 )
 
 // PrivacyGetter makes embedding easier
-type PrivacyGetter interface {
-	Privacy() Privacy
-}
+// type PrivacyGetter interface {
+// 	Privacy() Privacy
+// }
 
-// Privacy is a thing
+// Privacy lets you remove or purchase domain
+// privacy protection
 type Privacy interface {
 	Purchase() error
 	Delete() error
@@ -17,7 +18,7 @@ type Privacy interface {
 
 // privacy implements Privacy
 type privacy struct {
-	connectionBridge
+	// rest.Client should go here?
 }
 
 func (p *privacy) Purchase() error {

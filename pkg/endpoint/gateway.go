@@ -1,4 +1,4 @@
-package endpoints
+package endpoint
 
 // Gateway allows you to select versions
 type Gateway interface {

@@ -1,4 +1,21 @@
-package endpoints
+package contacts
+
+// Interface defines Contacts behavior
+type Interface interface {
+	Validate() error
+}
+
+// contacts implements Contacts
+type contacts struct {
+	// rest.Client should go here?
+}
+
+// Validate builds the validate piece of the URL
+func (c *contacts) Validate() error {
+	// c.URL = c.URL + "/contacts/validate"
+	// return c.Request
+	return nil
+}
 
 // Contact holds contact information
 type Contact struct {

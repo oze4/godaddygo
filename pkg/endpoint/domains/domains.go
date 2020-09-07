@@ -1,9 +1,11 @@
-package endpoints
+package domains
 
 import (
 	"encoding/json"
+	"time"
 
-	"github.com/oze4/godaddygo/internal/http"
+	rex "github.com/oze4/godaddygo/pkg/endpoint/domains/records"
+	resthttp "github.com/oze4/godaddygo/internal/http"
 )
 
 // Domain implements Domain [interface]
@@ -13,25 +15,25 @@ type Domain interface {
 	Agreements(domains []string, privacyRequested, forTransfer bool) error
 	IsAvailable() (*Available, error)
 	GetDetails() (DomainDetails, error)
-	Records() Records
+	rex. Records() Records
 }
 
 type domain struct {
-	connectionBridge
+	meta
 }
 
 func (d *domain) Records() Records {
-	return &records{d.connectionBridge}
+	return &records{d.meta}
 }
 
 // Contacts builds out the contacts piece of the URL
 func (d *domain) Contacts() Contacts {
-	return &contacts{d.connectionBridge}
+	return &contacts{d.meta}
 }
 
 // Privacy builds out the privacy piece of the URL
 func (d *domain) Privacy() Privacy {
-	return &privacy{d.connectionBridge}
+	return &privacy{d.meta}
 }
 
 // Agreements builds the agreements piece of the URL
@@ -58,7 +60,7 @@ func (d *domain) IsAvailable() (*Available, error) {
 	dom := d.targetDomain()
 	ft := "false"
 
-	req := &http.Request{
+	req := &resthttp.Request{
 		APIKey:    d.APIKey(),
 		APISecret: d.APISecret(),
 		URL:       url + "/domains/available?domain=" + dom + "&checkType=FAST&forTransfer=" + ft,
@@ -80,7 +82,7 @@ func (d *domain) IsAvailable() (*Available, error) {
 
 // GetDetails gets info on a domain
 func (d *domain) GetDetails() (DomainDetails, error) {
-	req := &http.Request{
+	req := &resthttp.Request{
 		APIKey:    d.APIKey(),
 		APISecret: d.APISecret(),
 		URL:       "", //TODO

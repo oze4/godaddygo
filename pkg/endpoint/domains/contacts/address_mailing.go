@@ -1,4 +1,4 @@
-package endpoints
+package contacts
 
 // AddressMailing holds contact address info
 type AddressMailing struct {

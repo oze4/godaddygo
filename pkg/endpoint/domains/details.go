@@ -1,8 +1,4 @@
-package endpoints
-
-import (
-	"time"
-)
+package domains
 
 // DomainDetails holds information about a GoDaddy domain.
 // This is the response when you `GET` info about a domain.

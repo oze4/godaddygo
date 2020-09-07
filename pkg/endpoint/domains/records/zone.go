@@ -1,4 +1,4 @@
-package endpoints
+package records
 
 import (
 	"encoding/json"
@@ -6,31 +6,6 @@ import (
 
 	"github.com/oze4/godaddygo/internal/http"
 )
-
-// DNSRecord is a struct that holds data about DNS records
-type DNSRecord struct {
-	Data     string `json:"data,omitempty"`
-	Name     string `json:"name,omitempty"`
-	Port     int    `json:"port,omitempty"`
-	Priority int    `json:"priority,omitempty"`
-	Protocol string `json:"protocol,omitempty"`
-	Service  string `json:"service,omitempty"`
-	TTL      int    `json:"ttl,omitempty"`
-	Type     string `json:"type,omitempty"`
-	Weight   int    `json:"weight,omitempty"`
-}
-
-// DNSRecordTypes to be used as an enum
-var DNSRecordTypes = map[string]string{
-	"A":     "A",
-	"AAAA":  "AAAA",
-	"CNAME": "CNAME",
-	"MX":    "MX",
-	"NS":    "NS",
-	"SOA":   "SOA",
-	"SRV":   "SRV",
-	"TXT":   "TXT",
-}
 
 // Records implements Records
 type Records interface {
@@ -40,7 +15,7 @@ type Records interface {
 }
 
 type records struct {
-	connectionBridge
+	// rest.Client should go here?
 }
 
 // GetAll returns all DNS records for a specific domain
@@ -223,4 +198,13 @@ func validateRecordType(recType string) error {
 		return errors.New("Invalid DNS Record type specified: " + recType + "'")
 	}
 	return nil
+}
+
+func validate(s string, m map[string]string) bool {
+	for t := range m {
+		if s == t {
+			return true
+		}
+	}
+	return false
 }
