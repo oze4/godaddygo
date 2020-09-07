@@ -1,10 +1,11 @@
 package records
 
 import (
-	"encoding/json"
+	// "encoding/json"
 	"errors"
 
-	"github.com/oze4/godaddygo/internal/http"
+	// "github.com/oze4/godaddygo/internal/http"
+	"github.com/oze4/godaddygo/pkg/rest"
 )
 
 // Records implements Records
@@ -15,11 +16,12 @@ type Records interface {
 }
 
 type records struct {
-	// rest.Client should go here?
+	rest.Config
 }
 
 // GetAll returns all DNS records for a specific domain
 func (r *records) GetAll() (*DNSRecord, error) {
+	/*
 	url, err := r.getBaseURL()
 	if err != nil {
 		return nil, err
@@ -43,6 +45,8 @@ func (r *records) GetAll() (*DNSRecord, error) {
 	}
 
 	return &dnsrecords, nil
+	*/
+	return &DNSRecord{}, nil
 }
 
 // GetByType returns all DNS records for a specific domain

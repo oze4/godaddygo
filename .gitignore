@@ -2,8 +2,3 @@ bin/
 __test/
 docs/
 cmd/
-_old/
-/internal/api/
-/internal/validator
-
-godaddygo.go.txt

@@ -33,7 +33,7 @@ func (r *Request) Do() ([]byte, error) {
 	}
 
 	// Create new REST request
-	req, err := http.NewRequest(r.Method, r.URL, bodyFin)
+	req, err := http.NewRequest(r.Method, r.URL(), bodyFin)
 	if err != nil {
 		return nil, fmt.Errorf("Error creating new request: %s", err.Error())
 	}

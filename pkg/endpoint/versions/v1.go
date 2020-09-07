@@ -1,7 +1,8 @@
-package version
+package versions
 
 import (
 	"github.com/oze4/godaddygo/pkg/endpoint/domains"
+	"github.com/oze4/godaddygo/pkg/rest"
 )
 
 // V1Interface targets version 1 of the GoDaddy API
@@ -10,7 +11,7 @@ type V1Interface interface {
 }
 
 type v1Client struct {
-	meta
+	rest.Config
 }
 
 // Domain provides domain related info and tasks for the `domains` GoDaddy API endpoint

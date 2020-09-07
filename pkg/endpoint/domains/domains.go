@@ -6,10 +6,11 @@ import (
 
 	rex "github.com/oze4/godaddygo/pkg/endpoint/domains/records"
 	resthttp "github.com/oze4/godaddygo/internal/http"
+	"github.com/oze4/godaddygo/pkg/rest"
 )
 
-// Domain implements Domain [interface]
-type Domain interface {
+// Interface implements Domain [interface]
+type Interface interface {
 	Contacts() Contacts
 	Privacy() Privacy
 	Agreements(domains []string, privacyRequested, forTransfer bool) error
@@ -19,11 +20,11 @@ type Domain interface {
 }
 
 type domain struct {
-	meta
+	rest.Config
 }
 
 func (d *domain) Records() Records {
-	return &records{d.meta}
+	return &records{d.}
 }
 
 // Contacts builds out the contacts piece of the URL

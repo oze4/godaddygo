@@ -10,6 +10,10 @@ type Config struct {
 	APIKey string
 	// GoDaddy API Secret, note that the prod and dev API's have unique API keys/secrets
 	APISecret string
+	// APIVersion holds determines which GoDaddy API to target
+	APIVersion string
+	// IsProduction determines which URL to send our request to
+	IsProduction bool
 	// HTTP REST method we validate this
 	Method string
 	// The path you wish to send your request to
@@ -19,17 +23,15 @@ type Config struct {
 	Host string
 	// The body of your request, if you need one
 	Body []byte
-	// IsProduction determines which URL to send our request to
-	IsProduction bool
 }
 
 // URL returns a properly formatted URL
 func (c *Config) URL() string {
-	if c.Host == "" {
-		panic("")
+	h := "https://api-ote.godaddy.com/" // Development
+	if c.IsProduction {
+		h = "https://api.godaddy.com/"
 	}
-	n := trimSuffix(c.Host, "/")
-	return n + "/" + c.Path
+	return h + c.Path
 }
 
 func trimSuffix(s, suffix string) string {
