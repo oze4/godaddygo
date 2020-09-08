@@ -1,24 +1,26 @@
-package privacy
+package domain
 
 import (
 	"errors"
+
+	"github.com/oze4/godaddygo/pkg/rest"
 )
 
 // PrivacyGetter makes embedding easier
-// type PrivacyGetter interface {
-// 	Privacy() Privacy
-// }
+type PrivacyGetter interface {
+	Privacy() PrivacyInterface
+}
 
-// Privacy lets you remove or purchase domain
+// PrivacyInterface lets you remove or purchase domain
 // privacy protection
-type Privacy interface {
+type PrivacyInterface interface {
 	Purchase() error
 	Delete() error
 }
 
 // privacy implements Privacy
 type privacy struct {
-	// rest.Client should go here?
+	*rest.Config
 }
 
 func (p *privacy) Purchase() error {

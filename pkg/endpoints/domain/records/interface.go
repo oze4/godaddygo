@@ -1,22 +1,25 @@
 package records
 
 import (
-	// "encoding/json"
 	"errors"
 
-	// "github.com/oze4/godaddygo/internal/http"
 	"github.com/oze4/godaddygo/pkg/rest"
 )
 
-// Records implements Records
-type Records interface {
+// New lets you build a new record
+func New(c *rest.Config) Interface {
+	return &records{c}
+}
+
+// Interface defines `records` behavior
+type Interface interface {
 	GetAll() (*DNSRecord, error)
 	GetByType(recordType string) error
 	GetByTypeName(recordType, recordName string) error
 }
 
 type records struct {
-	rest.Config
+	*rest.Config
 }
 
 // GetAll returns all DNS records for a specific domain
@@ -212,3 +215,5 @@ func validate(s string, m map[string]string) bool {
 	}
 	return false
 }
+
+

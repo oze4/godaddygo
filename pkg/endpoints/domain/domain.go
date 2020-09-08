@@ -1,40 +1,39 @@
-package domains
+package domain
 
 import (
 	"encoding/json"
-	"time"
 
-	rex "github.com/oze4/godaddygo/pkg/endpoint/domains/records"
-	resthttp "github.com/oze4/godaddygo/internal/http"
+	"github.com/oze4/godaddygo/pkg/endpoints/domain/records"
 	"github.com/oze4/godaddygo/pkg/rest"
+	resthttp "github.com/oze4/godaddygo/internal/http"
 )
 
 // Interface implements Domain [interface]
 type Interface interface {
-	Contacts() Contacts
-	Privacy() Privacy
+	ContactsGetter
+	PrivacyGetter
+	Records() records.Interface
 	Agreements(domains []string, privacyRequested, forTransfer bool) error
 	IsAvailable() (*Available, error)
 	GetDetails() (DomainDetails, error)
-	rex. Records() Records
 }
 
 type domain struct {
-	rest.Config
+	*rest.Config
 }
 
-func (d *domain) Records() Records {
-	return &records{d.}
+func (d *domain) Records() records.Interface {
+	return records.New(d.Config)
 }
 
 // Contacts builds out the contacts piece of the URL
-func (d *domain) Contacts() Contacts {
-	return &contacts{d.meta}
+func (d *domain) Contacts() ContactsInterface {
+	return &contacts{d.Config}
 }
 
 // Privacy builds out the privacy piece of the URL
-func (d *domain) Privacy() Privacy {
-	return &privacy{d.meta}
+func (d *domain) Privacy() PrivacyInterface {
+	return &privacy{d.Config}
 }
 
 // Agreements builds the agreements piece of the URL
@@ -52,7 +51,8 @@ func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool
 }
 
 // IsAvailable checks if the supplied domain name is available for purchase
-func (d *domain) IsAvailable() (*Available, error) {
+func (d *domain) IsAvailable() /*(*Available, error)*/ {
+	/*
 	url, err := d.getBaseURL()
 	if err != nil {
 		return nil, err
@@ -79,6 +79,7 @@ func (d *domain) IsAvailable() (*Available, error) {
 	}
 
 	return &avail, nil
+	*/
 }
 
 // GetDetails gets info on a domain

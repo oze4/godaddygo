@@ -16,3 +16,5 @@ func NewClient(prod bool, key, secret string) client.Interface {
 func Connect(godaddygoClient client.Interface) endpoints.Gateway {
 	return endpoints.NewConnection(godaddygoClient)
 }
+
+func MakeClient(key, secret string, prod bool) endpoints.

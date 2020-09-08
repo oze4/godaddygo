@@ -1,13 +1,27 @@
-package contacts
+package domain
 
-// Interface defines Contacts behavior
-type Interface interface {
+import (
+	"github.com/oze4/godaddygo/pkg/rest"
+)
+
+// New creates a new Contacts
+func newContacts(c *rest.Config) ContactsInterface {
+	return &contacts{c}
+}
+
+// ContactsGetter makes embedding easier
+type ContactsGetter interface {
+	ContactsInterface() ContactsInterface
+}
+
+// ContactsInterface defines Contacts behavior
+type ContactsInterface interface {
 	Validate() error
 }
 
 // contacts implements Contacts
 type contacts struct {
-	// rest.Client should go here?
+	*rest.Config
 }
 
 // Validate builds the validate piece of the URL

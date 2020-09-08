@@ -1,4 +1,4 @@
-package contacts
+package domain
 
 // AddressMailing holds contact address info
 type AddressMailing struct {
