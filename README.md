@@ -8,12 +8,11 @@
 - [Installation](#installation)
 - [Getting Started](#getting-started)
   - [API Structure](#our-api-structure)
-  - [Usage](#usage)
-    - [Default Client](#default-client)
-    - [Custom Client](#custom-client)
+- [Recommended Usage](#usage)
+  - [Default Client](#default-client)
+  - [Custom Client](#custom-client)
 - [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
-- [Roadmap](#roadmap)
-  - [Endpoints](#endpoints)
+- [Features](#features)
 
 ---
 
@@ -38,8 +37,6 @@ Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 
 ## Getting Started
 
-The `godaddygo` package is essentially for convenience. You have the ability to create your own client which you can pass to `endpoints.Connect(<your_client>)`
-
 ### Our API Structure
 
 Consider the following endpoint, which allows you to add a DNS record to a domain.
@@ -49,63 +46,69 @@ Consider the following endpoint, which allows you to add a DNS record to a domai
 Programmatically, this would look like:
 
 ```golang
-// Simplified
 api.V1().Domain("dom.com").Records().Add(newDNSRecord)
 ```
 
-### Usage 
+## Usage 
 
-You can either connect to the production API or the development API by running either:
- - `godaddygo.ConnectProduction(..)`
- - `godaddygo.ConnectDevelopment(...)`
+GoDaddy's API currently has 2 versions, `v1` and `v2`. Within the `godaddygo` package we provide 2 helper functions, one for each version. These helper functions  simply "wrap" around our "core", which means you have the ability to create yor own client(s).
 
-We create the default client behind the scenes for you, which allows you to get to the "meat and potatoes" as fast as possible.
+ - `godaddygo.ConnectProduction(key, secret)`
+ - `godaddygo.ConnectDevelopment(key, secret)`
+
+We take care of building the default client behind the scenes, which allows you to tap into this SDK in only a handful of lines of code.
+
+### Recommended Usage
 
 ```golang
 // Options for client
-k := "api_key"
-s := "api_secret"
-// Skip creating client, let us create the default client
-// behind the scenes
-// You can now get to the core API endpoints in fewer 
-// lines of code
-api := godaddygo.ConnectProduction(k, s)
-// or for OTE (development)...
-// api := godaddygo.ConnectDevelopment(k, s)
+prodKey := "api_key"
+prodSecret := "api_secret"
 
-// Use `api` here!
+// Target production API 
+// (https://api.godaddy.com)
+api := godaddygo.ConnectProduction(prodKey, prodSecret)
+
+/** 
+ * Or to target development API (which GoDaddy refers to as "OTE") 
+ * (https://api-ote.godaddy.com)
+ *
+ * api := godaddygo.ConnectDevelopment(devKey, devSecret)  
+ */
+
+// ...
 ```
 
-### Default Client:
+### Default Client
 
-With that being said you can access the default client and pass it into `endpoints.Connect(...)`
+If you would like, you can create a default client "manually", then pass it to `endpoints.Connect(<your_client_here>)`
 
 ```go
 package main
 
 import (
-	gdgClient "github.com/oze4/godaddygo/pkg/client"
-	gdgEndpoints "github.com/oze4/godaddygo/pkg/endpoints"
+	"github.com/oze4/godaddygo/pkg/client"
+	"github.com/oze4/godaddygo/pkg/endpoints"
 )
 
 func main() {
 	// Options for client
-	k := "api_key"
-	s := "api_secret"
+	key := "api_key"
+	secret := "api_secret"
 	// See here for more on GoDaddy production vs development (OTE) API's
 	// https://developer.godaddy.com/getstarted
 	targetProductionAPI := true
 
 	// Create default client
-	client := gdgClient.Default(k, s, targetProductionAPI)
+	client := client.Default(key, secret, targetProductionAPI)
 
 	// Connect our client to endpoints
-	api := gdgEndpoints.Connect(client)
+	api := endpoints.Connect(client)
 
 	//
-	// Use `api` here!
+	// Use `api` here...
 	//
-	// For example:
+	// ...for example:
 	prodv1 := api.V1()
 	// Target specific domain
 	mydomain := prodv1.Domain("mydomain.com")
@@ -118,11 +121,13 @@ func main() {
 
 ### Custom Client
 
+If you wish to use your own client instead of the default client, this is how you would do so.
+
 ```go
 package main
 
 import (
-	gdgEndpoints "github.com/oze4/godaddygo/pkg/endpoints"
+	"github.com/oze4/godaddygo/pkg/endpoints"
 )
 
 func main() {
@@ -132,15 +137,15 @@ func main() {
 		isprod: true,
 	}
 
-	api := gdgEndpoints.Connect(myCustomClient)
+	api := endpoints.Connect(myCustomClient)
 
+	//
 	// Use `api` here!
-
 	//
-	// The rest is the same as using the default client
-	//
+	// ...
 }
 
+// myClient is your custom client
 // As long as your client satisfies `client.Interface`
 // You can use it to connect to the `endpoints` Gateway
 type myClient struct {
@@ -164,9 +169,7 @@ func (c *myClient) IsProduction() string {
 
 ```
 
-## Roadmap
-
-### Endpoints
+## Features
 
 Please see [here](https://developer.godaddy.com/doc) for more information on GoDaddy API endpoints
 
@@ -184,5 +187,6 @@ Please see [here](https://developer.godaddy.com/doc) for more information on GoD
 <br />
 <br />
 <br />
-
-[mattoestreich.com](https://mattoestreich.com)
+---
+:wave: [mattoestreich.com](https://mattoestreich.com)
+---
