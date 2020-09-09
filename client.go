@@ -20,3 +20,15 @@ func NewClient(prod bool, key, secret string) client.Interface {
 func Connect(godaddygoClient client.Interface) endpoints.Gateway {
 	return endpoints.Connect(godaddygoClient)
 }
+
+// ConnectProduction is for convenience - create a new connection without 
+// having to specify if "isproduction" or not
+func ConnectProduction(apikey, apisecret string) endpoints.Gateway {
+	return endpoints.ConnectProduction(apikey, apisecret)
+}
+
+// ConnectDevelopment is for convenience - create a new connection without 
+// having to specify if "isproduction" or not
+func ConnectDevelopment(apikey, apisecret string) endpoints.Gateway {
+	return endpoints.ConnectDevelopment(apikey, apisecret)
+}

@@ -6,10 +6,10 @@
 
 - [Intro](#intro)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Getting Started](#getting-started)
+  - [API Structure](#our-api-structure)
   - [Default Client](#default-client)
   - [Custom Client](#custom-client)
-  - [API Structure](#our-api-structure)
 - [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
 - [Roadmap](#roadmap)
   - [Endpoints](#endpoints)
@@ -35,13 +35,28 @@ Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
 
 `go get -u github.com/oze4/godaddygo`
 
-## Usage
+## Getting Started
+
+The `godaddygo` package is essentially for convenience. You have the ability to create your own client which you can pass to `endpoints.Connect(<your_client>)`
+
+### Our API Structure
+
+Consider the following endpoint, which allows you to add a DNS record to a domain.
+
+![screenshot_from_godaddy_docs](https://i.imgur.com/tN2IveY.png)
+
+Programmatically, this would look like:
+
+```golang
+// Simplified
+api.V1().Domain("dom.com").Records().Add(newDNSRecord)
+```
+
 
 ### Default Client:
 
-The `godaddygo` package wraps around the `/pkg/endpoints` package.
-
 ```go
+// Recommended way
 package main
 
 import (
@@ -54,20 +69,19 @@ func main() {
     s := "api_secret"
     // See here for more on GoDaddy production vs development (OTE) API's
     // https://developer.godaddy.com/getstarted
-    targetProductionAPI := true 
+    targetProductionAPI := true
 
     // Create new client
     client := godaddygo.NewClient(targetProductionAPI, k, s)
-    
+
     // Connect our client to endpoints
-    godaddy := godaddygo.Connect(client)
+    api := godaddygo.Connect(client)
 
     //
-    // Use `godaddy` here!
-    //
-
-    // For example
-    prodv1 := godaddy.V1() // godaddy.V2() etc..
+	// Use `api` here!
+	//
+    // For example:
+    prodv1 := api.V1()
     // Target specific domain
     mydomain := prodv1.Domain("mydomain.com")
     // Get all DNS records for target domain
@@ -77,11 +91,23 @@ func main() {
 }
 ```
 
+You can also circumvent having to specify whether or not to target the production API.
+
+```golang
+// Simplified
+
+// Options for client
+k := "api_key"
+s := "api_secret"
+// Create new client
+client := godaddygo.ConnectProduction(k, s)
+// or for OTE (development)...
+// client := godaddygo.ConnectDevelopment(k, s)
+
+// etc...
+```
+
 ### Custom Client
-
-Again, *the `godaddygo` package wraps around the `/pkg/endpoints` package*. **This means you have the ability to write your own client**. As long as your client satisfies the [`session.Interface`](https://github.com/oze4/godaddygo/blob/master/pkg/session/interface.go#L3) interface, you can pass it to [`endpoints.NewConnection(client)`](https://github.com/oze4/godaddygo/blob/master/pkg/endpoints/connection.go#L29).
-
-This would look something like:
 
 ```go
 package main
@@ -92,28 +118,42 @@ import (
 
 func main() {
     // Instead of doing `godaddy := godaddygo.Connect(client)`, which
-    // just wraps around `endpoints.NewConnection`, you would do:
-    godaddy := endpoints.NewConnection(myclient) // pretend `myclient` satisfies `session.Interface`
+	// just wraps around `endpoints.Connect`, you would do:
+	myCustomClient := &myClient{
+		key: "api_key",
+		secret: "api_secret",
+		isprod: true,
+	}
 
-    // Use `godaddy` here! 
+    api := endpoints.Connect(myCustomClient)
+
+    // Use `api` here!
 
     //
     // The rest is the same as using the default client
     //
 }
-```
 
-### Our API Structure
+// As long as your client satisfies `client.Interface`
+// You can use it to connect to the `endpoints` Gateway
+type myClient struct {
+    key string
+    secret string
+    isprod bool
+    // ...
+}
 
-Consider the following endpoint, which allows you to add a DNS record to a domain..
+func (c *myClient) APIKey() string {
+    return c.key
+}
 
-![screenshot_from_godaddy_docs](https://i.imgur.com/tN2IveY.png)
+func (c *myClient) APISecret() string {
+    return c.secret
+}
 
-Programmatically, this would look like:
-
-```golang
-// Simplified
-godaddy.V1().Domain("dom.com").Records().Add(newDNSRecord)
+func (c *myClient) IsProduction() string {
+    return c.isprod
+}
 ```
 
 ## Roadmap
@@ -122,17 +162,16 @@ godaddy.V1().Domain("dom.com").Records().Add(newDNSRecord)
 
 Please see [here](https://developer.godaddy.com/doc) for more information on GoDaddy API endpoints
 
-| Endpoint      | Status                                                              |
-| ------------- | ------------------------------------------------------------------- |
-| Abuse         | -                                                                   |
-| Aftermarket   | -                                                                   |
-| Agreements    | -                                                                   |
-| Certificates  | -                                                                   |
-| Countries     | -                                                                   |
-| Domains       | Safe to get domain info and DNS records, as well as set DNS records |
-| Orders        | -                                                                   |
-| Shoppers      | -                                                                   |
-| Subscriptions | -                                                                   |
+- [ ] Abuse
+- [ ] Aftermarket
+- [ ] Agreements
+- [ ] Certificates
+- [ ] Countries
+- [x] Domains
+  - [x] DNS Records
+- [ ] Orders
+- [ ] Shoppers
+- [ ] Subscriptions
 
 <br />
 <br />
