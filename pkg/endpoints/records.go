@@ -90,7 +90,7 @@ func (r *records) GetByType(recordType string) (*[]DNSRecord, error) {
 		APIKey:    r.APIKey(),
 		APISecret: r.APISecret(),
 		Method:    "GET",
-		URL:       r.URLBasePlus("/records/" + recordType),
+		URL:       r.URLBasePlus("/domains/" + r.domainName + "/records/" + recordType),
 	}
 
 	res, err := req.Send()
@@ -117,7 +117,7 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]DNSRecord, er
 		APIKey:    r.APIKey(),
 		APISecret: r.APISecret(),
 		Method:    "GET",
-		URL:       r.URLBasePlus("/records/" + recordType + "/" + recordName),
+		URL:       r.URLBasePlus("/domains/" + r.domainName + "/records/" + recordType + "/" + recordName),
 	}
 
 	res, err := req.Send()
@@ -160,7 +160,7 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 		APISecret: r.APISecret(),
 		Method:    "PUT",
 		Body:      newrec,
-		URL:       r.URLBasePlus("/records/" + recType + "/" + recName),
+		URL:       r.URLBasePlus("/domains/" + r.domainName + "/records/" + recType + "/" + recName),
 	}
 
 	if _, err := req.Send(); err != nil {
@@ -187,7 +187,7 @@ func (r *records) Add(rec *DNSRecord) error {
 		APISecret: r.APISecret(),
 		Method:    "PATCH",
 		Body:      newrec,
-		URL:       r.URLBasePlus("/records"),
+		URL:       r.URLBasePlus("/domain/" + r.domainName + "/records"),
 	}
 
 	if _, err = req.Send(); err != nil {
@@ -224,7 +224,7 @@ func (r *records) AddMultiple(recs *[]DNSRecord) error {
 		APISecret: r.APISecret(),
 		Method:    "PATCH",
 		Body:      newrecs,
-		URL:       r.URLBasePlus("/records"),
+		URL:       r.URLBasePlus("/domains/" + r.domainName + "/records"),
 	}
 
 	if _, err = req.Send(); err != nil {
