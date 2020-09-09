@@ -18,26 +18,6 @@ type session struct {
 	apiVersion string
 }
 
-// URLBase returns the "base" GoDaddy API URL
-// By "base" we mean the target API plus API version
-// *Production Version 1 would return:
-// https://api.godaddy.com/v1
-func (s *session) urlBase() string {
-	u := "https://api-ote.godaddy.com"
-	if s.IsProduction() {
-		u = "https://api.godaddy.com"
-	}
-	return u + "/" + s.apiVersion
-}
-
-// URLBasePlus wraps URLBase()
-// We append any string you want to the end of the
-// base URL
-func (s *session) URLBasePlus(extra string) string {
-	b := s.urlBase()
-	return b + extra
-}
-
 // URLBuilder wraps `uri.Builder`
 // We assume that the session apiVersion and
 // session IsProduction() values are set prior

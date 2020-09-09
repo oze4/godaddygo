@@ -2,9 +2,9 @@ package uri
 
 // Records is the `/domain/<domain>/records` endpoint
 type Records interface {
-	String() string
 	ByType(rectype string) string
 	ByTypeName(rectype, recname string) string
+	String() string
 }
 
 type records struct {

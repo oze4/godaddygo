@@ -187,7 +187,7 @@ func (r *records) Add(rec *DNSRecord) error {
 		APISecret: r.APISecret(),
 		Method:    "PATCH",
 		Body:      newrec,
-		URL:       r.URLBasePlus("/domain/" + r.domainName + "/records"),
+		URL:       r.URLBuilder().Domain(r.domainName).Records().String(),
 	}
 
 	if _, err = req.Send(); err != nil {
