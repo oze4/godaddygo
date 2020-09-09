@@ -21,9 +21,9 @@ type cache struct {
 
 // Gateway allows you to target specific API versions
 type Gateway interface {
-    // We do not validate the `Version(v string)` parameter!
-    // We expect you to have already validated the
-    // version string beforehand
+	// We do not validate the `Version(v string)` parameter!
+	// We expect you to have already validated the
+	// version string beforehand
 	Version(v string) Version
 }
 
@@ -41,8 +41,8 @@ func (g *gateway) Version(v string) Version {
 
 // Version are the API versions
 type Version interface {
-    Domain(domainName string) Domain
-    DomainAvailability(domainName string, forTransfer bool) string
+	Domain(domainName string) Domain
+	DomainAvailability(domainName string, forTransfer bool) string
 }
 
 type version struct {
@@ -55,13 +55,13 @@ func (v *version) Domain(domainName string) Domain {
 }
 
 func (v *version) DomainAvailability(domainName string, forTransfer bool) string {
-    return v.path + "/available?domain=" + domainName + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
+	return v.path + "/available?domain=" + domainName + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
 }
 
 // Domain is the domains endpoint
 type Domain interface {
 	String() string
-    Records() Records
+	Records() Records
 }
 
 type domain struct {

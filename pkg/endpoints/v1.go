@@ -32,7 +32,7 @@ func (v *v1) Domain(hostname string) Domain {
 
 // GetDomainAvailability checks if the supplied domain name is available for purchase or not
 func (v *v1) GetDomainAvailability(domainname string) (*DomainAvailability, error) {
-    forTransfer := false
+	forTransfer := false
 	req := &rest.Request{
 		APIKey:    v.APIKey(),
 		APISecret: v.APISecret(),
