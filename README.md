@@ -89,30 +89,30 @@ import (
 )
 
 func main() {
-    // Options for client
-    k := "api_key"
-    s := "api_secret"
-    // See here for more on GoDaddy production vs development (OTE) API's
-    // https://developer.godaddy.com/getstarted
-    targetProductionAPI := true
+	// Options for client
+	k := "api_key"
+	s := "api_secret"
+	// See here for more on GoDaddy production vs development (OTE) API's
+	// https://developer.godaddy.com/getstarted
+	targetProductionAPI := true
 
-    // Create default client
-    client := gdgClient.Default(k, s, targetProductionAPI)
+	// Create default client
+	client := gdgClient.Default(k, s, targetProductionAPI)
 
-    // Connect our client to endpoints
-    api := gdgEndpoints.Connect(client)
+	// Connect our client to endpoints
+	api := gdgEndpoints.Connect(client)
 
-    //
+	//
 	// Use `api` here!
 	//
-    // For example:
-    prodv1 := api.V1()
-    // Target specific domain
-    mydomain := prodv1.Domain("mydomain.com")
-    // Get all DNS records for target domain
-    records, err := mydomain.Records().GetAll()
+	// For example:
+	prodv1 := api.V1()
+	// Target specific domain
+	mydomain := prodv1.Domain("mydomain.com")
+	// Get all DNS records for target domain
+	records, err := mydomain.Records().GetAll()
 
-    // ...
+	// ...
 }
 ```
 
@@ -122,45 +122,46 @@ func main() {
 package main
 
 import (
-    gdgEndpoints "github.com/oze4/godaddygo/pkg/endpoints"
+	gdgEndpoints "github.com/oze4/godaddygo/pkg/endpoints"
 )
 
 func main() {
 	myCustomClient := &myClient{
-		key: "api_key",
+		key:    "api_key",
 		secret: "api_secret",
 		isprod: true,
 	}
 
-    api := gdgEndpoints.Connect(myCustomClient)
+	api := gdgEndpoints.Connect(myCustomClient)
 
-    // Use `api` here!
+	// Use `api` here!
 
-    //
-    // The rest is the same as using the default client
-    //
+	//
+	// The rest is the same as using the default client
+	//
 }
 
 // As long as your client satisfies `client.Interface`
 // You can use it to connect to the `endpoints` Gateway
 type myClient struct {
-    key string
-    secret string
-    isprod bool
-    // ...your custom stuff
+	key    string
+	secret string
+	isprod bool
+	// ...your custom stuff
 }
 
 func (c *myClient) APIKey() string {
-    return c.key
+	return c.key
 }
 
 func (c *myClient) APISecret() string {
-    return c.secret
+	return c.secret
 }
 
 func (c *myClient) IsProduction() string {
-    return c.isprod
+	return c.isprod
 }
+
 ```
 
 ## Roadmap
