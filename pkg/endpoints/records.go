@@ -47,7 +47,7 @@ type RecordsGetter interface {
 type Records interface {
 	Add(rec *DNSRecord) error
 	AddMultiple(recordsToAdd *[]DNSRecord) error
-	GetAll() (*DNSRecord, error)
+	GetAll() (*[]DNSRecord, error)
 	GetByType(recordType string) (*[]DNSRecord, error)
 	GetByTypeName(recordType, recordName string) (*[]DNSRecord, error)
 	SetValue(recType, recName, newValue string) error
@@ -58,7 +58,7 @@ type records struct {
 }
 
 // GetAll returns all DNS records for a specific domain
-func (r *records) GetAll() (*DNSRecord, error) {
+func (r *records) GetAll() (*[]DNSRecord, error) {
 	req := &rest.Request{
 		APIKey:    r.APIKey(),
 		APISecret: r.APISecret(),
@@ -71,7 +71,7 @@ func (r *records) GetAll() (*DNSRecord, error) {
 		return nil, err
 	}
 
-	var dnsrecords DNSRecord
+	var dnsrecords []DNSRecord
 	if err := json.Unmarshal(resp, &dnsrecords); err != nil {
 		return nil, err
 	}
