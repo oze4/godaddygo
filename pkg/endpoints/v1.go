@@ -16,7 +16,6 @@ func newV1(s *session) V1 {
 type V1 interface {
 	Domain(hostname string) Domain
 	GetDomainAvailability(domainname string) (*DomainAvailability, error)
-	GetDomainAgreements(domainNames []string, privacyRequested, forTransfer bool) error //TODO: fix return
 }
 
 type v1 struct {
@@ -53,19 +52,4 @@ func (v *v1) GetDomainAvailability(domainname string) (*DomainAvailability, erro
 	}
 
 	return &avail, nil
-}
-
-// Agreements builds the agreements piece of the URL
-func (v *v1) GetDomainAgreements(domainNames []string, privacyRequested, forTransfer bool) error {
-	//TODO: finish this
-	/*
-		d.URL = d.URL + "/domains"
-		doms := append(domains, d.Host)
-		dl := strings.Join(doms, ",")
-		p := strconv.FormatBool(privacyRequested)
-		f := strconv.FormatBool(forTransfer)
-		d.URL = "/domains/agreements?tlds=" + dl + "&privacy=" + p + "&forTransfer=" + f
-		return d.Request
-	*/
-	return nil
 }
