@@ -10,17 +10,42 @@ import (
 	"strings"
 )
 
-// Request holds request data
-type Request struct {
-	Config
+// RequestMethods holds all acceptable request methods
+// https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
+var RequestMethods = map[string]string{
+	"GET":     "GET",
+	"HEAD":    "HEAD",
+	"POST":    "POST",
+	"DELETE":  "DELETE",
+	"PATCH":   "PATCH",
+	"OPTIONS": "OPTIONS",
+	"CONNECT": "CONNECT",
+	"PUT":     "PUT",
+	"TRACE":   "TRACE",
 }
 
-// Do is sends our http request
+// Request holds request data
+type Request struct {
+	// GoDaddy API Key, note that the prod and dev API's have unique API keys/secrets
+	APIKey string
+	// GoDaddy API Secret, note that the prod and dev API's have unique API keys/secrets
+	APISecret string
+	// HTTP REST method we validate this
+	Method string
+	// The URL you wish to send your request to
+	URL string
+	// The GoDaddy domain name you wish to target - mostly used internally
+	Host string
+	// The body of your request, if you need one
+	Body []byte
+}
+
+// Send is sends our http request
 // By default, this func does the following:
 //  - Validates REST method
 //  - Adds appropriate GoDaddy authorization header
 //  - Sets `Content-Type` header to `application/json`
-func (r *Request) Do() ([]byte, error) {
+func (r *Request) Send() ([]byte, error) {
 	// Verify we were given a valid REST method
 	if valid := validate(r.Method, RequestMethods); valid != true {
 		return nil, fmt.Errorf("Invalid request method: %s", r.Method)
@@ -33,7 +58,7 @@ func (r *Request) Do() ([]byte, error) {
 	}
 
 	// Create new REST request
-	req, err := http.NewRequest(r.Method, r.url(), bodyFin)
+	req, err := http.NewRequest(r.Method, r.URL, bodyFin)
 	if err != nil {
 		return nil, fmt.Errorf("Error creating new request: %s", err.Error())
 	}
@@ -103,18 +128,4 @@ func validate(s string, m map[string]string) bool {
 		}
 	}
 	return false
-}
-
-// RequestMethods holds all acceptable request methods
-// https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
-var RequestMethods = map[string]string{
-	"GET":     "GET",
-	"HEAD":    "HEAD",
-	"POST":    "POST",
-	"DELETE":  "DELETE",
-	"PATCH":   "PATCH",
-	"OPTIONS": "OPTIONS",
-	"CONNECT": "CONNECT",
-	"PUT":     "PUT",
-	"TRACE":   "TRACE",
 }

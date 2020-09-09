@@ -6,7 +6,7 @@ import (
 
 // NewAPIGateway ceates a new GoDaddy API gateway, which
 // lets you select the API version
-func NewAPIGateway(c *rest.Config) Interface {
+func NewAPIGateway(c *rest.Request) Interface {
 	return &gateway{c}
 }
 
@@ -18,12 +18,12 @@ type Interface interface {
 
 // gateway implements Interface
 type gateway struct {
-	*rest.Config
+	*rest.Request
 }
 
 func (g *gateway) V1() versions.V1Interface {
     g.APIVersion = "v1"
-	return &v1{g.Config}
+	return &v1{g.Request}
 }
 
 func (g *gateway) V2() error {
@@ -36,7 +36,7 @@ type V1Interface interface {
 }
 
 type v1 struct {
-	*rest.Config
+	*rest.Request
 }
 
 // Domain provides domain related info and tasks for the `domains` GoDaddy API endpoint
@@ -52,7 +52,7 @@ type V2Interface interface {
 }
 
 type v2 struct {
-	*rest.Config
+	*rest.Request
 }
 
 // Domain provides domain related info and tasks for the `domains` GoDaddy API endpoint

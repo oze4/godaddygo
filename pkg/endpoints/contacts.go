@@ -1,27 +1,23 @@
-package domain
-
-import (
-	"github.com/oze4/godaddygo/pkg/rest"
-)
+package endpoints
 
 // New creates a new Contacts
-func newContacts(c *rest.Config) ContactsInterface {
-	return &contacts{c}
+func newContacts(s *session) Contacts {
+	return &contacts{s}
 }
 
 // ContactsGetter makes embedding easier
 type ContactsGetter interface {
-	ContactsInterface() ContactsInterface
+	Contacts() Contacts
 }
 
-// ContactsInterface defines Contacts behavior
-type ContactsInterface interface {
+// Contacts defines Contacts behavior
+type Contacts interface {
 	Validate() error
 }
 
 // contacts implements Contacts
 type contacts struct {
-	*rest.Config
+	*session
 }
 
 // Validate builds the validate piece of the URL
@@ -42,4 +38,14 @@ type Contact struct {
 	NameMiddle     string         `json:"nameMiddle,omitempty"`
 	Organization   string         `json:"organization,omitempty"`
 	Phone          string         `json:"phone,omitempty"`
+}
+
+// AddressMailing holds contact address info
+type AddressMailing struct {
+	Address    string `json:"address1,omitempty"`
+	Address2   string `json:"address2,omitempty"`
+	City       string `json:"city,omitempty"`
+	Country    string `json:"country,omitempty"`
+	PostalCode string `json:"postalCode,omitempty"`
+	State      string `json:"state,omitempty"`
 }

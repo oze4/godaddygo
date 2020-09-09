@@ -1,53 +1,81 @@
-package records
+package endpoints
 
 import (
 	"errors"
-
-	"github.com/oze4/godaddygo/pkg/rest"
 )
 
-// New lets you build a new record
-func New(c *rest.Config) Interface {
-	return &records{c}
+// DNSRecord is a struct that holds data about DNS records
+type DNSRecord struct {
+	Data     string `json:"data,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Port     int    `json:"port,omitempty"`
+	Priority int    `json:"priority,omitempty"`
+	Protocol string `json:"protocol,omitempty"`
+	Service  string `json:"service,omitempty"`
+	TTL      int    `json:"ttl,omitempty"`
+	Type     string `json:"type,omitempty"`
+	Weight   int    `json:"weight,omitempty"`
 }
 
-// Interface defines `records` behavior
-type Interface interface {
+// DNSRecordTypes to be used as an enum
+var DNSRecordTypes = map[string]string{
+	"A":     "A",
+	"AAAA":  "AAAA",
+	"CNAME": "CNAME",
+	"MX":    "MX",
+	"NS":    "NS",
+	"SOA":   "SOA",
+	"SRV":   "SRV",
+	"TXT":   "TXT",
+}
+
+// New lets you build a new record
+func newRecords(s *session) Records {
+	return &records{s}
+}
+
+// RecordsGetter simplifies embedding
+type RecordsGetter interface {
+	Records() Records
+}
+
+// Records defines `records` behavior
+type Records interface {
 	GetAll() (*DNSRecord, error)
 	GetByType(recordType string) error
 	GetByTypeName(recordType, recordName string) error
 }
 
 type records struct {
-	*rest.Config
+	*session
 }
 
 // GetAll returns all DNS records for a specific domain
 func (r *records) GetAll() (*DNSRecord, error) {
 	/*
-	url, err := r.getBaseURL()
-	if err != nil {
-		return nil, err
-	}
+		url, err := r.getBaseURL()
+		if err != nil {
+			return nil, err
+		}
 
-	req := &http.Request{
-		APIKey:    r.APIKey(),
-		APISecret: r.APISecret(),
-		Method:    "GET",
-		URL:       url + "/domains/" + r.targetDomain() + "/records",
-	}
+		req := &http.Request{
+			APIKey:    r.APIKey(),
+			APISecret: r.APISecret(),
+			Method:    "GET",
+			URL:       url + "/domains/" + r.targetDomain() + "/records",
+		}
 
-	resp, err := req.Do()
-	if err != nil {
-		return nil, err
-	}
+		resp, err := req.Do()
+		if err != nil {
+			return nil, err
+		}
 
-	var dnsrecords DNSRecord
-	if err := json.Unmarshal(resp, &dnsrecords); err != nil {
-		return nil, err
-	}
+		var dnsrecords DNSRecord
+		if err := json.Unmarshal(resp, &dnsrecords); err != nil {
+			return nil, err
+		}
 
-	return &dnsrecords, nil
+		return &dnsrecords, nil
 	*/
 	return &DNSRecord{}, nil
 }
@@ -215,5 +243,3 @@ func validate(s string, m map[string]string) bool {
 	}
 	return false
 }
-
-
