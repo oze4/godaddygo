@@ -11,10 +11,10 @@ import (
 // This is the response when you `GET` info about a domain.
 type DomainDetails struct {
 	AuthCode               string        `json:"authCode,omitempty"`
-	ContactAdmin           Contacts      `json:"contactAdmin,omitempty"`
-	ContactBilling         Contacts      `json:"contactBilling,omitempty"`
-	ContactRegistrant      Contacts      `json:"contactRegistrant,omitempty"`
-	ContactTech            Contacts      `json:"contactTech,omitempty"`
+	ContactAdmin           Contact       `json:"contactAdmin,omitempty"`
+	ContactBilling         Contact       `json:"contactBilling,omitempty"`
+	ContactRegistrant      Contact       `json:"contactRegistrant,omitempty"`
+	ContactTech            Contact       `json:"contactTech,omitempty"`
 	CreatedAt              time.Time     `json:"createdAt,omitempty"`
 	DeletedAt              time.Time     `json:"deletedAt,omitempty"`
 	TransferAwayEligibleAt time.Time     `json:"transferAwayEligibleAt,omitempty"`

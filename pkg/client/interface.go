@@ -1,8 +1,8 @@
 package client
 
-// NewClient is an "batteries-included" default client
+// Default is an "batteries-included" default client
 // that can be used out of the box
-func NewClient(apikey, apisecret string, isproduction bool) Interface {
+func Default(apikey, apisecret string, isproduction bool) Interface {
 	return &defaultClient{
 		apiKey:       apikey,
 		apiSecret:    apisecret,
