@@ -8,8 +8,9 @@
 - [Installation](#installation)
 - [Getting Started](#getting-started)
   - [API Structure](#our-api-structure)
-  - [Default Client](#default-client)
-  - [Custom Client](#custom-client)
+  - [Usage](#usage)
+    - [Default Client](#default-client)
+    - [Custom Client](#custom-client)
 - [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
 - [Roadmap](#roadmap)
   - [Endpoints](#endpoints)
@@ -52,15 +53,39 @@ Programmatically, this would look like:
 api.V1().Domain("dom.com").Records().Add(newDNSRecord)
 ```
 
+### Usage 
+
+You can either connect to the production API or the development API by running either:
+ - `godaddygo.ConnectProduction(..)`
+ - `godaddygo.ConnectDevelopment(...)`
+
+We create the default client behind the scenes for you, which allows you to get to the "meat and potatoes" as fast as possible.
+
+```golang
+// Options for client
+k := "api_key"
+s := "api_secret"
+// Skip creating client, let us create the default client
+// behind the scenes
+// You can now get to the core API endpoints in fewer 
+// lines of code
+api := godaddygo.ConnectProduction(k, s)
+// or for OTE (development)...
+// api := godaddygo.ConnectDevelopment(k, s)
+
+// Use `api` here!
+```
 
 ### Default Client:
 
+With that being said you can access the default client and pass it into `endpoints.Connect(...)`
+
 ```go
-// Recommended way
 package main
 
 import (
-    "github.com/oze4/godaddygo"
+	gdgClient "github.com/oze4/godaddygo/pkg/client"
+	gdgEndpoints "github.com/oze4/godaddygo/pkg/endpoints"
 )
 
 func main() {
@@ -71,11 +96,11 @@ func main() {
     // https://developer.godaddy.com/getstarted
     targetProductionAPI := true
 
-    // Create new client
-    client := godaddygo.NewClient(targetProductionAPI, k, s)
+    // Create default client
+    client := gdgClient.Default(k, s, targetProductionAPI)
 
     // Connect our client to endpoints
-    api := godaddygo.Connect(client)
+    api := gdgEndpoints.Connect(client)
 
     //
 	// Use `api` here!
@@ -91,41 +116,23 @@ func main() {
 }
 ```
 
-You can also circumvent having to specify whether or not to target the production API.
-
-```golang
-// Simplified
-
-// Options for client
-k := "api_key"
-s := "api_secret"
-// Create new client
-client := godaddygo.ConnectProduction(k, s)
-// or for OTE (development)...
-// client := godaddygo.ConnectDevelopment(k, s)
-
-// etc...
-```
-
 ### Custom Client
 
 ```go
 package main
 
 import (
-    "github.com/oze4/godaddygo/pkg/endpoints"
+    gdgEndpoints "github.com/oze4/godaddygo/pkg/endpoints"
 )
 
 func main() {
-    // Instead of doing `godaddy := godaddygo.Connect(client)`, which
-	// just wraps around `endpoints.Connect`, you would do:
 	myCustomClient := &myClient{
 		key: "api_key",
 		secret: "api_secret",
 		isprod: true,
 	}
 
-    api := endpoints.Connect(myCustomClient)
+    api := gdgEndpoints.Connect(myCustomClient)
 
     // Use `api` here!
 
@@ -140,7 +147,7 @@ type myClient struct {
     key string
     secret string
     isprod bool
-    // ...
+    // ...your custom stuff
 }
 
 func (c *myClient) APIKey() string {
