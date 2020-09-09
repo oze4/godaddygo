@@ -7,12 +7,12 @@ import (
 // Connect allows you to get a new gateway
 // aka `endpoints.New(client)`
 func Connect(c client.Interface) Gateway {
-    s := newSession(c)
+	s := newSession(c)
 	return newGateway(s)
 }
 
 func newGateway(s *session) Gateway {
-    return &gateway{s}
+	return &gateway{s}
 }
 
 // Gateway targets specific GoDaddy API versions
@@ -41,18 +41,18 @@ func (g *gateway) V2() V2 {
 // returns a new Gateway which targets GoDaddy
 // production API
 func ConnectProduction(apikey, apisecret string) Gateway {
-    isProduction := true
-    c := client.NewClient(apikey, apisecret, isProduction)
-    s := newSession(c)
-    return newGateway(s)
+	isProduction := true
+	c := client.NewClient(apikey, apisecret, isProduction)
+	s := newSession(c)
+	return newGateway(s)
 }
 
 // ConnectDevelopment is an convenience function
 // returns a new Gateway which targets GoDaddy
 // development API
 func ConnectDevelopment(apikey, apisecret string) Gateway {
-    isProduction := false
-    c := client.NewClient(apikey, apisecret, isProduction)
-    s := newSession(c)
-    return newGateway(s)
+	isProduction := false
+	c := client.NewClient(apikey, apisecret, isProduction)
+	s := newSession(c)
+	return newGateway(s)
 }
