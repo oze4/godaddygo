@@ -7,75 +7,6 @@ import (
 	"github.com/oze4/godaddygo/pkg/rest"
 )
 
-// newDomain creates a new domain
-func newDomain(s *session, domainName string) Domain {
-	s.domainName = domainName
-	return &domain{s}
-}
-
-// Domain implements Domain [interface]
-type Domain interface {
-	ContactsGetter
-	PrivacyGetter
-	RecordsGetter
-	Agreements(domains []string, privacyRequested, forTransfer bool) error
-	GetDetails() (*DomainDetails, error)
-}
-
-type domain struct {
-	*session
-}
-
-func (d *domain) Records() Records {
-	return newRecords(d.session)
-}
-
-// Contacts builds out the contacts piece of the URL
-func (d *domain) Contacts() Contacts {
-	return newContacts(d.session)
-}
-
-// Privacy builds out the privacy piece of the URL
-func (d *domain) Privacy() Privacy {
-	return newPrivacy(d.session)
-}
-
-// Agreements builds the agreements piece of the URL
-func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool) error {
-	/*
-		d.URL = d.URL + "/domains"
-		doms := append(domains, d.Host)
-		dl := strings.Join(doms, ",")
-		p := strconv.FormatBool(privacyRequested)
-		f := strconv.FormatBool(forTransfer)
-		d.URL = "/agreements?tlds=" + dl + "&privacy=" + p + "&forTransfer=" + f
-		return d.Request
-	*/
-	return nil
-}
-
-// GetDetails gets info on a domain
-func (d *domain) GetDetails() (*DomainDetails, error) {
-	req := &rest.Request{
-		APIKey:    d.APIKey(),
-		APISecret: d.APISecret(),
-		URL:       d.URLBasePlus("/" + d.domainName),
-		Method:    "GET",
-	}
-
-	res, err := req.Send()
-	if err != nil {
-		return nil, err
-	}
-
-	var details DomainDetails
-	if err := json.Unmarshal(res, &details); err != nil {
-		return nil, err
-	}
-
-	return &details, nil
-}
-
 // DomainDetails holds information about a GoDaddy domain.
 // This is the response when you `GET` info about a domain.
 type DomainDetails struct {
@@ -128,6 +59,60 @@ type DomainAvailability struct {
 	Domain     string `json:"domain,omitempty"`
 	Period     int    `json:"period,omitempty"`
 	Price      int    `json:"price,omitempty"`
+}
+
+// newDomain creates a new domain
+func newDomain(s *session, domainName string) Domain {
+	s.domainName = domainName
+	return &domain{s}
+}
+
+// Domain implements Domain [interface]
+type Domain interface {
+	ContactsGetter
+	PrivacyGetter
+	RecordsGetter
+	GetDetails() (*DomainDetails, error)
+}
+
+type domain struct {
+	*session
+}
+
+func (d *domain) Records() Records {
+	return newRecords(d.session)
+}
+
+// Contacts builds out the contacts piece of the URL
+func (d *domain) Contacts() Contacts {
+	return newContacts(d.session)
+}
+
+// Privacy builds out the privacy piece of the URL
+func (d *domain) Privacy() Privacy {
+	return newPrivacy(d.session)
+}
+
+// GetDetails gets info on a domain
+func (d *domain) GetDetails() (*DomainDetails, error) {
+	req := &rest.Request{
+		APIKey:    d.APIKey(),
+		APISecret: d.APISecret(),
+		URL:       d.URLBasePlus("/" + d.domainName),
+		Method:    "GET",
+	}
+
+	res, err := req.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	var details DomainDetails
+	if err := json.Unmarshal(res, &details); err != nil {
+		return nil, err
+	}
+
+	return &details, nil
 }
 
 // Update updates a domain

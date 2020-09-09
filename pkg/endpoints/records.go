@@ -1,9 +1,9 @@
 package endpoints
 
 import (
-	"strings"
 	"encoding/json"
 	"errors"
+	"strings"
 
 	"github.com/oze4/godaddygo/pkg/rest"
 )
@@ -87,8 +87,10 @@ func (r *records) GetByType(recordType string) (*[]DNSRecord, error) {
 	}
 
 	req := &rest.Request{
-		Method: "GET",
-		URL:    r.URLBasePlus("/records/" + recordType),
+		APIKey:    r.APIKey(),
+		APISecret: r.APISecret(),
+		Method:    "GET",
+		URL:       r.URLBasePlus("/records/" + recordType),
 	}
 
 	res, err := req.Send()
@@ -112,8 +114,10 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]DNSRecord, er
 	}
 
 	req := &rest.Request{
-		Method: "GET",
-		URL:    r.URLBasePlus("/records/" + recordType + "/" + recordName),
+		APIKey:    r.APIKey(),
+		APISecret: r.APISecret(),
+		Method:    "GET",
+		URL:       r.URLBasePlus("/records/" + recordType + "/" + recordName),
 	}
 
 	res, err := req.Send()
@@ -152,9 +156,11 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 	}
 
 	req := &rest.Request{
-		Method: "PUT",
-		Body:   newrec,
-		URL:    r.URLBasePlus("/records/" + recType + "/" + recName),
+		APIKey:    r.APIKey(),
+		APISecret: r.APISecret(),
+		Method:    "PUT",
+		Body:      newrec,
+		URL:       r.URLBasePlus("/records/" + recType + "/" + recName),
 	}
 
 	if _, err := req.Send(); err != nil {
@@ -177,9 +183,11 @@ func (r *records) Add(rec *DNSRecord) error {
 	}
 
 	req := &rest.Request{
-		Method: "PATCH",
-		Body:   newrec,
-		URL:    r.URLBasePlus("/records"),
+		APIKey:    r.APIKey(),
+		APISecret: r.APISecret(),
+		Method:    "PATCH",
+		Body:      newrec,
+		URL:       r.URLBasePlus("/records"),
 	}
 
 	if _, err = req.Send(); err != nil {
@@ -212,9 +220,11 @@ func (r *records) AddMultiple(recs *[]DNSRecord) error {
 	}
 
 	req := &rest.Request{
-		Method: "PATCH",
-		Body:   newrecs,
-		URL:    r.URLBasePlus("/records"),
+		APIKey:    r.APIKey(),
+		APISecret: r.APISecret(),
+		Method:    "PATCH",
+		Body:      newrecs,
+		URL:       r.URLBasePlus("/records"),
 	}
 
 	if _, err = req.Send(); err != nil {
