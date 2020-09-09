@@ -18,8 +18,6 @@
 
 ## Intro
 
-Hello and welcome! Thanks for checking us out :smile:
-
 **This library currently supports**:
 
 - Getting domain info
@@ -81,7 +79,7 @@ api := godaddygo.ConnectProduction(prodKey, prodSecret)
 
 ### Default Client
 
-If you would like, you can create a default client "manually", then pass it to `endpoints.Connect(<your_client_here>)`
+If you would like, you can create a default client "manually", then pass it to `endpoints.Connect(<default_client_here>)`
 
 ```go
 package main
