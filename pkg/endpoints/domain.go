@@ -19,7 +19,6 @@ type Domain interface {
 	PrivacyGetter
 	RecordsGetter
 	Agreements(domains []string, privacyRequested, forTransfer bool) error
-	IsAvailable() (*DomainAvailability, error)
 	GetDetails() (*DomainDetails, error)
 }
 
@@ -55,37 +54,12 @@ func (d *domain) Agreements(domains []string, privacyRequested, forTransfer bool
 	return nil
 }
 
-// IsAvailable checks if the supplied domain name is available for purchase
-func (d *domain) IsAvailable() (*DomainAvailability, error) {
-	dom := d.domainName
-	ft := "false"
-
-	req := &rest.Request{
-		APIKey:    d.APIKey(),
-		APISecret: d.APISecret(),
-		URL:       d.URLBasePlus("/domains/available?domain=" + dom + "&checkType=FAST&forTransfer=" + ft),
-		Method:    "GET",
-	}
-
-	res, err := req.Send()
-	if err != nil {
-		return nil, err
-	}
-
-	var avail DomainAvailability
-	if err := json.Unmarshal(res, &avail); err != nil {
-		return nil, err
-	}
-
-	return &avail, nil
-}
-
 // GetDetails gets info on a domain
 func (d *domain) GetDetails() (*DomainDetails, error) {
 	req := &rest.Request{
 		APIKey:    d.APIKey(),
 		APISecret: d.APISecret(),
-		URL:       "", //TODO
+		URL:       d.URLBasePlus("/" + d.domainName),
 		Method:    "GET",
 	}
 

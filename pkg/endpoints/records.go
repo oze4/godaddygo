@@ -1,7 +1,10 @@
 package endpoints
 
 import (
+	"encoding/json"
 	"errors"
+
+	"github.com/oze4/godaddygo/pkg/rest"
 )
 
 // DNSRecord is a struct that holds data about DNS records
@@ -42,8 +45,10 @@ type RecordsGetter interface {
 // Records defines `records` behavior
 type Records interface {
 	GetAll() (*DNSRecord, error)
-	GetByType(recordType string) error
-	GetByTypeName(recordType, recordName string) error
+	GetByType(recordType string) (*[]DNSRecord, error)
+	GetByTypeName(recordType, recordName string) (*[]DNSRecord, error)
+	Add(rec *DNSRecord) error
+	AddMultiple(recordsToAdd *[]DNSRecord) error
 }
 
 type records struct {
@@ -52,178 +57,164 @@ type records struct {
 
 // GetAll returns all DNS records for a specific domain
 func (r *records) GetAll() (*DNSRecord, error) {
-	/*
-		url, err := r.getBaseURL()
-		if err != nil {
-			return nil, err
-		}
+	req := &rest.Request{
+		APIKey:    r.APIKey(),
+		APISecret: r.APISecret(),
+		Method:    "GET",
+		URL:       r.URLBasePlus("/domains/" + r.domainName + "/records"),
+	}
 
-		req := &http.Request{
-			APIKey:    r.APIKey(),
-			APISecret: r.APISecret(),
-			Method:    "GET",
-			URL:       url + "/domains/" + r.targetDomain() + "/records",
-		}
+	resp, err := req.Send()
+	if err != nil {
+		return nil, err
+	}
 
-		resp, err := req.Do()
-		if err != nil {
-			return nil, err
-		}
+	var dnsrecords DNSRecord
+	if err := json.Unmarshal(resp, &dnsrecords); err != nil {
+		return nil, err
+	}
 
-		var dnsrecords DNSRecord
-		if err := json.Unmarshal(resp, &dnsrecords); err != nil {
-			return nil, err
-		}
-
-		return &dnsrecords, nil
-	*/
-	return &DNSRecord{}, nil
+	return &dnsrecords, nil
 }
 
 // GetByType returns all DNS records for a specific domain
-func (r *records) GetByType(recordType string) /* DNSRecord,*/ error {
-	/*
-		// Check we were given a valid record type (A, AAAA, etc....)
-		if err := validateRecordType(recordType); err != nil {
-			return nil, err
-		}
+func (r *records) GetByType(recordType string) (*[]DNSRecord, error) {
+	// Check we were given a valid record type (A, AAAA, etc....)
+	if err := validateRecordType(recordType); err != nil {
+		return nil, err
+	}
 
-		r.URL = r.URL + "/records/" + recordType
-		r.Method = "GET"
+	req := &rest.Request{
+		Method: "GET",
+		URL:    r.URLBasePlus("/records/" + recordType),
+	}
 
-		resp, err := r.Request.Do()
-		if err != nil {
-			return nil, err
-		}
+	res, err := req.Send()
+	if err != nil {
+		return nil, err
+	}
 
-		var dnsrecords DNSRecord
-		if err := json.Unmarshal(resp, &dnsrecords); err != nil {
-			return nil, err
-		}
+	var dnsrecords []DNSRecord
+	if err := json.Unmarshal(res, &dnsrecords); err != nil {
+		return nil, err
+	}
 
-		return &dnsrecords, nil
-	*/
-	return nil
+	return &dnsrecords, nil
 }
 
 // GetByTypeName allows you to get specific DNS record(s) by type and name
-func (r *records) GetByTypeName(recordType, recordName string) /* DNSRecord, */ error {
+func (r *records) GetByTypeName(recordType, recordName string) (*[]DNSRecord, error) {
 	// Check we were given a valid record type (A, AAAA, etc....)
-	/*
-		    if err := validateRecordType(recordType); err != nil {
-					return nil, err
-				}
+	if err := validateRecordType(recordType); err != nil {
+		return nil, err
+	}
 
-				r.URL = r.URL + "/records/" + recordType + "/" + recordName
-				r.Method = "GET"
+	req := &rest.Request{
+		Method: "GET",
+		URL:    r.URLBasePlus("/records/" + recordType + "/" + recordName),
+	}
 
-				resp, err := r.Request.Do()
-				if err != nil {
-					return nil, err
-				}
+	res, err := req.Send()
+	if err != nil {
+		return nil, err
+	}
 
-				var dnsrecords DNSRecord
-				if err := json.Unmarshal(resp, &dnsrecords); err != nil {
-					return nil, err
-				}
+	var dnsrecords []DNSRecord
+	if err := json.Unmarshal(res, &dnsrecords); err != nil {
+		return nil, err
+	}
 
-			    return &dnsrecords, nil
-	*/
-	return nil
+	return &dnsrecords, nil
 }
 
 // SetValue allows you to set the value of an existing DNS record.
 // If some.example.com resolved to 1.1.1.1 but I wanted it to be 2.2.2.2
 // I would use this function to update that value
 func (r *records) SetValue(recType, recName, newValue string) error {
-	/*
-		    // Check we were given a valid record type (A, AAAA, etc....)
-			if err := validateRecordType(recType); err != nil {
-				return err
-			}
+	// Check we were given a valid record type (A, AAAA, etc....)
+	if err := validateRecordType(recType); err != nil {
+		return err
+	}
 
-			newdns := DNSRecord{
-				DNSRecord{
-					Type: recType,
-					Name: recName,
-					Data: newValue,
-				},
-			}
+	rec := []DNSRecord{
+		DNSRecord{
+			Type: recType,
+			Name: recName,
+			Data: newValue,
+		},
+	}
 
-			newdnsByte, err := json.Marshal(newdns)
-			if err != nil {
-				return err
-			}
+	newrec, err := json.Marshal(rec)
+	if err != nil {
+		return err
+	}
 
-			r.URL = r.URL + "/records/" + recType + "/" + recName
-			r.Method = "PUT"
-			r.Body = newdnsByte
+	req := &rest.Request{
+		Method: "PUT",
+		Body:   newrec,
+		URL:    r.URLBasePlus("/records/" + recType + "/" + recName),
+	}
 
-			_, err = r.Request.Do()
-			if err != nil {
-				return err
-			}
-	*/
+	if _, err := req.Send(); err != nil {
+		return err
+	}
 	return nil
 }
 
 // Add adds a new DNS record, it will NOT update any existing records
 // a new record WILL be added
 func (r *records) Add(rec *DNSRecord) error {
-	/*
-		    // Check we were given a valid record type (A, AAAA, etc....)
-			if err := validateRecordType(rec.Type); err != nil {
-				return err
-			}
+	// Check we were given a valid record type (A, AAAA, etc....)
+	if err := validateRecordType(rec.Type); err != nil {
+		return err
+	}
 
-			newdns := DNSRecord{*rec}
-			bod, err := json.Marshal(newdns)
-			if err != nil {
-				return err
-			}
+	newrec, err := json.Marshal(rec)
+	if err != nil {
+		return err
+	}
 
-			r.URL = r.URL + "/records"
-			r.Method = "PATCH"
-			r.Body = bod
+	req := &rest.Request{
+		Method: "PATCH",
+		Body:   newrec,
+		URL:    r.URLBasePlus("/records"),
+	}
 
-			if _, err = r.Request.Do(); err != nil {
-				return err
-		    }
-	*/
-
+	if _, err = req.Send(); err != nil {
+		return err
+	}
 	return nil
 }
 
 // AddMultiple lets you add multiple DNS records at once, it will NOT
 // update any existing records a new record WILL be added
-func (r *records) AddMultiple(recs *DNSRecord) error {
-	/*
-			iserr := false
-			for _, rec := range *recs {
-				// Check we were given a valid record type (A, AAAA, etc....)
-				if err := validateRecordType(rec.Type); err != nil {
-					iserr = true
-				}
-			}
+func (r *records) AddMultiple(recs *[]DNSRecord) error {
+	iserr := false
+	for _, rec := range *recs {
+		// Check we were given a valid record type (A, AAAA, etc....)
+		if err := validateRecordType(rec.Type); err != nil {
+			iserr = true
+		}
+	}
 
-			if iserr {
-				return errors.New("Invalid record type found")
-			}
+	if iserr {
+		return errors.New("Invalid record type found")
+	}
 
-			bod, err := json.Marshal(recs)
-			if err != nil {
-				return err
-			}
+	newrecs, err := json.Marshal(recs)
+	if err != nil {
+		return err
+	}
 
-			r.URL = r.URL + "/records"
-			r.Method = "PATCH"
-			r.Body = bod
+	req := &rest.Request{
+		Method: "PATCH",
+		Body:   newrecs,
+		URL:    r.URLBasePlus("/records"),
+	}
 
-			if _, err = r.Request.Do(); err != nil {
-				return err
-		    }
-	*/
-
+	if _, err = req.Send(); err != nil {
+		return err
+	}
 	return nil
 }
 
