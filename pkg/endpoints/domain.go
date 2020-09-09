@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/oze4/godaddygo/pkg/rest"
-	"github.com/oze4/godaddygo/pkg/uri"
 )
 
 // DomainDetails holds information about a GoDaddy domain.
@@ -96,12 +95,10 @@ func (d *domain) Privacy() Privacy {
 
 // GetDetails gets info on a domain
 func (d *domain) GetDetails() (*DomainDetails, error) {
-	url := uri.Builder(d.IsProduction()).Versions(d.apiVersion).Domain(d.domainName)
-
 	req := &rest.Request{
 		APIKey:    d.APIKey(),
 		APISecret: d.APISecret(),
-		URL:       url.String(),
+		URL:       d.URLBuilder().Domain(d.domainName).String(),
 		Method:    "GET",
 	}
 

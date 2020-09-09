@@ -1,5 +1,9 @@
 package uri
 
+import (
+	"strconv"
+)
+
 // Builder is the start of generating an API URL
 func Builder(isproduction bool) Gateway {
 	h := "https://api-ote.godaddy.com"
@@ -17,36 +21,47 @@ type cache struct {
 
 // Gateway allows you to target specific API versions
 type Gateway interface {
-	Versions(v string) Versions
+    // We do not validate the `Version(v string)` parameter!
+    // We expect you to have already validated the
+    // version string beforehand
+	Version(v string) Version
 }
 
 type gateway struct {
 	*cache
 }
 
-func (g *gateway) Versions(v string) Versions {
+// We do not validate the `v string` parameter!
+// We expect you to have already validated the
+// version string beforehand
+func (g *gateway) Version(v string) Version {
 	g.path += "/" + v
-	return &versions{g.cache}
+	return &version{g.cache}
 }
 
-// Versions are the API versions
-type Versions interface {
-	Domain(domainName string) Domain
+// Version are the API versions
+type Version interface {
+    Domain(domainName string) Domain
+    DomainAvailability(domainName string, forTransfer bool) string
 }
 
-type versions struct {
+type version struct {
 	*cache
 }
 
-func (v *versions) Domain(domainName string) Domain {
+func (v *version) Domain(domainName string) Domain {
 	v.path += "/domains/" + domainName
 	return &domain{v.cache}
+}
+
+func (v *version) DomainAvailability(domainName string, forTransfer bool) string {
+    return v.path + "/available?domain=" + domainName + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
 }
 
 // Domain is the domains endpoint
 type Domain interface {
 	String() string
-	Records() Records
+    Records() Records
 }
 
 type domain struct {
@@ -65,8 +80,8 @@ func (d *domain) Records() Records {
 // Records is the `/domain/<domain>/records` endpoint
 type Records interface {
 	String() string
-	GetByType(rectype string) string
-	GetByTypeName(rectype, recname string) string
+	ByType(rectype string) string
+	ByTypeName(rectype, recname string) string
 }
 
 type records struct {
@@ -77,10 +92,10 @@ func (r *records) String() string {
 	return r.path
 }
 
-func (r *records) GetByType(rectype string) string {
+func (r *records) ByType(rectype string) string {
 	return r.path + "/" + rectype
 }
 
-func (r *records) GetByTypeName(rectype, recname string) string {
-	return r.GetByType(rectype) + "/" + recname
+func (r *records) ByTypeName(rectype, recname string) string {
+	return r.ByType(rectype) + "/" + recname
 }

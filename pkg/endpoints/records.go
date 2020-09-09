@@ -63,7 +63,7 @@ func (r *records) GetAll() (*[]DNSRecord, error) {
 		APIKey:    r.APIKey(),
 		APISecret: r.APISecret(),
 		Method:    "GET",
-		URL:       r.URLBasePlus("/domains/" + r.domainName + "/records"),
+		URL:       r.URLBuilder().Domain(r.domainName).Records().String(),
 	}
 
 	resp, err := req.Send()
@@ -90,7 +90,7 @@ func (r *records) GetByType(recordType string) (*[]DNSRecord, error) {
 		APIKey:    r.APIKey(),
 		APISecret: r.APISecret(),
 		Method:    "GET",
-		URL:       r.URLBasePlus("/domains/" + r.domainName + "/records/" + recordType),
+		URL:       r.URLBuilder().Domain(r.domainName).Records().ByType(recordType),
 	}
 
 	res, err := req.Send()
@@ -117,7 +117,7 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]DNSRecord, er
 		APIKey:    r.APIKey(),
 		APISecret: r.APISecret(),
 		Method:    "GET",
-		URL:       r.URLBasePlus("/domains/" + r.domainName + "/records/" + recordType + "/" + recordName),
+		URL:       r.URLBuilder().Domain(r.domainName).String(),
 	}
 
 	res, err := req.Send()
@@ -160,7 +160,7 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 		APISecret: r.APISecret(),
 		Method:    "PUT",
 		Body:      newrec,
-		URL:       r.URLBasePlus("/domains/" + r.domainName + "/records/" + recType + "/" + recName),
+		URL:       r.URLBuilder().Domain(r.domainName).Records().ByTypeName(recType, recName),
 	}
 
 	if _, err := req.Send(); err != nil {
@@ -224,7 +224,7 @@ func (r *records) AddMultiple(recs *[]DNSRecord) error {
 		APISecret: r.APISecret(),
 		Method:    "PATCH",
 		Body:      newrecs,
-		URL:       r.URLBasePlus("/domains/" + r.domainName + "/records"),
+		URL:       r.URLBuilder().Domain(r.domainName).Records().String(),
 	}
 
 	if _, err = req.Send(); err != nil {

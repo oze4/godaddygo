@@ -32,12 +32,11 @@ func (v *v1) Domain(hostname string) Domain {
 
 // GetDomainAvailability checks if the supplied domain name is available for purchase or not
 func (v *v1) GetDomainAvailability(domainname string) (*DomainAvailability, error) {
-	forTransfer := "false" // Needs to be a string!
-
+    forTransfer := false
 	req := &rest.Request{
 		APIKey:    v.APIKey(),
 		APISecret: v.APISecret(),
-		URL:       v.URLBasePlus("/domains/available?domain=" + domainname + "&checkType=FAST&forTransfer=" + forTransfer),
+		URL:       v.URLBuilder().DomainAvailability(domainname, forTransfer),
 		Method:    "GET",
 	}
 
