@@ -1,6 +1,7 @@
 package endpoints
 
 import (
+	"strings"
 	"encoding/json"
 	"errors"
 
@@ -44,11 +45,12 @@ type RecordsGetter interface {
 
 // Records defines `records` behavior
 type Records interface {
+	Add(rec *DNSRecord) error
+	AddMultiple(recordsToAdd *[]DNSRecord) error
 	GetAll() (*DNSRecord, error)
 	GetByType(recordType string) (*[]DNSRecord, error)
 	GetByTypeName(recordType, recordName string) (*[]DNSRecord, error)
-	Add(rec *DNSRecord) error
-	AddMultiple(recordsToAdd *[]DNSRecord) error
+	SetValue(recType, recName, newValue string) error
 }
 
 type records struct {
@@ -189,18 +191,21 @@ func (r *records) Add(rec *DNSRecord) error {
 // AddMultiple lets you add multiple DNS records at once, it will NOT
 // update any existing records a new record WILL be added
 func (r *records) AddMultiple(recs *[]DNSRecord) error {
-	iserr := false
+	// Check we were given a valid record type for each record (A, AAAA, etc....)
+	var recordsWithError []string
 	for _, rec := range *recs {
-		// Check we were given a valid record type (A, AAAA, etc....)
 		if err := validateRecordType(rec.Type); err != nil {
-			iserr = true
+			recordsWithError = append(recordsWithError, rec.Name)
 		}
 	}
 
-	if iserr {
-		return errors.New("Invalid record type found")
+	// If we have any records with a bad record type
+	if len(recordsWithError) > 0 {
+		errRecs := strings.Join(recordsWithError, ",")
+		return errors.New("Invalid record type found on the following records: " + errRecs)
 	}
 
+	// Otherwise, marshal the records and send our request
 	newrecs, err := json.Marshal(recs)
 	if err != nil {
 		return err
