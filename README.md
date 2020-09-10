@@ -7,10 +7,12 @@
 - [Intro](#intro)
 - [Installation](#installation)
 - [Getting Started](#getting-started)
+  - [Really, though, show me what I need to get started..](#really-though-show-me-what-i-need-to-get-started)
   - [API Structure](#our-api-structure)
-- [Recommended Usage](#usage)
-  - [Default Client](#default-client)
-  - [Custom Client](#custom-client)
+- [Usage Details](#usage)
+  - [Recommended Usage](#recommended-usage)
+  - [Using Default Client](#default-client)
+  - [Providing Custom Client](#custom-client)
 - [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
 - [Features](#features)
 
@@ -18,22 +20,50 @@
 
 ## Intro
 
-**This library currently supports**:
+ - See [here](#features) for more on what features this package currently supports
+ - Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddy.com/doc)
 
-- Getting domain info
-- Checking domain availability
-- Getting DNS records
-- Setting DNS records
+<br /> 
 
-Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddy.com/doc)
-
-Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint
+<small>Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint</small>
 
 ## Installation
 
 `go get -u github.com/oze4/godaddygo`
 
 ## Getting Started
+
+Details and information on how to get up and `Go`ing
+
+### Really, though, show me what I need to get started..
+
+Bare minimum what you need to get started (aka how you will typically use this package):
+
+```golang
+package main
+
+import (
+	"github.com/oze4/godaddygo"
+)
+
+func main() {
+	prodKey := "-"
+	prodSecret := "-"
+
+	// Target version 1 of the production API
+	api := godaddygo.ConnectProduction(prodKey, prodSecret)
+	prodv1 := api.V1()
+
+	// Now have access to all GoDaddy production V1
+	// API endpoints (via `prodv1`)
+
+	// eg: prodv1.Domain("x.com").Records().GetAll()
+	//     prodv1.Domain("x.com").Records().Add(someDNSRecord)
+	//     prodv1.Domain("x.com").GetDetails()
+	//     prodv1.GetDomainAvailability("<some-domain-you-want-to-buy.com>")
+	// etc...
+}
+```
 
 ### Our API Structure
 
@@ -79,7 +109,9 @@ api := godaddygo.ConnectProduction(prodKey, prodSecret)
 
 ### Default Client
 
-If you would like, you can create a default client "manually", then pass it to `endpoints.Connect(<default_client_here>)`
+ - If you would like, you may create a default client "manually", then pass it to `endpoints.Connect(<default_client_here>)`. 
+ - At a high level, the `godaddygo` package is essentially just a wrapper for `endpoints` and `client`. 
+ - All we do is "wrap" those packages, as shown below
 
 ```go
 package main
@@ -119,7 +151,7 @@ func main() {
 
 ### Custom Client
 
-If you wish to use your own client instead of the default client, this is how you would do so.
+ - If you wish to use your own client instead of the default client, this is how you would do so.
 
 ```go
 package main
@@ -186,5 +218,5 @@ Please see [here](https://developer.godaddy.com/doc) for more information on GoD
 <br />
 <br />
 ---
-:wave: [mattoestreich.com](https://mattoestreich.com)
+[mattoestreich.com](https://mattoestreich.com)
 ---
