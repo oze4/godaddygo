@@ -20,7 +20,7 @@
 
 ## Intro
 
- - See [here](#features) for more on what features this package currently supports
+ - See [here](#features) for more on which features this package currently supports
  - Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddy.com/doc)
 
 <br /> 
