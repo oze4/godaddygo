@@ -6,8 +6,7 @@
 
 - [Intro](#intro)
 - [Installation](#installation)
-- [Getting Started](#getting-started)
-  - [Really, though, show me what I need to get started..](#really-though-show-me-what-i-need-to-get-started)
+- [Getting Started](#really-though-show-me-what-i-need-to-get-started)
   - [API Structure](#our-api-structure)
 - [Usage Details](#usage)
   - [Recommended Usage](#recommended-usage)
