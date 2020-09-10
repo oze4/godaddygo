@@ -14,11 +14,11 @@ import (
 
 // URLBuilder wraps `uri.Builder`
 func (s *session) URLBuilder() uri.Version {
-    // s.IsProduction *has* to already be set by the time we see 
-    // it here
+	// s.IsProduction *has* to already be set by the time we see
+	// it here
 	// It does not matter if `s.apiVersion` is empty here or not
-    // We let the API return an error, which should guide us
-    p := s.IsProduction()
-    v := s.apiVersion
+	// We let the API return an error, which should guide us
+	p := s.IsProduction()
+	v := s.apiVersion
 	return uri.Builder(p).Version(v)
 }

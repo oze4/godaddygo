@@ -144,7 +144,7 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 	// We allow the user to just supply a new value as a string
 	// This means we have to create the DNS record object which
 	// the GoDaddy api expects.
-	// They are looking for an array, even if it's just for a 
+	// They are looking for an array, even if it's just for a
 	// single record
 	rec := []DNSRecord{
 		DNSRecord{
