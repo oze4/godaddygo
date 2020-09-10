@@ -9,7 +9,6 @@
 - [Getting Started](#really-though-show-me-what-i-need-to-get-started)
   - [API Structure](#our-api-structure)
 - [Usage Details](#usage)
-  - [Recommended Usage](#recommended-usage)
   - [Using Default Client](#default-client)
   - [Providing Custom Client](#custom-client)
 - [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
@@ -80,37 +79,16 @@ api.V1().Domain("dom.com").Records().Add(newDNSRecord)
 
 GoDaddy's API currently has 2 versions, `v1` and `v2`. Within the `godaddygo` package we provide 2 helper functions, one for each version. These helper functions  simply "wrap" around our "core", which means you have the ability to create yor own client(s).
 
+We recommend using one of the following:
+
  - `godaddygo.ConnectProduction(key, secret)`
  - `godaddygo.ConnectDevelopment(key, secret)`
-
-We take care of building the default client behind the scenes, which allows you to tap into this SDK in only a handful of lines of code.
-
-### Recommended Usage
-
-```golang
-// Options for client
-prodKey := "api_key"
-prodSecret := "api_secret"
-
-// Target production API 
-// (https://api.godaddy.com)
-api := godaddygo.ConnectProduction(prodKey, prodSecret)
-
-/** 
- * Or to target development API (which GoDaddy refers to as "OTE") 
- * (https://api-ote.godaddy.com)
- *
- * api := godaddygo.ConnectDevelopment(devKey, devSecret)  
- */
-
-// ...
-```
 
 ### Default Client
 
  - If you would like, you may create a default client "manually", then pass it to `endpoints.Connect(<default_client_here>)`. 
  - At a high level, the `godaddygo` package is essentially just a wrapper for `endpoints` and `client`. 
- - All we do is "wrap" those packages, as shown below
+ - All we do is "wrap" those packages within `godaddygo`, as shown below
 
 ```go
 package main
