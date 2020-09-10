@@ -25,7 +25,7 @@
 
 <br /> 
 
-<small>Pull requests welcome! We plan on slowly integrating each GoDaddy endpoint</small>
+<small>Pull requests welcome! We would like to eventually support each GoDaddy API endpoint, not just domain/DNS related tasks</small>
 
 ## Installation
 
