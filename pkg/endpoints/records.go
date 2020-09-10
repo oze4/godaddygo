@@ -117,7 +117,7 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]DNSRecord, er
 		APIKey:    r.APIKey(),
 		APISecret: r.APISecret(),
 		Method:    "GET",
-		URL:       r.URLBuilder().Domain(r.domainName).String(),
+		URL:       r.URLBuilder().Domain(r.domainName).Records().ByTypeName(recordType, recordName),
 	}
 
 	res, err := req.Send()
@@ -137,11 +137,15 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]DNSRecord, er
 // If some.example.com resolved to 1.1.1.1 but I wanted it to be 2.2.2.2
 // I would use this function to update that value
 func (r *records) SetValue(recType, recName, newValue string) error {
-	// Check we were given a valid record type (A, AAAA, etc....)
 	if err := validateRecordType(recType); err != nil {
 		return err
 	}
 
+	// We allow the user to just supply a new value as a string
+	// This means we have to create the DNS record object which
+	// the GoDaddy api expects.
+	// They are looking for an array, even if it's just for a 
+	// single record
 	rec := []DNSRecord{
 		DNSRecord{
 			Type: recType,
@@ -150,6 +154,7 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 		},
 	}
 
+	// Marshal and send
 	newrec, err := json.Marshal(rec)
 	if err != nil {
 		return err
@@ -160,19 +165,19 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 		APISecret: r.APISecret(),
 		Method:    "PUT",
 		Body:      newrec,
-		URL:       r.URLBuilder().Domain(r.domainName).Records().ByTypeName(recType, recName),
+		URL:       r.URLBuilder().Domain(r.domainName).Records().SetValue(recType, recName),
 	}
 
 	if _, err := req.Send(); err != nil {
 		return err
 	}
+
 	return nil
 }
 
 // Add adds a new DNS record, it will NOT update any existing records
 // a new record WILL be added
 func (r *records) Add(rec *DNSRecord) error {
-	// Check we were given a valid record type (A, AAAA, etc....)
 	if err := validateRecordType(rec.Type); err != nil {
 		return err
 	}
@@ -193,13 +198,13 @@ func (r *records) Add(rec *DNSRecord) error {
 	if _, err = req.Send(); err != nil {
 		return err
 	}
+
 	return nil
 }
 
 // AddMultiple lets you add multiple DNS records at once, it will NOT
 // update any existing records a new record WILL be added
 func (r *records) AddMultiple(recs *[]DNSRecord) error {
-	// Check we were given a valid record type for each record (A, AAAA, etc....)
 	var recordsWithError []string
 	for _, rec := range *recs {
 		if err := validateRecordType(rec.Type); err != nil {
@@ -230,6 +235,7 @@ func (r *records) AddMultiple(recs *[]DNSRecord) error {
 	if _, err = req.Send(); err != nil {
 		return err
 	}
+
 	return nil
 }
 

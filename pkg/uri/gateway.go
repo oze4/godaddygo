@@ -2,7 +2,8 @@ package uri
 
 // Gateway allows you to target specific API versions
 type Gateway interface {
-	// We do not validate the `Version(v string)` parameter!
+	// We do not validate the `Version(v string)` 
+	// parameter!
 	// We expect you to have already validated the
 	// version string beforehand
 	Version(v string) Version
