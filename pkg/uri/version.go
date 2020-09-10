@@ -20,5 +20,5 @@ func (v *version) Domain(domainName string) Domain {
 }
 
 func (v *version) DomainAvailability(domainName string, forTransfer bool) string {
-	return v.path + "/available?domain=" + domainName + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
+	return v.path + "/domains/available?domain=" + domainName + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
 }
