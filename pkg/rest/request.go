@@ -106,7 +106,7 @@ func (r *Request) verifyStatusCode(resp *http.Response, bodyBytes []byte) error 
 	if resp.StatusCode >= 400 {
 		var respMap map[string]string
 		if err := json.Unmarshal(bodyBytes, &respMap); err != nil {
-			return fmt.Errorf("Bad request: %d", resp.StatusCode)
+			return fmt.Errorf("Bad request\nStatus Code: %d\nError: %s", resp.StatusCode, err.Error())
 		}
 
 		// Outputs error object (map[string]string) as a single line

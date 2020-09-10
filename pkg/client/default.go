@@ -1,5 +1,15 @@
 package client
 
+// Default is an "batteries-included" default client
+// that can be used out of the box
+func Default(apikey, apisecret string, isproduction bool) Interface {
+	return &defaultClient{
+		apiKey:       apikey,
+		apiSecret:    apisecret,
+		isProduction: isproduction,
+	}
+}
+
 // defaultClient implements Interface
 type defaultClient struct {
 	apiKey       string

@@ -1,6 +1,6 @@
 package uri
 
-// Builder is the start of generating an API URL
+// Builder is the start of generating an API URL string
 func Builder(isproduction bool) Gateway {
 	h := "https://api-ote.godaddy.com"
 	if isproduction {
