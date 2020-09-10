@@ -2,7 +2,7 @@ package endpoints
 
 import (
 	"github.com/oze4/godaddygo/pkg/client"
-	uri "github.com/oze4/godaddygo/pkg/uri"
+	"github.com/oze4/godaddygo/pkg/uri"
 )
 
 func newSession(clientInterface client.Interface) *session {
@@ -19,12 +19,9 @@ type session struct {
 }
 
 // URLBuilder wraps `uri.Builder`
-// We assume that the session apiVersion and
-// session IsProduction() values are set prior
-// to this
-// These should both be set before needing to construct
-// a URL, which is why we return `uri.Version` and not `uri.Gateway`
-// this is for convenience
 func (s *session) URLBuilder() uri.Version {
+	// s.IsProduction *has* to already be set by the time we see it here
+	// It does not matter if `s.apiVersion` is empty here or not
+	// We let the error the API will produce guide us
 	return uri.Builder(s.IsProduction()).Version(s.apiVersion)
 }
