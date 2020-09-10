@@ -6,7 +6,7 @@
 
 - [Intro](#intro)
 - [Installation](#installation)
-- [Getting Started](#really-though-show-me-what-i-need-to-get-started)
+- [Getting Started](#getting-started)
   - [API Structure](#our-api-structure)
 - [Usage Details](#usage)
   - [Using Default Client](#default-client)
@@ -30,10 +30,6 @@
 `go get -u github.com/oze4/godaddygo`
 
 ## Getting Started
-
-Details and information on how to get up and `Go`ing
-
-### Really, though, show me what I need to get started..
 
 Bare minimum what you need to get started (aka how you will typically use this package):
 
