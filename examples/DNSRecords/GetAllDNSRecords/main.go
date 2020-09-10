@@ -20,7 +20,7 @@ func main() {
 	// Target `records` for this domain
 	records := domain.Records()
 	// Get all records
-	dnsrecords, err := records.GetAll()
+	dnsrecords, err := records.GetAll() // -> *[]DNSRecord
 	if err != nil {
 		panic(err.Error())
 	}
