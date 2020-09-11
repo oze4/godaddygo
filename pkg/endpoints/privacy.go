@@ -13,8 +13,8 @@ type PrivacyGetter interface {
 	Privacy() Privacy
 }
 
-// Privacy lets you remove or purchase domain
-// privacy protection
+// Privacy knows how to purchase and remove privacy
+// for a domain
 type Privacy interface {
 	Purchase(c *Consent) error
 	Remove() error
@@ -26,14 +26,14 @@ type privacy struct {
 }
 
 func (p *privacy) Purchase(c *Consent) error {
-	purchaseconsent, err := json.Marshal(c)
+	purchaseConsent, err := json.Marshal(c)
 	if err != nil {
 		return err
 	}
 
 	p.Method = "POST"
 	p.URL = p.URLBuilder().Domain(p.domainName).Privacy().Purchase()
-	p.Body = purchaseconsent
+	p.Body = purchaseConsent
 
 	if _, err := p.Request.Send(); err != nil {
 		return err
