@@ -23,14 +23,14 @@ type v1 struct {
 
 // Domain provides domain related info and tasks for the
 // `domains` GoDaddy API endpoint
-// This endpoint should be used for domains that you own
-// (specifically, the `hostname` parameter)
 func (v *v1) Domain(hostname string) Domain {
 	return newDomain(v.session, hostname)
 }
 
-// GetDomainAvailability checks if the supplied domain name is available for purchase or not
-// Determine whether or not the specific domain is available for purchase
+// GetDomainAvailability checks if the supplied domain name 
+// is available for purchase or not
+// Determine whether or not the specific domain is available 
+// for purchase
 func (v *v1) GetDomainAvailability(domainname string) (*DomainAvailability, error) {
 	forTransfer := false
 	v.Method = "GET"
