@@ -1,7 +1,7 @@
 package endpoints
 
 import (
-	"errors"
+	"encoding/json"
 )
 
 func newPrivacy(s *session) Privacy {
@@ -16,8 +16,8 @@ type PrivacyGetter interface {
 // Privacy lets you remove or purchase domain
 // privacy protection
 type Privacy interface {
-	Purchase() error
-	Delete() error
+	Purchase(c *Consent) error
+	Remove() error
 }
 
 // privacy implements Privacy
@@ -25,16 +25,30 @@ type privacy struct {
 	*session
 }
 
-func (p *privacy) Purchase() error {
-	// p.URL = p.URL + "/privacy/purchase"
-	// p.Method = "POST"
-	// return p.Request
-	return errors.New("Not implemented")
+func (p *privacy) Purchase(c *Consent) error {
+	purchaseconsent, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+
+	p.Method = "POST"
+	p.URL = p.URLBuilder().Domain(p.domainName).PurchasePrivacy()
+	p.Body = purchaseconsent
+
+	if _, err := p.Request.Send(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (p *privacy) Delete() error {
-	// p.URL = p.URL + "/privacy"
-	// p.Method = "DELETE"
-	// return p.Request
-	return errors.New("Not implemented")
+func (p *privacy) Remove() error {
+	p.Method = "DELETE"
+	p.URL = p.URLBuilder().Domain(p.domainName).RemovePrivacy()
+
+	if _, err := p.Request.Send(); err != nil {
+		return err
+	}
+
+	return nil
 }

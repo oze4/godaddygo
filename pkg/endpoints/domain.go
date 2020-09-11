@@ -17,8 +17,6 @@ type Domain interface {
 	PrivacyGetter
 	RecordsGetter
 	GetDetails() (*DomainDetails, error)
-	RemovePrivacy() error
-	PurchasePrivacy(c *Consent) error
 }
 
 type domain struct {
@@ -55,35 +53,6 @@ func (d *domain) GetDetails() (*DomainDetails, error) {
 	}
 
 	return &details, nil
-}
-
-func (d *domain) PurchasePrivacy(c *Consent) error {
-	purchaseconsent, err := json.Marshal(c)
-	if err != nil {
-		return err
-	}
-
-	d.Method = "POST"
-	d.URL = d.URLBuilder().Domain(d.domainName).PurchasePrivacy()
-	d.Body = purchaseconsent
-
-	if _, err := d.Request.Send(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// RemovePrivacy removes privacy for the specified domain
-func (d *domain) RemovePrivacy() error {
-	d.Method = "DELETE"
-	d.URL = d.URLBuilder().Domain(d.domainName).RemovePrivacy()
-
-	if _, err := d.Request.Send(); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // DomainDetails holds information about a GoDaddy domain.
