@@ -9,7 +9,6 @@
 - [Intro](#intro)
 - [Installation](#installation)
 - [Getting Started](#getting-started)
-  - [API Structure](#our-api-structure)
 - [Usage Details](#usage)
   - [Using Default Client](#default-client)
   - [Providing Custom Client](#custom-client)
@@ -54,24 +53,14 @@ func main() {
 	// Now have access to all GoDaddy production V1
 	// API endpoints (via `prodv1`)
 
-	// eg: prodv1.Domain("x.com").Records().GetAll()
-	//     prodv1.Domain("x.com").Records().Add(someDNSRecord)
-	//     prodv1.Domain("x.com").GetDetails()
-	//     prodv1.GetDomainAvailability("<some-domain-you-want-to-buy.com>")
+	// eg: prodv1.Domain("xyz.com").Records().GetAll()
+	//     prodv1.Domain("xyz.com").Records().Add(someDNSRecord)
+	//     prodv1.Domain("xyz.com").GetDetails()
+	//     prodv1.Domains().My() // <-- List all domains you own
+	//     prodv1.Domains().CheckAvailability("dom.com")
+	//     prodv1.Domains().Purchase(dom)
 	// etc...
 }
-```
-
-### Our API Structure
-
-Consider the following endpoint, which allows you to add a DNS record to a domain.
-
-![screenshot_from_godaddy_docs](https://i.imgur.com/tN2IveY.png)
-
-Programmatically, this would look like:
-
-```golang
-api.V1().Domain("dom.com").Records().Add(newDNSRecord)
 ```
 
 ## Usage 
@@ -117,9 +106,9 @@ func main() {
 	// ...for example:
 	prodv1 := api.V1()
 	// Target specific domain
-	mydomain := prodv1.Domain("mydomain.com")
+	mydom := prodv1.Domain("dom.com")
 	// Get all DNS records for target domain
-	records, err := mydomain.Records().GetAll()
+	records, err := mydom.Records().GetAll()
 
 	// ...
 }

@@ -4,14 +4,13 @@ import (
 	"encoding/json"
 )
 
-func newPrivacy(s *session, domainname string) Privacy {
-	s.domainName = domainname
+func newPrivacy(s *session) Privacy {
 	return &privacy{s}
 }
 
 // PrivacyGetter makes embedding easier
 type PrivacyGetter interface {
-	Privacy(domainname string) Privacy
+	Privacy() Privacy
 }
 
 // Privacy knows how to purchase and remove privacy

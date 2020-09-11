@@ -7,14 +7,13 @@ import (
 )
 
 // New lets you build a new record
-func newRecords(s *session, domainname string) Records {
-	s.domainName = domainname
+func newRecords(s *session) Records {
 	return &records{s}
 }
 
 // RecordsGetter simplifies embedding
 type RecordsGetter interface {
-	Records(domainname string) Records
+	Records() Records
 }
 
 // Records defines `records` behavior
