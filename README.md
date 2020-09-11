@@ -187,13 +187,13 @@ Please see [here](https://developer.godaddy.com/doc) for more information on GoD
 - Domains
   - [x] Check domain availability
   - [x] Get all DNS records
-	- [x] Get all DNS records of specific type
-	- [x] Get specific DNS record
-	- [x] Set DNS record(s)
-	- [x] Add/create DNS record(s)
-	- [x] Purchase domain
-	- [x] Purchase privacy for domain
-	- [x] Remove privacy for domain
+  - [x] Get all DNS records of specific type
+  - [x] Get specific DNS record
+  - [x] Set DNS record(s)
+  - [x] Add/create DNS record(s)
+  - [x] Purchase domain
+  - [x] Purchase privacy for domain
+  - [x] Remove privacy for domain
 - [ ] Orders
 - [ ] Shoppers
 - [ ] Subscriptions
