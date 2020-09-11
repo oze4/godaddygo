@@ -1,18 +1,30 @@
 package endpoints
 
+/**
+ *
+ * `session` is essentially private cache that is used for each connection to our `endpoints`
+ *
+ */
+
 import (
 	"github.com/oze4/godaddygo/pkg/client"
+	"github.com/oze4/godaddygo/pkg/rest"
 )
 
 func newSession(clientInterface client.Interface) *session {
-	return &session{Interface: clientInterface}
+	return &session{
+		Request: &rest.Request{
+			APIKey:    clientInterface.APIKey(),
+			APISecret: clientInterface.APISecret(),
+		},
+		isProduction: clientInterface.IsProduction(),
+	}
 }
 
-// session defines how a session behaves
+// session is essentially private cache that is used for each connection to our `endpoints`
 type session struct {
-	client.Interface
-	method     string
-	path       string
-	domainName string
-	apiVersion string
+	*rest.Request
+	isProduction bool
+	domainName   string
+	apiVersion   string
 }

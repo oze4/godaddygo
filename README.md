@@ -27,7 +27,8 @@
 
 ## Installation
 
-`go get -u github.com/oze4/godaddygo`
+ - `go get -u github.com/oze4/godaddygo`
+ - See [here](https://developer.godaddy.com/) for more on how to obtain an API key and API secret from GoDaddy (click 'API Keys')
 
 ## Getting Started
 

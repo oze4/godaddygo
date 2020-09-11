@@ -4,34 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"strings"
-
-	"github.com/oze4/godaddygo/pkg/rest"
 )
-
-// DNSRecord is a struct that holds data about DNS records
-type DNSRecord struct {
-	Data     string `json:"data,omitempty"`
-	Name     string `json:"name,omitempty"`
-	Port     int    `json:"port,omitempty"`
-	Priority int    `json:"priority,omitempty"`
-	Protocol string `json:"protocol,omitempty"`
-	Service  string `json:"service,omitempty"`
-	TTL      int    `json:"ttl,omitempty"`
-	Type     string `json:"type,omitempty"`
-	Weight   int    `json:"weight,omitempty"`
-}
-
-// DNSRecordTypes to be used as an enum
-var DNSRecordTypes = map[string]string{
-	"A":     "A",
-	"AAAA":  "AAAA",
-	"CNAME": "CNAME",
-	"MX":    "MX",
-	"NS":    "NS",
-	"SOA":   "SOA",
-	"SRV":   "SRV",
-	"TXT":   "TXT",
-}
 
 // New lets you build a new record
 func newRecords(s *session) Records {
@@ -59,14 +32,17 @@ type records struct {
 
 // GetAll returns all DNS records for a specific domain
 func (r *records) GetAll() (*[]DNSRecord, error) {
-	req := &rest.Request{
-		APIKey:    r.APIKey(),
-		APISecret: r.APISecret(),
-		Method:    "GET",
-		URL:       r.URLBuilder().Domain(r.domainName).Records().String(),
-	}
+	// req := rest.NewRequest(
+	// 	r.APIKey(),
+	// 	r.APISecret(),
+	// 	r.URLBuilder().Domain(r.domainName).Records().String(),
+	// 	"GET",
+	// )
 
-	resp, err := req.Send()
+	r.URL = r.URLBuilder().Domain(r.domainName).Records().String()
+	r.Method = "GET"
+
+	resp, err := r.Request.Send()
 	if err != nil {
 		return nil, err
 	}
@@ -86,14 +62,17 @@ func (r *records) GetByType(recordType string) (*[]DNSRecord, error) {
 		return nil, err
 	}
 
-	req := &rest.Request{
-		APIKey:    r.APIKey(),
-		APISecret: r.APISecret(),
-		Method:    "GET",
-		URL:       r.URLBuilder().Domain(r.domainName).Records().ByType(recordType),
-	}
+	// req := rest.NewRequest(
+	// 	r.APIKey(),
+	// 	r.APISecret(),
+	// 	r.URLBuilder().Domain(r.domainName).Records().ByType(recordType),
+	// 	"GET",
+	// )
 
-	res, err := req.Send()
+	r.Method = "GET"
+	r.URL = r.URLBuilder().Domain(r.domainName).Records().ByType(recordType)
+
+	res, err := r.Request.Send()
 	if err != nil {
 		return nil, err
 	}
@@ -113,14 +92,17 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]DNSRecord, er
 		return nil, err
 	}
 
-	req := &rest.Request{
-		APIKey:    r.APIKey(),
-		APISecret: r.APISecret(),
-		Method:    "GET",
-		URL:       r.URLBuilder().Domain(r.domainName).Records().ByTypeName(recordType, recordName),
-	}
+	// req := rest.NewRequest(
+	// 	r.APIKey(),
+	// 	r.APISecret(),
+	// 	r.URLBuilder().Domain(r.domainName).Records().ByTypeName(recordType, recordName),
+	// 	"GET",
+	// )
 
-	res, err := req.Send()
+	r.Method = "GET"
+	r.URL = r.URLBuilder().Domain(r.domainName).Records().ByTypeName(recordType, recordName)
+
+	res, err := r.Request.Send()
 	if err != nil {
 		return nil, err
 	}
@@ -160,15 +142,18 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 		return err
 	}
 
-	req := &rest.Request{
-		APIKey:    r.APIKey(),
-		APISecret: r.APISecret(),
-		Method:    "PUT",
-		Body:      newrec,
-		URL:       r.URLBuilder().Domain(r.domainName).Records().SetValue(recType, recName),
-	}
+	// req := rest.NewRequest(
+	// 	r.APIKey(),
+	// 	r.APISecret(),
+	// 	r.URLBuilder().Domain(r.domainName).Records().SetValue(recType, recName),
+	// 	"PUT",
+	// )
 
-	if _, err := req.Send(); err != nil {
+	r.Method = "PUT"
+	r.URL = r.URLBuilder().Domain(r.domainName).Records().SetValue(recType, recName)
+	r.Body = newrec
+
+	if _, err := r.Request.Send(); err != nil {
 		return err
 	}
 
@@ -187,15 +172,19 @@ func (r *records) Add(rec *DNSRecord) error {
 		return err
 	}
 
-	req := &rest.Request{
-		APIKey:    r.APIKey(),
-		APISecret: r.APISecret(),
-		Method:    "PATCH",
-		Body:      newrec,
-		URL:       r.URLBuilder().Domain(r.domainName).Records().String(),
-	}
+	// req := &rest.Request{
+	// 	APIKey:    r.APIKey(),
+	// 	APISecret: r.APISecret(),
+	// 	Method:    "PATCH",
+	// 	Body:      newrec,
+	// 	URL:       r.URLBuilder().Domain(r.domainName).Records().String(),
+	// }
 
-	if _, err = req.Send(); err != nil {
+	r.Method = "PATCH"
+	r.URL = r.URLBuilder().Domain(r.domainName).Records().String()
+	r.Body = newrec
+
+	if _, err = r.Request.Send(); err != nil {
 		return err
 	}
 
@@ -224,15 +213,19 @@ func (r *records) AddMultiple(recs *[]DNSRecord) error {
 		return err
 	}
 
-	req := &rest.Request{
-		APIKey:    r.APIKey(),
-		APISecret: r.APISecret(),
-		Method:    "PATCH",
-		Body:      newrecs,
-		URL:       r.URLBuilder().Domain(r.domainName).Records().String(),
-	}
+	// req := &rest.Request{
+	// 	APIKey:    r.APIKey(),
+	// 	APISecret: r.APISecret(),
+	// 	Method:    "PATCH",
+	// 	Body:      newrecs,
+	// 	URL:       r.URLBuilder().Domain(r.domainName).Records().String(),
+	// }
 
-	if _, err = req.Send(); err != nil {
+	r.Method = "PATCH"
+	r.URL = r.URLBuilder().Domain(r.domainName).Records().String()
+	r.Body = newrecs
+
+	if _, err = r.Request.Send(); err != nil {
 		return err
 	}
 
@@ -254,4 +247,29 @@ func validate(s string, m map[string]string) bool {
 		}
 	}
 	return false
+}
+
+// DNSRecord is a struct that holds data about DNS records
+type DNSRecord struct {
+	Data     string `json:"data,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Port     int    `json:"port,omitempty"`
+	Priority int    `json:"priority,omitempty"`
+	Protocol string `json:"protocol,omitempty"`
+	Service  string `json:"service,omitempty"`
+	TTL      int    `json:"ttl,omitempty"`
+	Type     string `json:"type,omitempty"`
+	Weight   int    `json:"weight,omitempty"`
+}
+
+// DNSRecordTypes to be used as an enum
+var DNSRecordTypes = map[string]string{
+	"A":     "A",
+	"AAAA":  "AAAA",
+	"CNAME": "CNAME",
+	"MX":    "MX",
+	"NS":    "NS",
+	"SOA":   "SOA",
+	"SRV":   "SRV",
+	"TXT":   "TXT",
 }

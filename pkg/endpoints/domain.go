@@ -3,9 +3,57 @@ package endpoints
 import (
 	"encoding/json"
 	"time"
-
-	"github.com/oze4/godaddygo/pkg/rest"
 )
+
+// newDomain creates a new domain
+func newDomain(s *session, domainName string) Domain {
+	s.domainName = domainName
+	return &domain{s}
+}
+
+// Domain implements Domain [interface]
+type Domain interface {
+	ContactsGetter
+	PrivacyGetter
+	RecordsGetter
+	GetDetails() (*DomainDetails, error)
+}
+
+type domain struct {
+	*session
+}
+
+func (d *domain) Records() Records {
+	return newRecords(d.session)
+}
+
+// Contacts builds out the contacts piece of the URL
+func (d *domain) Contacts() Contacts {
+	return newContacts(d.session)
+}
+
+// Privacy builds out the privacy piece of the URL
+func (d *domain) Privacy() Privacy {
+	return newPrivacy(d.session)
+}
+
+// GetDetails gets info on a domain
+func (d *domain) GetDetails() (*DomainDetails, error) {
+	d.Method = "GET"
+	d.URL = d.URLBuilder().Domain(d.domainName).String()
+
+	res, err := d.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	var details DomainDetails
+	if err := json.Unmarshal(res, &details); err != nil {
+		return nil, err
+	}
+
+	return &details, nil
+}
 
 // DomainDetails holds information about a GoDaddy domain.
 // This is the response when you `GET` info about a domain.
@@ -61,58 +109,12 @@ type DomainAvailability struct {
 	Price      int    `json:"price,omitempty"`
 }
 
-// newDomain creates a new domain
-func newDomain(s *session, domainName string) Domain {
-	s.domainName = domainName
-	return &domain{s}
-}
-
-// Domain implements Domain [interface]
-type Domain interface {
-	ContactsGetter
-	PrivacyGetter
-	RecordsGetter
-	GetDetails() (*DomainDetails, error)
-}
-
-type domain struct {
-	*session
-}
-
-func (d *domain) Records() Records {
-	return newRecords(d.session)
-}
-
-// Contacts builds out the contacts piece of the URL
-func (d *domain) Contacts() Contacts {
-	return newContacts(d.session)
-}
-
-// Privacy builds out the privacy piece of the URL
-func (d *domain) Privacy() Privacy {
-	return newPrivacy(d.session)
-}
-
-// GetDetails gets info on a domain
-func (d *domain) GetDetails() (*DomainDetails, error) {
-	req := &rest.Request{
-		APIKey:    d.APIKey(),
-		APISecret: d.APISecret(),
-		URL:       d.URLBuilder().Domain(d.domainName).String(),
-		Method:    "GET",
-	}
-
-	res, err := req.Send()
-	if err != nil {
-		return nil, err
-	}
-
-	var details DomainDetails
-	if err := json.Unmarshal(res, &details); err != nil {
-		return nil, err
-	}
-
-	return &details, nil
+// DomainPurchaseResponse is GoDaddy's response to purchasing a domain
+type DomainPurchaseResponse struct {
+	Currency  string `json:"currency,omitempty"`
+	ItemCount int    `json:"itemCount,omitempty"`
+	OrderID   int    `json:"orderId,omitempty"`
+	Total     int    `json:"total,omitempty"`
 }
 
 // Update updates a domain

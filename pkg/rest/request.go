@@ -10,20 +10,6 @@ import (
 	"strings"
 )
 
-// RequestMethods holds all acceptable request methods
-// https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
-var RequestMethods = map[string]string{
-	"GET":     "GET",
-	"HEAD":    "HEAD",
-	"POST":    "POST",
-	"DELETE":  "DELETE",
-	"PATCH":   "PATCH",
-	"OPTIONS": "OPTIONS",
-	"CONNECT": "CONNECT",
-	"PUT":     "PUT",
-	"TRACE":   "TRACE",
-}
-
 // Request holds request data
 type Request struct {
 	// GoDaddy API Key, note that the prod and dev API's have unique API keys/secrets
@@ -128,4 +114,18 @@ func validate(s string, m map[string]string) bool {
 		}
 	}
 	return false
+}
+
+// RequestMethods holds all acceptable request methods
+// https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
+var RequestMethods = map[string]string{
+	"GET":     "GET",
+	"HEAD":    "HEAD",
+	"POST":    "POST",
+	"DELETE":  "DELETE",
+	"PATCH":   "PATCH",
+	"OPTIONS": "OPTIONS",
+	"CONNECT": "CONNECT",
+	"PUT":     "PUT",
+	"TRACE":   "TRACE",
 }

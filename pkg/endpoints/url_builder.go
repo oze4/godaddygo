@@ -18,7 +18,7 @@ func (s *session) URLBuilder() uri.Version {
 	// it here
 	// It does not matter if `s.apiVersion` is empty here or not
 	// We let the API return an error, which should guide us
-	p := s.IsProduction()
+	p := s.isProduction
 	v := s.apiVersion
 	return uri.Builder(p).Version(v)
 }
