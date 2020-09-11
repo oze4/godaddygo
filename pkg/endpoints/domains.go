@@ -1,8 +1,8 @@
 package endpoints
 
 import (
-    "encoding/json"
-    "time"
+	"encoding/json"
+	"time"
 )
 
 func newDomains(s *session) Domains {
