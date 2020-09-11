@@ -107,16 +107,11 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 	// the GoDaddy api expects.
 	// They are looking for an array, even if it's just for a
 	// single record
-	rec := []DNSRecord{
-		DNSRecord{
-			Type: recType,
-			Name: recName,
-			Data: newValue,
-		},
-	}
+	rec := DNSRecord{Type: recType, Name: recName, Data: newValue}
+	recSlice := []DNSRecord{rec}
 
 	// Marshal and send
-	newrec, err := json.Marshal(rec)
+	newrec, err := json.Marshal(recSlice)
 	if err != nil {
 		return err
 	}
