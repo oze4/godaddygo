@@ -11,6 +11,7 @@ import (
 	"github.com/oze4/godaddygo/pkg/rest"
 )
 
+// session is essentially private cache that is used for each connection to our `endpoints`
 func newSession(clientInterface client.Interface) *session {
 	return &session{
 		Request: &rest.Request{
