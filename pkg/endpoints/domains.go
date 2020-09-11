@@ -21,7 +21,7 @@ type DomainsGetter interface {
 //  - List all of the domains you own
 // etc...
 type Domains interface {
-	CheckAvailability(domainname string) (*DomainAvailability, error)
+	CheckAvailability(domainname string) (*GoDaddyDomainAvailability, error)
 	My() (*[]GoDaddyDomain, error)
 	Purchase(GoDaddyDomainDetails *GoDaddyDomainDetails) (*DomainPurchaseResponse, error)
 }
@@ -51,17 +51,17 @@ func (d *domains) My() (*[]GoDaddyDomain, error) {
 
 // CheckAvailability determine whether or not the specific domain is available
 // for purchase
-func (d *domains) CheckAvailability(domainname string) (*DomainAvailability, error) {
+func (d *domains) CheckAvailability(domainname string) (*GoDaddyDomainAvailability, error) {
 	forTransfer := false
 	d.Method = "GET"
-	d.URL = d.URLBuilder().DomainAvailability(domainname, forTransfer)
+	d.URL = d.URLBuilder().GoDaddyDomainAvailability(domainname, forTransfer)
 
 	res, err := d.Request.Send()
 	if err != nil {
 		return nil, err
 	}
 
-	var avail DomainAvailability
+	var avail GoDaddyDomainAvailability
 	if err := json.Unmarshal(res, &avail); err != nil {
 		return nil, err
 	}

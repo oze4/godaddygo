@@ -111,8 +111,8 @@ type DomainName struct {
 	Status string `json:"status,omitempty"`
 }
 
-// DomainAvailability holds data about domain availability
-type DomainAvailability struct {
+// GoDaddyDomainAvailability holds data about domain availability
+type GoDaddyDomainAvailability struct {
 	Available  bool   `json:"available,omitempty"`
 	Currency   string `json:"currency,omitempty"`
 	Definitive bool   `json:"definitive,omitempty"`

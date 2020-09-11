@@ -7,7 +7,7 @@ import (
 // Version are the API versions
 type Version interface {
 	Domain(domainName string) Domain
-	DomainAvailability(domainName string, forTransfer bool) string
+	GoDaddyDomainAvailability(domainName string, forTransfer bool) string
 	GetMyDomains() string
 	PurchaseDomain() string
 }
@@ -21,7 +21,7 @@ func (v *version) Domain(domainName string) Domain {
 	return &domain{v.cache}
 }
 
-func (v *version) DomainAvailability(domainName string, forTransfer bool) string {
+func (v *version) GoDaddyDomainAvailability(domainName string, forTransfer bool) string {
 	return v.path + "/domains/available?domain=" + domainName + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
 }
 

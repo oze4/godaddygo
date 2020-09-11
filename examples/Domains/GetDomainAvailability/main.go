@@ -16,7 +16,7 @@ func main() {
 	prodv1 := api.V1()
 	// Check for domain availability
 	// *You DO NOT need to own this domain*
-	availability, err := prodv1.GetDomainAvailability("google.com") // -> *DomainAvailability
+	availability, err := prodv1.GetDomainAvailability("google.com") // -> *GoDaddyDomainAvailability
 	if err != nil {
 		panic(err.Error())
 	}
