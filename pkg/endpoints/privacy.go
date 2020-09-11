@@ -32,7 +32,7 @@ func (p *privacy) Purchase(c *Consent) error {
 	}
 
 	p.Method = "POST"
-	p.URL = p.URLBuilder().Domain(p.domainName).PurchasePrivacy()
+	p.URL = p.URLBuilder().Domain(p.domainName).Privacy().Purchase()
 	p.Body = purchaseconsent
 
 	if _, err := p.Request.Send(); err != nil {
@@ -44,7 +44,7 @@ func (p *privacy) Purchase(c *Consent) error {
 
 func (p *privacy) Remove() error {
 	p.Method = "DELETE"
-	p.URL = p.URLBuilder().Domain(p.domainName).RemovePrivacy()
+	p.URL = p.URLBuilder().Domain(p.domainName).Privacy().Remove()
 
 	if _, err := p.Request.Send(); err != nil {
 		return err

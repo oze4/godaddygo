@@ -1,15 +1,10 @@
 package uri
 
-const (
-	privacyRoot = "/privacy"
-)
-
 // Domain is the domains endpoint
 type Domain interface {
 	String() string
 	Records() Records
-	RemovePrivacy() string
-	PurchasePrivacy() string
+	PrivacyGetter
 }
 
 type domain struct {
@@ -25,10 +20,6 @@ func (d *domain) Records() Records {
 	return &records{d.cache}
 }
 
-func (d *domain) RemovePrivacy() string {
-	return d.path + privacyRoot
-}
-
-func (d *domain) PurchasePrivacy() string {
-	return d.path + privacyRoot + "/purchase"
+func (d *domain) Privacy() Privacy {
+	return &privacy{d.cache}
 }
