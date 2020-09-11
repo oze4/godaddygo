@@ -1,15 +1,15 @@
 package uri
 
-// Purchase knows how to create URL's for 
+// Purchase knows how to create URL's for
 // the "purchase endpoint"
 type Purchase interface {
-    String() string
+	String() string
 }
 
 type purchase struct {
-    *cache
+	*cache
 }
 
 func (p *purchase) String() string {
-    return p.path + "/domains/purchase"
+	return p.path + "/domains/purchase"
 }

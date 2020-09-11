@@ -119,8 +119,8 @@ type DomainPurchaseResponse struct {
 
 // Consent is required when purhasing domain privacy
 type Consent struct {
-	AgreedAt time.Time 
-	AgreedBy string
+	AgreedAt      time.Time
+	AgreedBy      string
 	AgreementKeys []string // No idea what this is, need to dig into that
 }
 
