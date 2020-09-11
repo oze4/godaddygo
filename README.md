@@ -1,6 +1,6 @@
 # [godaddygo](https://oze4.github.io/godaddygo/)
 
-[Check us out on `pkg.go.dev`](https://pkg.go.dev/github.com/oze4/godaddygo?tab=doc)
+[Check us out on `pkg.go.dev`](https://pkg.go.dev/github.com/oze4/godaddygo?tab=doc) \*seems to be a little behind a lot of the time
 
 ---
 
