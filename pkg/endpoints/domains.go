@@ -14,16 +14,7 @@ type DomainsGetter interface {
 	Domains() Domains
 }
 
-// Domains knows how to interact with domains you may not own
-//
-//  - check if a domain is available for purchase
-//  - purchase a domain
-//
-// Domains is also useful for when you don't want to target
-// a specific domain
-//
-//  - list all domains you own
-//  - etc..
+// Domains knows how to interact with the domains endpoint
 type Domains interface {
 	ContactsGetter
 	PrivacyGetter

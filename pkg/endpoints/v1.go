@@ -15,8 +15,7 @@ type v1 struct {
 	*session
 }
 
-// Domains knows how to interact with the domains
-// endpoint
+// Domains knows how to interact with the domains endpoint
 func (v *v1) Domains() Domains {
 	return newDomains(v.session)
 }
