@@ -25,7 +25,7 @@ type Domain interface {
 	ContactsGetter
 	PrivacyGetter
 	RecordsGetter
-	GetDetails() (*DomainDetails, error)
+	GetDetails() (*GoDaddyDomainDetails, error)
 }
 
 // domain implements Domain
@@ -49,8 +49,8 @@ func (d *domain) Privacy() Privacy {
 }
 
 // GetDetails gets details for the specified domain
-// returns `*DomainDetails`
-func (d *domain) GetDetails() (*DomainDetails, error) {
+// returns `*GoDaddyDomainDetails`
+func (d *domain) GetDetails() (*GoDaddyDomainDetails, error) {
 	d.Method = "GET"
 	d.URL = d.URLBuilder().Domain(d.domainName).String()
 
@@ -59,7 +59,7 @@ func (d *domain) GetDetails() (*DomainDetails, error) {
 		return nil, err
 	}
 
-	var details DomainDetails
+	var details GoDaddyDomainDetails
 	if err := json.Unmarshal(res, &details); err != nil {
 		return nil, err
 	}
@@ -67,29 +67,9 @@ func (d *domain) GetDetails() (*DomainDetails, error) {
 	return &details, nil
 }
 
-/*
-  {
-    "createdAt": "2015-06-15T13:10:43.000Z",
-    "domain": "000.biz",
-    "domainId": 1002111,
-    "expirationProtected": false,
-    "expires": "2016-06-14T23:59:59.000Z",
-    "exposeWhois": false,
-    "holdRegistrar": false,
-    "locked": true,
-    "nameServers": null,
-    "privacy": false,
-    "renewAuto": true,
-    "renewable": false,
-    "status": "TRANSFERRED_OUT",
-    "transferAwayEligibleAt": "2016-07-29T23:59:59.000Z",
-    "transferProtected": false
-  }
-*/
-
-// DomainDetails holds information about a GoDaddy domain.
+// GoDaddyDomainDetails holds information about a GoDaddy domain.
 // This is the response when you `GET` info about a domain.
-type DomainDetails struct {
+type GoDaddyDomainDetails struct {
 	AuthCode               string        `json:"authCode,omitempty"`
 	ContactAdmin           Contact       `json:"contactAdmin,omitempty"`
 	ContactBilling         Contact       `json:"contactBilling,omitempty"`

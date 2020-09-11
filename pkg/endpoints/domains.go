@@ -23,7 +23,7 @@ type DomainsGetter interface {
 type Domains interface {
 	CheckAvailability(domainname string) (*DomainAvailability, error)
 	My() (*[]GoDaddyDomain, error)
-	Purchase(domaindetails *DomainDetails) (*DomainPurchaseResponse, error)
+	Purchase(GoDaddyDomainDetails *GoDaddyDomainDetails) (*DomainPurchaseResponse, error)
 }
 
 // domains (plural) implements Domains (plural)
@@ -70,8 +70,8 @@ func (d *domains) CheckAvailability(domainname string) (*DomainAvailability, err
 }
 
 // Purchase purchase and register the sepcified domain
-func (d *domains) Purchase(domaindetails *DomainDetails) (*DomainPurchaseResponse, error) {
-	domdetails, err := json.Marshal(domaindetails)
+func (d *domains) Purchase(GoDaddyDomainDetails *GoDaddyDomainDetails) (*DomainPurchaseResponse, error) {
+	domdetails, err := json.Marshal(GoDaddyDomainDetails)
 	if err != nil {
 		return nil, err
 	}

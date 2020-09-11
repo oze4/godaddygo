@@ -18,7 +18,7 @@ func main() {
 	// Set our domain
 	domain := prodv1.Domain(targetDomain)
 	// Get details on our domain
-	deets, err := domain.GetDetails() // -> *DomainDetails
+	deets, err := domain.GetDetails() // -> *GoDaddyDomainDetails
 	if err != nil {
 		panic(err.Error())
 	}
