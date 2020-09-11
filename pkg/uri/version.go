@@ -8,6 +8,7 @@ import (
 type Version interface {
 	Domain(domainName string) Domain
 	DomainAvailability(domainName string, forTransfer bool) string
+	GetMyDomains() string
 	PurchaseDomain() string
 }
 
@@ -26,4 +27,8 @@ func (v *version) DomainAvailability(domainName string, forTransfer bool) string
 
 func (v *version) PurchaseDomain() string {
 	return v.path + "/domains/purchase"
+}
+
+func (v *version) GetMyDomains() string {
+	return v.path + "/domains"
 }

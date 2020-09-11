@@ -1,13 +1,14 @@
 package endpoints
 
 // New creates a new Contacts
-func newContacts(s *session) Contacts {
+func newContacts(s *session, domainname string) Contacts {
+	s.domainName = domainname
 	return &contacts{s}
 }
 
 // ContactsGetter makes embedding easier
 type ContactsGetter interface {
-	Contacts() Contacts
+	Contacts(domainname string) Contacts
 }
 
 // Contacts defines Contacts behavior

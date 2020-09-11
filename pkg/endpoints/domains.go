@@ -5,42 +5,74 @@ import (
 	"time"
 )
 
-// newDomain creates a new domain
-func newDomain(s *session, domainName string) Domain {
-	s.domainName = domainName
-	return &domain{s}
+func newDomains(s *session) Domains {
+	return &domains{s}
 }
 
-// Domain implements Domain [interface]
-type Domain interface {
+// DomainsGetter simplifies embedding
+type DomainsGetter interface {
+	Domains() Domains
+}
+
+// Domains knows how to interact with domains you may not own
+//
+//  - check if a domain is available for purchase
+//  - purchase a domain
+//
+// Domains is also useful for when you don't want to target
+// a specific domain
+//
+//  - list all domains you own
+//  - etc..
+type Domains interface {
 	ContactsGetter
 	PrivacyGetter
 	RecordsGetter
-	GetDetails() (*DomainDetails, error)
+	CheckAvailability(domainname string) (*DomainAvailability, error)
+	GetDetails(domainname string) (*DomainDetails, error)
+	List() (*[]DomainDetails, error)
+	Purchase(domaindetails *DomainDetails) (*DomainPurchaseResponse, error)
 }
 
-type domain struct {
+type domains struct {
 	*session
 }
 
-func (d *domain) Records() Records {
-	return newRecords(d.session)
+func (d *domains) Records(domainname string) Records {
+	return newRecords(d.session, domainname)
 }
 
 // Contacts builds out the contacts piece of the URL
-func (d *domain) Contacts() Contacts {
-	return newContacts(d.session)
+func (d *domains) Contacts(domainname string) Contacts {
+	return newContacts(d.session, domainname)
 }
 
 // Privacy builds out the privacy piece of the URL
-func (d *domain) Privacy() Privacy {
-	return newPrivacy(d.session)
+func (d *domains) Privacy(domainname string) Privacy {
+	return newPrivacy(d.session, domainname)
+}
+
+func (d *domains) List() (*[]DomainDetails, error) {
+	d.Method = "GET"
+	d.URL = d.URLBuilder().GetMyDomains()
+
+	res, err := d.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	var mydomains []DomainDetails
+	if err := json.Unmarshal(res, &mydomains); err != nil {
+		return nil, err
+	}
+
+	return &mydomains, nil
 }
 
 // GetDetails gets info on a domain
-func (d *domain) GetDetails() (*DomainDetails, error) {
+func (d *domains) GetDetails(domainname string) (*DomainDetails, error) {
 	d.Method = "GET"
-	d.URL = d.URLBuilder().Domain(d.domainName).String()
+	d.URL = d.URLBuilder().Domain(domainname).String()
 
 	res, err := d.Request.Send()
 	if err != nil {
@@ -53,6 +85,50 @@ func (d *domain) GetDetails() (*DomainDetails, error) {
 	}
 
 	return &details, nil
+}
+
+// CheckAvailability determine whether or not the specific domain is available
+// for purchase
+func (d *domains) CheckAvailability(domainname string) (*DomainAvailability, error) {
+	forTransfer := false
+	d.Method = "GET"
+	d.URL = d.URLBuilder().DomainAvailability(domainname, forTransfer)
+
+	res, err := d.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	var avail DomainAvailability
+	if err := json.Unmarshal(res, &avail); err != nil {
+		return nil, err
+	}
+
+	return &avail, nil
+}
+
+// Purchase purchase and register the sepcified domain
+func (d *domains) Purchase(domaindetails *DomainDetails) (*DomainPurchaseResponse, error) {
+	domdetails, err := json.Marshal(domaindetails)
+	if err != nil {
+		return nil, err
+	}
+
+	d.Method = "POST"
+	d.URL = d.URLBuilder().PurchaseDomain()
+	d.Body = domdetails
+
+	res, err := d.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	var purchaseResponse DomainPurchaseResponse
+	if err := json.Unmarshal(res, &purchaseResponse); err != nil {
+		return nil, err
+	}
+
+	return &purchaseResponse, nil
 }
 
 // DomainDetails holds information about a GoDaddy domain.
