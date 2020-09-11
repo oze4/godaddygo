@@ -1,5 +1,7 @@
 # [godaddygo](https://oze4.github.io/godaddygo/)
 
+[Check us out on `pkg.go.dev`](https://pkg.go.dev/github.com/oze4/godaddygo?tab=doc)
+
 ---
 
 # Table of Contents
@@ -182,8 +184,16 @@ Please see [here](https://developer.godaddy.com/doc) for more information on GoD
 - [ ] Agreements
 - [ ] Certificates
 - [ ] Countries
-- [x] Domains
-  - [x] DNS Records
+- Domains
+  - [x] Check domain availability
+  - [x] Get all DNS records
+	- [x] Get all DNS records of specific type
+	- [x] Get specific DNS record
+	- [x] Set DNS record(s)
+	- [x] Add/create DNS record(s)
+	- [x] Purchase domain
+	- [x] Purchase privacy for domain
+	- [x] Remove privacy for domain
 - [ ] Orders
 - [ ] Shoppers
 - [ ] Subscriptions

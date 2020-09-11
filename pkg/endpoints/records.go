@@ -32,13 +32,6 @@ type records struct {
 
 // GetAll returns all DNS records for a specific domain
 func (r *records) GetAll() (*[]DNSRecord, error) {
-	// req := rest.NewRequest(
-	// 	r.APIKey(),
-	// 	r.APISecret(),
-	// 	r.URLBuilder().Domain(r.domainName).Records().String(),
-	// 	"GET",
-	// )
-
 	r.URL = r.URLBuilder().Domain(r.domainName).Records().String()
 	r.Method = "GET"
 
@@ -62,13 +55,6 @@ func (r *records) GetByType(recordType string) (*[]DNSRecord, error) {
 		return nil, err
 	}
 
-	// req := rest.NewRequest(
-	// 	r.APIKey(),
-	// 	r.APISecret(),
-	// 	r.URLBuilder().Domain(r.domainName).Records().ByType(recordType),
-	// 	"GET",
-	// )
-
 	r.Method = "GET"
 	r.URL = r.URLBuilder().Domain(r.domainName).Records().ByType(recordType)
 
@@ -91,13 +77,6 @@ func (r *records) GetByTypeName(recordType, recordName string) (*[]DNSRecord, er
 	if err := validateRecordType(recordType); err != nil {
 		return nil, err
 	}
-
-	// req := rest.NewRequest(
-	// 	r.APIKey(),
-	// 	r.APISecret(),
-	// 	r.URLBuilder().Domain(r.domainName).Records().ByTypeName(recordType, recordName),
-	// 	"GET",
-	// )
 
 	r.Method = "GET"
 	r.URL = r.URLBuilder().Domain(r.domainName).Records().ByTypeName(recordType, recordName)
@@ -142,13 +121,6 @@ func (r *records) SetValue(recType, recName, newValue string) error {
 		return err
 	}
 
-	// req := rest.NewRequest(
-	// 	r.APIKey(),
-	// 	r.APISecret(),
-	// 	r.URLBuilder().Domain(r.domainName).Records().SetValue(recType, recName),
-	// 	"PUT",
-	// )
-
 	r.Method = "PUT"
 	r.URL = r.URLBuilder().Domain(r.domainName).Records().SetValue(recType, recName)
 	r.Body = newrec
@@ -171,14 +143,6 @@ func (r *records) Add(rec *DNSRecord) error {
 	if err != nil {
 		return err
 	}
-
-	// req := &rest.Request{
-	// 	APIKey:    r.APIKey(),
-	// 	APISecret: r.APISecret(),
-	// 	Method:    "PATCH",
-	// 	Body:      newrec,
-	// 	URL:       r.URLBuilder().Domain(r.domainName).Records().String(),
-	// }
 
 	r.Method = "PATCH"
 	r.URL = r.URLBuilder().Domain(r.domainName).Records().String()
@@ -212,14 +176,6 @@ func (r *records) AddMultiple(recs *[]DNSRecord) error {
 	if err != nil {
 		return err
 	}
-
-	// req := &rest.Request{
-	// 	APIKey:    r.APIKey(),
-	// 	APISecret: r.APISecret(),
-	// 	Method:    "PATCH",
-	// 	Body:      newrecs,
-	// 	URL:       r.URLBuilder().Domain(r.domainName).Records().String(),
-	// }
 
 	r.Method = "PATCH"
 	r.URL = r.URLBuilder().Domain(r.domainName).Records().String()

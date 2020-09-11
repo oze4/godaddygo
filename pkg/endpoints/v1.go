@@ -33,13 +33,6 @@ func (v *v1) Domain(hostname string) Domain {
 // Determine whether or not the specific domain is available for purchase
 func (v *v1) GetDomainAvailability(domainname string) (*DomainAvailability, error) {
 	forTransfer := false
-	// req := &rest.Request{
-	// 	APIKey:    v.APIKey(),
-	// 	APISecret: v.APISecret(),
-	// 	URL:       v.URLBuilder().DomainAvailability(domainname, forTransfer),
-	// 	Method:    "GET",
-	// }
-
 	v.Method = "GET"
 	v.URL = v.URLBuilder().DomainAvailability(domainname, forTransfer)
 
@@ -62,14 +55,6 @@ func (v *v1) PurchaseDomain(d *DomainDetails) (*DomainPurchaseResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// req := &rest.Request{
-	// 	APIKey: v.APIKey(),
-	// 	APISecret: v.APISecret(),
-	// 	URL: v.URLBuilder().PurchaseDomain(),
-	// 	Body: domaindetails,
-	// 	Method: "POST",
-	// }
 
 	v.Method = "POST"
 	v.URL = v.URLBuilder().PurchaseDomain()
