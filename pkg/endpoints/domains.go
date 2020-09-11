@@ -1,7 +1,8 @@
 package endpoints
 
 import (
-	"encoding/json"
+    "encoding/json"
+    "time"
 )
 
 func newDomains(s *session) Domains {
@@ -21,7 +22,7 @@ type DomainsGetter interface {
 // etc...
 type Domains interface {
 	CheckAvailability(domainname string) (*DomainAvailability, error)
-	My() (*[]DomainDetails, error)
+	My() (*[]GoDaddyDomain, error)
 	Purchase(domaindetails *DomainDetails) (*DomainPurchaseResponse, error)
 }
 
@@ -31,7 +32,7 @@ type domains struct {
 }
 
 // My lists all domains *you own* or have the ability to manage
-func (d *domains) My() (*[]DomainDetails, error) {
+func (d *domains) My() (*[]GoDaddyDomain, error) {
 	d.Method = "GET"
 	d.URL = d.URLBuilder().GetMyDomains()
 
@@ -40,7 +41,7 @@ func (d *domains) My() (*[]DomainDetails, error) {
 		return nil, err
 	}
 
-	var mydomains []DomainDetails
+	var mydomains []GoDaddyDomain
 	if err := json.Unmarshal(res, &mydomains); err != nil {
 		return nil, err
 	}
@@ -90,4 +91,24 @@ func (d *domains) Purchase(domaindetails *DomainDetails) (*DomainPurchaseRespons
 	}
 
 	return &purchaseResponse, nil
+}
+
+// GoDaddyDomain is what gets returned when listing all of
+// your domains
+type GoDaddyDomain struct {
+	CreatedAt              time.Time
+	Domain                 string
+	DomainID               int
+	ExpirationProtected    bool
+	Expires                time.Time
+	ExposeWhois            bool
+	HoldRegistrar          bool
+	Locked                 bool
+	NameServers            interface{} // []string
+	Privacy                bool
+	RenewAuto              bool
+	Renewable              bool
+	Status                 string
+	TransferAwayEligibleAt time.Time
+	TransferProtected      bool
 }

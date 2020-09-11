@@ -67,6 +67,26 @@ func (d *domain) GetDetails() (*DomainDetails, error) {
 	return &details, nil
 }
 
+/*
+  {
+    "createdAt": "2015-06-15T13:10:43.000Z",
+    "domain": "000.biz",
+    "domainId": 1002111,
+    "expirationProtected": false,
+    "expires": "2016-06-14T23:59:59.000Z",
+    "exposeWhois": false,
+    "holdRegistrar": false,
+    "locked": true,
+    "nameServers": null,
+    "privacy": false,
+    "renewAuto": true,
+    "renewable": false,
+    "status": "TRANSFERRED_OUT",
+    "transferAwayEligibleAt": "2016-07-29T23:59:59.000Z",
+    "transferProtected": false
+  }
+*/
+
 // DomainDetails holds information about a GoDaddy domain.
 // This is the response when you `GET` info about a domain.
 type DomainDetails struct {
