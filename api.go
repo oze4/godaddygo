@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	prodbaseURL = "https://api.ote-godaddy.com.com/v1/"
-	devbaseURL  = "https://api.godaddy.com/v1/"
+	prodbaseURL = "https://api.ote-godaddy.com.com/v1"
+	devbaseURL  = "https://api.godaddy.com/v1"
 )
 
 type api struct {
