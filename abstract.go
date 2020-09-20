@@ -25,7 +25,7 @@ type Client interface {
 	Delete(url string) error
 }
 
-// API knows how to interact with the GoDaddy API 
+// API knows how to interact with the GoDaddy API
 type API interface {
 	Domain(d string) (Domain, error)
 	List() ([]string, error)
@@ -118,21 +118,21 @@ type Records interface {
 
 const (
 	// RecordTypeA defines A record
-	RecordTypeA     = "A"
+	RecordTypeA = "A"
 	// RecordTypeAAAA defines AAAA record
-	RecordTypeAAAA  = "AAAA"
+	RecordTypeAAAA = "AAAA"
 	// RecordTypeCNAME defines CNAME record
 	RecordTypeCNAME = "CNAME"
 	// RecordTypeMX defines MX record
-	RecordTypeMX    = "MX"
+	RecordTypeMX = "MX"
 	// RecordTypeNS defines NS record
-	RecordTypeNS    = "NS"
+	RecordTypeNS = "NS"
 	// RecordTypeSOA defines SOA record
-	RecordTypeSOA   = "SOA"
+	RecordTypeSOA = "SOA"
 	// RecordTypeSRV defines SRV record
-	RecordTypeSRV   = "SRV"
+	RecordTypeSRV = "SRV"
 	// RecordTypeTXT defines TXT record
-	RecordTypeTXT   = "TXT"
+	RecordTypeTXT = "TXT"
 )
 
 // Record defines a DNS record

@@ -7,8 +7,8 @@ import (
 )
 
 var (
-    // ErrorWrongStatusCode is the error generated when an incorrect
-    // http status code is received
+	// ErrorWrongStatusCode is the error generated when an incorrect
+	// http status code is received
 	ErrorWrongStatusCode = fmt.Errorf("ErrorWrongStatusCode")
 )
 
@@ -18,7 +18,7 @@ type client struct {
 	baseURL string
 }
 
-// New returns a new client
+// NewClient returns a new client
 func NewClient(key string, secret string, baseURL string) *client {
 	return &client{key, secret, baseURL}
 }
