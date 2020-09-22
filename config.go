@@ -30,7 +30,7 @@ type Config struct {
 // version should be `v1` or `v2`
 func NewConfig(key, secret, env, version string) *Config {
 	return &Config{
-        Client:  http.DefaultClient,
+		Client:  http.DefaultClient,
 		key:     key,
 		secret:  secret,
 		version: version,

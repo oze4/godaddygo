@@ -28,7 +28,7 @@ func NewAPI(c *Config) *API {
 		c.baseURL = prodbaseURL
 		return &API{c}
 	}
-	
+
 	c.baseURL = devbaseURL
 	return &API{c}
 }
