@@ -35,9 +35,6 @@ func (c *Config) makeDo(ctx context.Context, method string, path string, body io
 	req.Header.Set("Authorization", "sso-key "+c.key+":"+c.secret)
 	req.Header.Set("Content-Type", "application/json")
 
-	fmt.Println(req.Header.Get("Authorization"))
-	fmt.Println(c.baseURL+"/"+c.version+path)
-
 	resp, err := c.Client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("Error sending request: %w", err)

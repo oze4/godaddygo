@@ -42,8 +42,8 @@ const (
 
 	/** godaddy api url's **/
 
-	prodbaseURL = "https://api.ote-godaddy.com"
-	devbaseURL  = "https://api.godaddy.com"
+	prodbaseURL = "https://api.godaddy.com"
+	devbaseURL  = "https://api.ote-godaddy.com"
 )
 
 /** -----------

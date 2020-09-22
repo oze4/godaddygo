@@ -15,14 +15,17 @@ type API struct {
 }
 
 // NewAPI uses a config to connect you to the GoDaddy API
-func NewAPI(c *Config) *API {
-	if c.env == APIProdEnv {
+func NewAPI(c *Config) (*API, error) {
+	switch c.env {
+	case APIProdEnv:
 		c.baseURL = prodbaseURL
-		return &API{c}
+	case APIDevEnv:
+		c.baseURL = devbaseURL
+	default:
+		return nil, fmt.Errorf("%w", ErrorWrongAPIVersion)
 	}
 
-	c.baseURL = devbaseURL
-	return &API{c}
+	return &API{c}, nil
 }
 
 // Domain targets domain endpoint
