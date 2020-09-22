@@ -10,7 +10,7 @@ func main() {
 	// Your info...
 	prodKey := "-"
 	prodSecret := "-"
-	// Connect to production V1 API
+	// Connect to production V1 Gateway
 	api := godaddygo.ConnectProduction(prodKey, prodSecret).V1()
 	// Get all domains you own
 	mydoms, err := api.Domains().My()

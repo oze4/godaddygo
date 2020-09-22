@@ -12,9 +12,9 @@ import (
 const (
 	/** env vars, used for connection parameters **/
 
-	// APIProdEnv targets the production API
+	// APIProdEnv targets the production Gateway
 	APIProdEnv = "prod"
-	// APIDevEnv targets the development API
+	// APIDevEnv targets the development Gateway
 	APIDevEnv = "dev"
 	// APIVersion1 specifies version 1
 	APIVersion1 = "v1"
@@ -50,13 +50,26 @@ const (
  * interfaces
  ----------- */
 
-// Domain knows how to interact with the Domains GoDaddy API endpoint
+// Gateway connects you to the GoDaddy endpoints
+type Gateway interface {
+	V1() V1
+}
+
+// V1 knows how to interact with GoDaddy Gateway version 1
+type V1 interface {
+	Domain(name string) Domain
+	List(ctx context.Context) ([]string, error)
+	CheckAvailability(ctx context.Context, name string) error
+	Purchase(ctx context.Context, dom DomainDetails) error
+}
+
+// Domain knows how to interact with the Domains GoDaddy Gateway endpoint
 type Domain interface {
 	Records() Records
 	GetDetails(ctx context.Context) (DomainDetails, error)
 }
 
-// Records knows how to interact with the Records GoDaddy API endpoint
+// Records knows how to interact with the Records GoDaddy Gateway endpoint
 type Records interface {
 	List(ctx context.Context) ([]Record, error)
 	FindByType(ctx context.Context, t string) ([]Record, error)

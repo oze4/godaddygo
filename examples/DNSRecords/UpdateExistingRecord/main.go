@@ -11,9 +11,9 @@ func main() {
 	prodKey := "// your prod key"
 	prodSecret := "// your prod secret"
 	targetDomain := "dom.com"
-	// Connect to production API
+	// Connect to production Gateway
 	api := godaddygo.ConnectProduction(prodKey, prodSecret)
-	// Target version 1 of the production GoDaddy API
+	// Target version 1 of the production GoDaddy Gateway
 	prodv1 := api.V1()
 	// Set our domain
 	domain := prodv1.Domain(targetDomain)

@@ -24,12 +24,12 @@
 
 <br /> 
 
-<small>Pull requests welcome! We would like to eventually support each GoDaddy API endpoint, not just domain/DNS related tasks</small>
+<small>Pull requests welcome! We would like to eventually support each GoDaddy Gateway endpoint, not just domain/DNS related tasks</small>
 
 ## Installation
 
  - `go get -u github.com/oze4/godaddygo`
- - See [here](https://developer.godaddygo.com/) for more on how to obtain an API key and API secret from GoDaddy (click 'API Keys')
+ - See [here](https://developer.godaddygo.com/) for more on how to obtain an Gateway key and Gateway secret from GoDaddy (click 'Gateway Keys')
 
 ## Getting Started
 
@@ -46,12 +46,12 @@ func main() {
 	prodKey := "-"
 	prodSecret := "-"
 
-	// Target version 1 of the production API
+	// Target version 1 of the production Gateway
 	api := godaddygo.ConnectProduction(prodKey, prodSecret)
 	prodv1 := api.V1()
 
 	// Now have access to all GoDaddy production V1
-	// API endpoints (via `prodv1`)
+	// Gateway endpoints (via `prodv1`)
 
 	// eg: prodv1.Domain("xyz.com").Records().GetAll()
 	//     prodv1.Domain("xyz.com").Records().Add(someDNSRecord)
@@ -65,7 +65,7 @@ func main() {
 
 ## Usage 
 
-GoDaddy's API currently has 2 versions, `v1` and `v2`. Within the `godaddygo` package we provide 2 helper functions, one for each version. These helper functions  simply "wrap" around our "core", which means you have the ability to create yor own client(s).
+GoDaddy's Gateway currently has 2 versions, `v1` and `v2`. Within the `godaddygo` package we provide 2 helper functions, one for each version. These helper functions  simply "wrap" around our "core", which means you have the ability to create yor own client(s).
 
 We recommend using one of the following:
 
@@ -90,7 +90,7 @@ func main() {
 	// Options for client
 	key := "api_key"
 	secret := "api_secret"
-	// See here for more on GoDaddy production vs development (OTE) API's
+	// See here for more on GoDaddy production vs development (OTE) Gateway's
 	// https://developer.godaddygo.com/getstarted
 	targetProductionAPI := true
 
@@ -166,7 +166,7 @@ func (c *myClient) IsProduction() string {
 
 ## Features
 
-Please see [here](https://developer.godaddygo.com/doc) for more information on GoDaddy API endpoints
+Please see [here](https://developer.godaddygo.com/doc) for more information on GoDaddy Gateway endpoints
 
 - [ ] Abuse
 - [ ] Aftermarket
