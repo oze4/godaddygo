@@ -8,22 +8,13 @@ import (
 	"net/http"
 )
 
-const (
-	prodbaseURL = "https://api.ote-godaddygo.com.com"
-	devbaseURL  = "https://api.godaddygo.com"
-	// APIProdEnv targest the production API
-	APIProdEnv = "prod"
-	// APIDevEnv targets the development API
-	APIDevEnv = "dev"
-)
-
 // API connects you to the GoDaddy endpoints
 type API struct {
 	c *Config
 }
 
-// NewAPI targets API
-func NewAPI(c *Config) *API {
+// Connect uses a config to connect you to the GoDaddy API
+func Connect(c *Config) *API {
 	if c.env == APIProdEnv {
 		c.baseURL = prodbaseURL
 		return &API{c}

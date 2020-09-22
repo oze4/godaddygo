@@ -24,10 +24,10 @@ type Config struct {
 }
 
 // NewConfig creates a config using `http.DefaultClient` as our client
-// key is the api key
-// secret is the api secret
-// env is whether or not we are targeting prod or dev - use APIDevEnv or APIProdEnv
-// version should be `v1` or `v2`
+//  - key is the api key
+//  - secret is the api secret
+//  - env is whether or not we are targeting prod or dev, use APIDevEnv or APIProdEnv
+//  - version should be `v1` or `v2`, use APIVersion1 or APIVersion2
 func NewConfig(key, secret, env, version string) *Config {
 	return &Config{
 		Client:  http.DefaultClient,
@@ -39,8 +39,8 @@ func NewConfig(key, secret, env, version string) *Config {
 }
 
 // SetClient allows you to specify your own http client
-func (c *Config) SetClient(httpclient *http.Client) {
-	c.Client = httpclient
+func (c *Config) SetClient(h *http.Client) {
+	c.Client = h
 }
 
 func (c *Config) make(method string, path string, body io.Reader, expectedStatus int) (io.ReadCloser, error) {
