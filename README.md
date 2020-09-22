@@ -74,7 +74,7 @@ We recommend using one of the following:
 
 ### Default Client
 
- - If you would like, you may create a default client "manually", then pass it to `endpoints.Connect(<default_client_here>)`. 
+ - If you would like, you may create a default client "manually", then pass it to `endpoints.NewAPI(<default_client_here>)`. 
  - At a high level, the `godaddygo` package is essentially just a wrapper for `endpoints` and `client`. 
  - All we do is "wrap" those packages within `godaddygo`, as shown below
 
@@ -98,7 +98,7 @@ func main() {
 	client := client.Default(key, secret, targetProductionAPI)
 
 	// Connect our client to endpoints
-	api := endpoints.Connect(client)
+	api := endpoints.NewAPI(client)
 
 	//
 	// Use `api` here...
@@ -132,7 +132,7 @@ func main() {
 		isprod: true,
 	}
 
-	api := endpoints.Connect(myCustomClient)
+	api := endpoints.NewAPI(myCustomClient)
 
 	//
 	// Use `api` here!

@@ -1,10 +1,17 @@
 package godaddygo
 
 import (
+	"context"
 	"time"
 )
 
+/** ---------
+ * constants
+ --------- */
+
 const (
+	/** env vars, used for connection parameters **/
+
 	// APIProdEnv targets the production API
 	APIProdEnv = "prod"
 	// APIDevEnv targets the development API
@@ -13,6 +20,8 @@ const (
 	APIVersion1 = "v1"
 	// APIVersion2 specifies version 2
 	APIVersion2 = "v2"
+
+	/** dns record types **/
 
 	// RecordTypeA defines A record
 	RecordTypeA = "A"
@@ -31,16 +40,34 @@ const (
 	// RecordTypeTXT defines TXT record
 	RecordTypeTXT = "TXT"
 
+	/** godaddy api url's **/
+
 	prodbaseURL = "https://api.ote-godaddy.com"
 	devbaseURL  = "https://api.godaddy.com"
 )
 
-// Domain knows how to interact with the Domains
-// GoDaddy API endpoint
+/** -----------
+ * interfaces
+ ----------- */
+
+// Domain knows how to interact with the Domains GoDaddy API endpoint
 type Domain interface {
 	Records() Records
-	GetDetails() (DomainDetails, error)
+	GetDetails(ctx context.Context) (DomainDetails, error)
 }
+
+// Records knows how to interact with the Records GoDaddy API endpoint
+type Records interface {
+	List(ctx context.Context) ([]Record, error)
+	FindByType(ctx context.Context, t string) ([]Record, error)
+	FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error)
+	Update(ctx context.Context, rec Record) error
+	Delete(ctx context.Context, rec Record) error
+}
+
+/** --------
+ * structs
+ -------- */
 
 // DomainDetails defines the details of a domain
 type DomainDetails struct {
@@ -106,16 +133,6 @@ type RealName struct {
 // DomainName defines a domain name
 type DomainName struct {
 	Status string
-}
-
-// Records knows how to interact with the Records
-// GoDaddy API endpoint
-type Records interface {
-	List() ([]Record, error)
-	FindByType(t string) ([]Record, error)
-	FindByTypeAndName(t string, n string) ([]Record, error)
-	Update(rec Record) error
-	Delete(rec Record) error
 }
 
 // Record defines a DNS record

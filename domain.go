@@ -1,6 +1,7 @@
 package godaddygo
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -20,9 +21,9 @@ func (d *domain) Records() Records {
 	return newRecords(d.c)
 }
 
-func (d *domain) GetDetails() (DomainDetails, error) {
+func (d *domain) GetDetails(ctx context.Context) (DomainDetails, error) {
 	url := "/domains/" + d.c.domainName
-	result, err := d.c.make(http.MethodGet, url, nil, 200)
+	result, err := d.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return DomainDetails{}, err
 	}

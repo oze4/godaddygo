@@ -1,6 +1,7 @@
 package godaddygo
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -16,10 +17,10 @@ func newRecords(c *Config) *records {
 	return &records{c}
 }
 
-func (r *records) List() ([]Record, error) {
+func (r *records) List(ctx context.Context) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records"
 
-	result, err := r.c.make(http.MethodGet, url, nil, 200)
+	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot list records of %s : %w", r.c.domainName, err)
 	}
@@ -27,10 +28,10 @@ func (r *records) List() ([]Record, error) {
 	return readRecordListResponse(result)
 }
 
-func (r *records) FindByType(t string) ([]Record, error) {
+func (r *records) FindByType(ctx context.Context, t string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t
 
-	result, err := r.c.make(http.MethodGet, url, nil, 200)
+	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot list records of %s : %w", r.c.domainName, err)
 	}
@@ -38,16 +39,16 @@ func (r *records) FindByType(t string) ([]Record, error) {
 	return readRecordListResponse(result)
 }
 
-func (r *records) FindByTypeAndName(t string, n string) ([]Record, error) {
+func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t + "/" + n
-	result, err := r.c.make(http.MethodGet, url, nil, 200)
+	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot list records of %s : %w", r.c.domainName, err)
 	}
 	return readRecordListResponse(result)
 }
 
-func (r *records) Update(rec Record) error {
+func (r *records) Update(ctx context.Context, rec Record) error {
 	/*
 		url := "/domains/"+r.domain+"/records/"+rec.Name
 		result, err := r.c.Put("/domains/"+r.domain+"/records/"+rec.Name, buildUpdateRecordRequestBody(rec))
@@ -59,7 +60,7 @@ func (r *records) Update(rec Record) error {
 	return nil
 }
 
-func (r *records) Delete(rec Record) error {
+func (r *records) Delete(ctx context.Context, rec Record) error {
 	/*
 		return r.c.Delete("/domains/" + r.domain + "/records/" + rec.Name)
 	*/
