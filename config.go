@@ -7,6 +7,10 @@ import (
 	"net/http"
 )
 
+func newDefaultConfig(key, secret, env, version string) *Config {
+	return &Config{http.DefaultClient, key, secret, "", env, version, ""}
+}
+
 // Config holds connection options
 type Config struct {
 	Client     *http.Client
@@ -45,33 +49,4 @@ func (c *Config) makeDo(ctx context.Context, method string, path string, body io
 	}
 
 	return resp.Body, nil
-}
-
-// NewConfig creates a config using `http.DefaultClient` as our client
-//  - key is the api key
-//  - secret is the api secret
-//  - env is whether or not we are targeting prod or dev, use APIDevEnv or APIProdEnv
-//  - version should be `v1` or `v2`, use APIVersion1 or APIVersion2
-func NewConfig(key, secret, env string) *Config {
-	return &Config{
-		Client: http.DefaultClient,
-		key:    key,
-		secret: secret,
-		env:    env,
-	}
-}
-
-// NewConfigWithClient creates a config using a custom http client
-//  - key is the api key
-//  - secret is the api secret
-//  - env is whether or not we are targeting prod or dev, use APIDevEnv or APIProdEnv
-//  - version should be `v1` or `v2`, use APIVersion1 or APIVersion2
-//  - c is your http client
-func NewConfigWithClient(key, secret, env string, c *http.Client) *Config {
-	return &Config{
-		Client:  c,
-		key:     key,
-		secret:  secret,
-		env:     env,
-	}
 }
