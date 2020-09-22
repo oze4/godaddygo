@@ -1,46 +1,45 @@
 package godaddygo
 
 import (
+	"net/http"
 	"fmt"
 	"io"
 )
 
 const (
-	prodbaseURL = "https://api.ote-godaddy.com.com/v1"
-	devbaseURL  = "https://api.godaddy.com/v1"
+	prodbaseURL = "https://api.ote-godaddygo.com.com"
+	devbaseURL  = "https://api.godaddygo.com"
+	// APIProdEnv targest the production API
+	APIProdEnv = "prod"
+	// APIDevEnv targets the development API
+	APIDevEnv = "dev"
 )
 
-type api struct {
-	c Client
+// API connects you to the GoDaddy endpoints
+type API struct {
+	config *Config
 }
 
-// NewAPI targets API version 1
-func NewAPI(key string, secret string, env string) *api {
-	if env == APIProdEnv {
-		return &api{
-			c: NewClient(key, secret, prodbaseURL),
-		}
+// NewAPI targets API
+func NewAPI(c *Config) *API {
+	if c.env == APIProdEnv {
+		c.baseURL = prodbaseURL
+		return &API{c}
 	}
-	return &api{
-		c: NewClient(key, secret, devbaseURL),
-	}
+	c.baseURL = devbaseURL
+	return &API{c}
 }
 
-// WithClient targets API version 1 with your own client
-func WithClient(c Client) *api {
-	return &api{c}
+// Domain targets domain endpoint
+func (a *API) Domain(name string) Domain {
+	a.config.domainName = name
+	return newDomain(a.config)
 }
 
-func (a *api) Domain(name string) (Domain, error) {
-	result, err := a.c.Get("/domains/" + name)
-	if err != nil {
-		return nil, fmt.Errorf("Cannot get domain %s : %w", name, err)
-	}
-	return newDomain(a.c, result)
-}
-
-func (a *api) List() ([]string, error) {
-	result, err := a.c.Get("/domains")
+// List returns your domains
+func (a *API) List() ([]string, error) {
+	url := "/domains"
+	result, err := a.config.makeRequest(http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot list domains : %w", err)
 	}
@@ -52,8 +51,9 @@ func readListResponse(result io.ReadCloser) ([]string, error) {
 	return nil, nil
 }
 
-func (a *api) CheckAvailability(name string) error {
-	result, err := a.c.Get("/domains/" + name + "/availability")
+// CheckAvailability checks if a domain is available for purchase
+func (a *API) CheckAvailability(name string) error {
+	result, err := a.client.Get("/domains/" + name + "/availability")
 	if err != nil {
 		return fmt.Errorf("Cannot get availability of domain %s : %w", name, err)
 	}
@@ -64,9 +64,10 @@ func checkAvailability(result io.ReadCloser) error {
 	return nil
 }
 
-func (a *api) Purchase(name string) error {
+// Purchase purchases a domain
+func (a *API) Purchase(name string) error {
 	var purchaseRequest io.Reader // fill with real request
-	result, err := a.c.Post("/domains/"+name+"/purchase", purchaseRequest)
+	result, err := a.client.Post("/domains/"+name+"/purchase", purchaseRequest)
 	result.Close()
 	if err != nil {
 		return fmt.Errorf("Cannot purchase domain %s : %w", name, err)

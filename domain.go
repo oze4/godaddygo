@@ -5,47 +5,47 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net/http"
 )
 
+func newDomain(c *Config) *domain {
+	return &domain{config: c}
+}
+
 type domain struct {
-	c       Client
-	details DomainDetails
+	config *Config
 }
 
-func newDomain(c Client, result io.ReadCloser) (*domain, error) {
-	d := &domain{c: c}
-	details, err := readV1Response(result)
+func (d *domain) Records() Records {
+	return newRecords(d.config)
+}
+
+func (d *domain) GetDetails() (DomainDetails, error) {
+	url := "/domains/" + d.config.domainName
+	
+	result, err := d.config.makeRequest(http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, fmt.Errorf("Failed parsing domain response : %w", err)
+		return DomainDetails{}, err
 	}
-	d.details = details
-	return d, nil
+
+	details, err := readDomainDetailsResponse(result)
+	if err != nil {
+		return DomainDetails{}, fmt.Errorf("Failed parsing domain response : %w", err)
+	}
+
+	return details, nil
 }
 
-type domainV1Response struct {
-	domain string
-}
-
-func readV1Response(result io.ReadCloser) (DomainDetails, error) {
+func readDomainDetailsResponse(result io.ReadCloser) (DomainDetails, error) {
 	content, err := ioutil.ReadAll(result)
 	if err != nil {
 		return DomainDetails{}, fmt.Errorf("cannot read body content : %w", err)
 	}
-	var v1resp domainV1Response
-	err = json.Unmarshal(content, &v1resp)
+	var details DomainDetails
+	err = json.Unmarshal(content, &details)
 	if err != nil {
 		return DomainDetails{}, fmt.Errorf("invalid json response : %w", err)
 	}
 
-	return DomainDetails{
-		Domain: v1resp.domain,
-	}, nil
-}
-
-func (d *domain) Records() Records {
-	return newRecords(d.c, d.details.Domain)
-}
-
-func (d *domain) GetDetails() DomainDetails {
-	return d.details
+	return details, nil
 }

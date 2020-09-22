@@ -6,12 +6,11 @@ import (
 )
 
 type records struct {
-	c      Client
-	domain string
+	config *Config
 }
 
-func newRecords(c Client, domain string) *records {
-	return &records{c, domain}
+func newRecords(c *Config) *records {
+	return &records{c}
 }
 
 func (r *records) List() ([]Record, error) {

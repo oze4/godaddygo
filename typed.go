@@ -1,43 +1,14 @@
 package godaddygo
 
 import (
-	"io"
 	"time"
 )
-
-const (
-	// APIProdEnv targest the production API
-	APIProdEnv = "prod"
-	// APIDevEnv targets the development API
-	APIDevEnv = "dev"
-)
-
-// ClientBuilder knows how to build a new client
-type ClientBuilder interface {
-	WithCredential(key string, secret string, baseURL string) Client
-}
-
-// Client knows how to send requests
-type Client interface {
-	Get(url string) (io.ReadCloser, error)
-	Post(url string, body io.Reader) (io.ReadCloser, error)
-	Put(url string, body io.Reader) (io.ReadCloser, error)
-	Delete(url string) error
-}
-
-// API knows how to interact with the GoDaddy API
-type API interface {
-	Domain(d string) (Domain, error)
-	List() ([]string, error)
-	CheckAvailability(d string) error
-	Purchase(d string) error
-}
 
 // Domain knows how to interact with the Domains
 // GoDaddy API endpoint
 type Domain interface {
 	Records() Records
-	GetDetails() DomainDetails
+	GetDetails() (DomainDetails, error)
 }
 
 // DomainDetails defines the details of a domain

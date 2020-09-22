@@ -20,7 +20,7 @@
 ## Intro
 
  - See [here](#features) for more on which features this package currently supports
- - Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddy.com/doc)
+ - Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddygo.com/doc)
 
 <br /> 
 
@@ -29,7 +29,7 @@
 ## Installation
 
  - `go get -u github.com/oze4/godaddygo`
- - See [here](https://developer.godaddy.com/) for more on how to obtain an API key and API secret from GoDaddy (click 'API Keys')
+ - See [here](https://developer.godaddygo.com/) for more on how to obtain an API key and API secret from GoDaddy (click 'API Keys')
 
 ## Getting Started
 
@@ -91,7 +91,7 @@ func main() {
 	key := "api_key"
 	secret := "api_secret"
 	// See here for more on GoDaddy production vs development (OTE) API's
-	// https://developer.godaddy.com/getstarted
+	// https://developer.godaddygo.com/getstarted
 	targetProductionAPI := true
 
 	// Create default client
@@ -166,7 +166,7 @@ func (c *myClient) IsProduction() string {
 
 ## Features
 
-Please see [here](https://developer.godaddy.com/doc) for more information on GoDaddy API endpoints
+Please see [here](https://developer.godaddygo.com/doc) for more information on GoDaddy API endpoints
 
 - [ ] Abuse
 - [ ] Aftermarket
