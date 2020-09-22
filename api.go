@@ -22,7 +22,7 @@ func NewAPI(c *Config) (*API, error) {
 	case APIDevEnv:
 		c.baseURL = devbaseURL
 	default:
-		return nil, fmt.Errorf("%w", ErrorWrongAPIVersion)
+		return nil, fmt.Errorf("%w", ErrorWrongAPIEnv)
 	}
 
 	return &API{c}, nil
