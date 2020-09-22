@@ -111,12 +111,12 @@ type Contact struct {
 
 // AddressMailing defines a mailing address
 type AddressMailing struct {
-	Address    string
-	Address2   string
-	City       string
-	Country    string
-	PostalCode string
-	State      string
+	Address    string `json:"address1,omitempty"`
+	Address2   string `json:"address2,omitempty"`
+	City       string `json:"city,omitempty"`
+	Country    string `json:"country,omitempty"`
+	PostalCode string `json:"postalCode,omitempty"`
+	State      string `json:"state,omitempty"`
 }
 
 // Verifications defines who verified purchases, etc..
