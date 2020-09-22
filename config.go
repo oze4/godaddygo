@@ -13,7 +13,7 @@ var (
 
 // Config holds connection options
 type Config struct {
-    Client     *http.Client
+	Client     *http.Client
 	key        string
 	secret     string
 	baseURL    string
@@ -23,18 +23,18 @@ type Config struct {
 	domainName string
 }
 
-func (c *Config) makeURLBase(xtra string) string {
-	return c.baseURL + ""
-}
-
 // NewConfig creates a config using `http.DefaultClient` as our client
+// key is the api key
+// secret is the api secret
+// env is whether or not we are targeting prod or dev - use APIDevEnv or APIProdEnv
+// version should be `v1` or `v2`
 func NewConfig(key, secret, env, version string) *Config {
 	return &Config{
+        Client:  http.DefaultClient,
 		key:     key,
 		secret:  secret,
 		version: version,
 		env:     env,
-		Client:  http.DefaultClient,
 	}
 }
 
@@ -43,11 +43,12 @@ func (c *Config) SetClient(httpclient *http.Client) {
 	c.Client = httpclient
 }
 
-func (c *Config) makeRequest(method string, path string, body io.Reader, expectedStatus int) (io.ReadCloser, error) {
+func (c *Config) make(method string, path string, body io.Reader, expectedStatus int) (io.ReadCloser, error) {
 	req, err := http.NewRequest(method, c.baseURL+"/"+c.version+path, body)
 	if err != nil {
 		return nil, fmt.Errorf("Error creating new request: %w", err)
 	}
+
 	req.Header.Set("Authorization", "sso-key "+c.key+":"+c.secret)
 	req.Header.Set("Content-Type", "application/json")
 
@@ -59,5 +60,6 @@ func (c *Config) makeRequest(method string, path string, body io.Reader, expecte
 	if resp.StatusCode != expectedStatus {
 		return resp.Body, fmt.Errorf("%w :expectedStatus %d, got %d", ErrorWrongStatusCode, expectedStatus, resp.StatusCode)
 	}
+
 	return resp.Body, nil
 }

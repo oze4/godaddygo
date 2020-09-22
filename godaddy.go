@@ -1,9 +1,5 @@
 package godaddygo
 
-import (
-	"fmt"
-)
-
 /*
 // NewProductionV1 targets version 1 of the production API
 func NewProductionV1(key string, secret string) *API {

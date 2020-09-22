@@ -1,9 +1,11 @@
 package godaddygo
 
 import (
-	"net/http"
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
 )
 
 const (
@@ -17,7 +19,7 @@ const (
 
 // API connects you to the GoDaddy endpoints
 type API struct {
-	config *Config
+	c *Config
 }
 
 // NewAPI targets API
@@ -26,23 +28,26 @@ func NewAPI(c *Config) *API {
 		c.baseURL = prodbaseURL
 		return &API{c}
 	}
+	
 	c.baseURL = devbaseURL
 	return &API{c}
 }
 
 // Domain targets domain endpoint
 func (a *API) Domain(name string) Domain {
-	a.config.domainName = name
-	return newDomain(a.config)
+	a.c.domainName = name
+	return newDomain(a.c)
 }
 
 // List returns your domains
 func (a *API) List() ([]string, error) {
 	url := "/domains"
-	result, err := a.config.makeRequest(http.MethodGet, url, nil, 200)
+
+	result, err := a.c.make(http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot list domains : %w", err)
 	}
+
 	return readListResponse(result)
 }
 
@@ -53,10 +58,13 @@ func readListResponse(result io.ReadCloser) ([]string, error) {
 
 // CheckAvailability checks if a domain is available for purchase
 func (a *API) CheckAvailability(name string) error {
-	result, err := a.client.Get("/domains/" + name + "/availability")
+	url := "/domains/" + name + "/availability"
+
+	result, err := a.c.make(http.MethodGet, url, nil, 200)
 	if err != nil {
 		return fmt.Errorf("Cannot get availability of domain %s : %w", name, err)
 	}
+
 	return checkAvailability(result)
 }
 
@@ -65,12 +73,18 @@ func checkAvailability(result io.ReadCloser) error {
 }
 
 // Purchase purchases a domain
-func (a *API) Purchase(name string) error {
-	var purchaseRequest io.Reader // fill with real request
-	result, err := a.client.Post("/domains/"+name+"/purchase", purchaseRequest)
-	result.Close()
+func (a *API) Purchase(dom DomainDetails) error {
+	domBytes, err := json.Marshal(dom)
 	if err != nil {
-		return fmt.Errorf("Cannot purchase domain %s : %w", name, err)
+		return err
 	}
+
+	purchaseRequest := bytes.NewBuffer(domBytes)
+	url := "/domains/" + a.c.domainName + "/purchase"
+
+	if _, err := a.c.make(http.MethodPost, url, purchaseRequest, 200); err != nil {
+		return fmt.Errorf("Cannot purchase domain %s : %w", a.c.domainName, err)
+	}
+
 	return nil
 }

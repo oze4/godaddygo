@@ -1,12 +1,15 @@
 package godaddygo
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"net/http"
 )
 
 type records struct {
-	config *Config
+	c *Config
 }
 
 func newRecords(c *Config) *records {
@@ -14,41 +17,68 @@ func newRecords(c *Config) *records {
 }
 
 func (r *records) List() ([]Record, error) {
-	result, err := r.c.Get("/domains/" + r.domain + "/records")
+	url := "/domains/" + r.c.domainName + "/records"
+
+	result, err := r.c.make(http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot list records of %s : %w", r.domain, err)
+		return nil, fmt.Errorf("Cannot list records of %s : %w", r.c.domainName, err)
 	}
+
 	return readRecordListResponse(result)
 }
 
-func readRecordListResponse(result io.ReadCloser) ([]Record, error) {
-	result.Close()
-	return nil, nil
-}
-
 func (r *records) FindByType(t string) ([]Record, error) {
-	result, err := r.c.Get("/domains/" + r.domain + "/records?type=" + t)
+	url := "/domains/" + r.c.domainName + "/records/" + t
+
+	result, err := r.c.make(http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot list records of %s : %w", r.domain, err)
+		return nil, fmt.Errorf("Cannot list records of %s : %w", r.c.domainName, err)
 	}
+
 	return readRecordListResponse(result)
 }
 
 func (r *records) FindByTypeAndName(t string, n string) ([]Record, error) {
-	result, err := r.c.Get("/domains/" + r.domain + "/records?type=" + t + "&name=" + n)
+	url := "/domains/" + r.c.domainName + "/records/" + t + "/" + n
+	result, err := r.c.make(http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot list records of %s : %w", r.domain, err)
+		return nil, fmt.Errorf("Cannot list records of %s : %w", r.c.domainName, err)
 	}
 	return readRecordListResponse(result)
 }
 
 func (r *records) Update(rec Record) error {
-	result, err := r.c.Put("/domains/"+r.domain+"/records/"+rec.Name, buildUpdateRecordRequestBody(rec))
-	result.Close()
-	if err != nil {
-		return fmt.Errorf("Cannot update record %s : %w", rec.Name, err)
-	}
+	/*
+		url := "/domains/"+r.domain+"/records/"+rec.Name
+		result, err := r.c.Put("/domains/"+r.domain+"/records/"+rec.Name, buildUpdateRecordRequestBody(rec))
+		result.Close()
+		if err != nil {
+			return fmt.Errorf("Cannot update record %s : %w", rec.Name, err)
+		}
+	*/
 	return nil
+}
+
+func (r *records) Delete(rec Record) error {
+	/*
+		return r.c.Delete("/domains/" + r.domain + "/records/" + rec.Name)
+	*/
+	return nil
+}
+
+func readRecordListResponse(result io.ReadCloser) ([]Record, error) {
+	defer result.Close()
+	content, err := ioutil.ReadAll(result)
+	if err != nil {
+		return []Record{}, fmt.Errorf("cannot read body content : %w", err)
+	}
+
+	var zone []Record
+	if err := json.Unmarshal(content, &zone); err != nil {
+		return []Record{}, err
+	}
+
+	return zone, nil
 }
 
 func buildUpdateRecordRequestBody(rec Record) io.Reader {
@@ -58,8 +88,4 @@ func buildUpdateRecordRequestBody(rec Record) io.Reader {
 func readRecordResponse(result io.ReadCloser) (Record, error) {
 	result.Close()
 	return Record{}, nil
-}
-
-func (r *records) Delete(rec Record) error {
-	return r.c.Delete("/domains/" + r.domain + "/records/" + rec.Name)
 }
