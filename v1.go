@@ -11,13 +11,13 @@ import (
 
 // newV1 is for internal convenience
 func newV1(c *Config) *v1 {
-    c.version = "v1"
-    return &v1{c}
+	c.version = "v1"
+	return &v1{c}
 }
 
 // v1 implements V1
 type v1 struct {
-    c *Config
+	c *Config
 }
 
 // Domain targets domain endpoint
@@ -26,8 +26,8 @@ func (v *v1) Domain(name string) Domain {
 	return newDomain(v.c)
 }
 
-// List returns your domains
-func (v *v1) List(ctx context.Context) ([]string, error) {
+// ListDomains returns your domains
+func (v *v1) ListDomains(ctx context.Context) ([]string, error) {
 	url := "/domains"
 
 	result, err := v.c.makeDo(ctx, http.MethodGet, url, nil, 200)
@@ -36,12 +36,6 @@ func (v *v1) List(ctx context.Context) ([]string, error) {
 	}
 
 	return readListResponse(result)
-}
-
-// readListResponse reads http response when listing
-func readListResponse(result io.ReadCloser) ([]string, error) {
-	result.Close()
-	return nil, nil
 }
 
 // CheckAvailability checks if a domain is available for purchase
@@ -56,13 +50,8 @@ func (v *v1) CheckAvailability(ctx context.Context, name string) error {
 	return checkAvailability(result)
 }
 
-// checkAvailability reads the response for checking domain availability
-func checkAvailability(result io.ReadCloser) error {
-	return nil
-}
-
-// Purchase purchases a domain
-func (v *v1) Purchase(ctx context.Context, dom DomainDetails) error {
+// PurchaseDomain purchases a domain
+func (v *v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 	domBytes, err := json.Marshal(dom)
 	if err != nil {
 		return err
@@ -75,5 +64,16 @@ func (v *v1) Purchase(ctx context.Context, dom DomainDetails) error {
 		return fmt.Errorf("Cannot purchase domain %s : %w", v.c.domainName, err)
 	}
 
+	return nil
+}
+
+// readListResponse reads http response when listing
+func readListResponse(result io.ReadCloser) ([]string, error) {
+	result.Close()
+	return nil, nil
+}
+
+// checkAvailability reads the response for checking domain availability
+func checkAvailability(result io.ReadCloser) error {
 	return nil
 }

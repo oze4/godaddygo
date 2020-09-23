@@ -53,15 +53,19 @@ const (
 // Gateway connects you to the GoDaddy endpoints
 type Gateway interface {
 	V1() V1
+	V2() V2
 }
 
 // V1 knows how to interact with GoDaddy Gateway version 1
 type V1 interface {
 	Domain(name string) Domain
-	List(ctx context.Context) ([]string, error)
+	ListDomains(ctx context.Context) ([]string, error)
 	CheckAvailability(ctx context.Context, name string) error
-	Purchase(ctx context.Context, dom DomainDetails) error
+	PurchaseDomain(ctx context.Context, dom DomainDetails) error
 }
+
+// V2 knows how to interact with GoDaddy Gateway version 2
+type V2 interface{}
 
 // Domain knows how to interact with the Domains GoDaddy Gateway endpoint
 type Domain interface {

@@ -7,13 +7,24 @@ import (
 	"net/http"
 )
 
-func newDefaultConfig(key, secret, env, version string) *Config {
-	return &Config{http.DefaultClient, key, secret, "", env, version, ""}
+// NewConfig creates a default config, allowing you to choose Production or
+// Development GoDaddy API via `APIProdEnv` or `APIDevEnv` constants
+func NewConfig(key, secret, env string) *Config {
+	return newDefaultConfig(key, secret, env)
+}
+
+func newDefaultConfig(key, secret, env string) *Config {
+	return &Config{
+		client: http.DefaultClient,
+		key:    key,
+		secret: secret,
+		env:    env,
+	}
 }
 
 // Config holds connection options
 type Config struct {
-	Client     *http.Client
+	client     *http.Client
 	key        string // key is the api key
 	secret     string // secret is the api secret
 	baseURL    string // we take care of this
@@ -22,9 +33,9 @@ type Config struct {
 	domainName string // dns zone to target
 }
 
-// SetClient allows you to specify your own http client
-func (c *Config) SetClient(h *http.Client) {
-	c.Client = h
+// WithClient attaches a custom `*http.Client`
+func (c *Config) WithClient(client *http.Client) {
+	c.client = client
 }
 
 // makeDo makes an http.Request and sends it
@@ -39,7 +50,7 @@ func (c *Config) makeDo(ctx context.Context, method string, path string, body io
 	req.Header.Set("Authorization", "sso-key "+c.key+":"+c.secret)
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := c.Client.Do(req)
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("Error sending request: %w", err)
 	}
