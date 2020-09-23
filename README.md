@@ -8,10 +8,9 @@
 
 - [Intro](#intro)
 - [Installation](#installation)
-- [Getting Started](#getting-started)
-- [Usage Details](#usage)
-  - [Using Default Client](#default-client)
-  - [Providing Custom Client](#custom-client)
+- [Usage](#usage)
+  - [Basic](#basic-usage)
+  - [Custom Client](#using-custom-client)
 - [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
 - [Features](#features)
 
@@ -31,7 +30,9 @@
  - `go get -u github.com/oze4/godaddygo`
  - See [here](https://developer.godaddygo.com/) for more on how to obtain an Gateway key and Gateway secret from GoDaddy (click 'Gateway Keys')
 
-## Getting Started
+## Usage
+
+### Basic Usage
 
 Bare minimum what you need to get started (aka how you will typically use this package):
 
@@ -43,125 +44,65 @@ import (
 )
 
 func main() {
-	prodKey := "-"
-	prodSecret := "-"
+	key := "<your_key>"
+	secret := "<your_secret>"
 
-	// Target version 1 of the production Gateway
-	api := godaddygo.ConnectProduction(prodKey, prodSecret)
-	prodv1 := api.V1()
+	// Target production GoDaddy API
+	// 99% of the time this is what you are looking for
+	gateway, err := godaddygo.NewProduction(key, secret)
+	if err != nil {
+		panic(err.Error())
+	}
+	
+	// Target version 1 of production API
+	godaddy := gateway.V1() 
 
-	// Now have access to all GoDaddy production V1
-	// Gateway endpoints (via `prodv1`)
+	// Now have access to all GoDaddy production V1 Gateway endpoints (via `godaddy`)
 
-	// eg: prodv1.Domain("xyz.com").Records().GetAll()
-	//     prodv1.Domain("xyz.com").Records().Add(someDNSRecord)
-	//     prodv1.Domain("xyz.com").GetDetails()
-	//     prodv1.Domains().My() // <-- List all domains you own
-	//     prodv1.Domains().CheckAvailability("dom.com")
-	//     prodv1.Domains().Purchase(dom)
+	// eg: godaddy.Domain("xyz.com").Records().List(ctx)
+	//     godaddy.Domain("xyz.com").Records().Add(ctx, someDNSRecord)
+	//     godaddy.Domain("xyz.com").Records().FindByType(ctx, godaddygo.RecordTypeA)
+	//     godaddy.Domain("xyz.com").GetDetails(ctx)
+	//     godaddy.ListDomains(ctx)
+	//     godaddy.CheckAvailability(ctx, "dom.com")
+	//     godaddy.Purchase(ctx, someDomain)
 	// etc...
-}
-```
-
-## Usage 
-
-GoDaddy's Gateway currently has 2 versions, `v1` and `v2`. Within the `godaddygo` package we provide 2 helper functions, one for each version. These helper functions  simply "wrap" around our "core", which means you have the ability to create yor own client(s).
-
-We recommend using one of the following:
-
- - `godaddygo.ConnectProduction(key, secret)`
- - `godaddygo.ConnectDevelopment(key, secret)`
-
-### Default Client
-
- - If you would like, you may create a default client "manually", then pass it to `endpoints.NewAPI(<default_client_here>)`. 
- - At a high level, the `godaddygo` package is essentially just a wrapper for `endpoints` and `client`. 
- - All we do is "wrap" those packages within `godaddygo`, as shown below
-
-```go
-package main
-
-import (
-	"github.com/oze4/godaddygo/pkg/client"
-	"github.com/oze4/godaddygo/pkg/endpoints"
-)
-
-func main() {
-	// Options for client
-	key := "api_key"
-	secret := "api_secret"
-	// See here for more on GoDaddy production vs development (OTE) Gateway's
-	// https://developer.godaddygo.com/getstarted
-	targetProductionAPI := true
-
-	// Create default client
-	client := client.Default(key, secret, targetProductionAPI)
-
-	// Connect our client to endpoints
-	api := endpoints.NewAPI(client)
-
-	//
-	// Use `api` here...
-	//
-	// ...for example:
-	prodv1 := api.V1()
-	// Target specific domain
-	mydom := prodv1.Domain("dom.com")
-	// Get all DNS records for target domain
-	records, err := mydom.Records().GetAll()
-
-	// ...
 }
 ```
 
 ### Custom Client
 
- - If you wish to use your own client instead of the default client, this is how you would do so.
-
 ```go
 package main
 
 import (
-	"github.com/oze4/godaddygo/pkg/endpoints"
+	"net/http"
+
+	"github.com/oze4/godaddygo"
 )
 
 func main() {
-	myCustomClient := &myClient{
-		key:    "api_key",
-		secret: "api_secret",
-		isprod: true,
+	key := "<your_key>"
+	secret := "<your_secret>"
+	// Target production API
+	target := godaddygo.APIProdEnv // godaddygo.APIDevEnv
+
+	// Build new config
+	myConfig := godaddygo.NewConfig(key, secret, target)
+	// Build custom client
+	myClient := &http.Client{}
+
+	// Establish "connection" with API
+	gateway, err := godaddygo.WithClient(myClient, myConfig)
+	if err != nil {
+		panic(err.Error())
 	}
 
-	api := endpoints.NewAPI(myCustomClient)
+	// Target version 1 of the production API
+	godaddy := gateway.V1()
 
-	//
-	// Use `api` here!
-	//
-	// ...
+	// ...use `godaddy` just like in Basic Usage example above
 }
-
-// myClient is your custom client
-// As long as your client satisfies `client.Interface`
-// You can use it to connect to the `endpoints` Gateway
-type myClient struct {
-	key    string
-	secret string
-	isprod bool
-	// ...your custom stuff
-}
-
-func (c *myClient) APIKey() string {
-	return c.key
-}
-
-func (c *myClient) APISecret() string {
-	return c.secret
-}
-
-func (c *myClient) IsProduction() string {
-	return c.isprod
-}
-
 ```
 
 ## Features

@@ -4,15 +4,32 @@ import (
 	"net/http"
 )
 
-// NewConfig creates a default config, allowing you to choose Production or
-// Development GoDaddy API via `APIProdEnv` or `APIDevEnv` constants
+// NewConfig creates a new config
 func NewConfig(key, secret, env string) *Config {
-	return newConfig(key, secret, env)
+    return newConfig(key, secret, env)
 }
 
-// New returns a new Gateway based upon a config
+// NewProduction targets GoDaddy production API
+func NewProduction(key string, secret string) (Gateway, error) {
+	c := newConfig(key, secret, APIProdEnv)
+	return new(c)
+}
+
+// NewDevelopment targets GoDaddy development API
+func NewDevelopment(key string, secret string) (Gateway, error) {
+	c := newConfig(key, secret, APIDevEnv)
+	return new(c)
+}
+
+// WithClient returns a Gateway using your own `*http.Client`
+func WithClient(client *http.Client, config *Config) (Gateway, error) {
+	config.client = client
+	return new(config)
+}
+
+// new returns a new Gateway based upon a config
 // Also sets the `baseURL` based upon `env`
-func New(c *Config) (Gateway, error) {
+func new(c *Config) (Gateway, error) {
 	switch c.env {
 	case APIProdEnv:
 		c.baseURL = prodbaseURL
@@ -23,25 +40,4 @@ func New(c *Config) (Gateway, error) {
 	}
 
 	return newGateway(c), nil
-}
-
-// NewProduction targets GoDaddy production API
-func NewProduction(key string, secret string) Gateway {
-	c := newConfig(key, secret, APIProdEnv)
-	g, _ := New(c)
-	return g
-}
-
-// NewDevelopment targets GoDaddy development API
-func NewDevelopment(key string, secret string) Gateway {
-	c := newConfig(key, secret, APIDevEnv)
-	g, _ := New(c)
-	return g
-}
-
-// WithClient returns a Gateway using your own `*http.Client`
-func WithClient(conf *Config, client *http.Client) Gateway {
-	conf.client = client
-	g, _ := New(conf)
-	return g
 }
