@@ -2,6 +2,8 @@ package godaddygo
 
 import (
 	"context"
+	"io"
+	"io/ioutil"
 	"time"
 )
 
@@ -60,7 +62,7 @@ type Gateway interface {
 type V1 interface {
 	Domain(name string) Domain
 	ListDomains(ctx context.Context) ([]string, error)
-	CheckAvailability(ctx context.Context, name string) error
+	CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error)
 	PurchaseDomain(ctx context.Context, dom DomainDetails) error
 }
 
@@ -88,29 +90,29 @@ type Records interface {
 
 // DomainDetails defines the details of a domain
 type DomainDetails struct {
-	AuthCode               string
-	ContactAdmin           Contact
-	ContactBilling         Contact
-	ContactRegistrant      Contact
-	ContactTech            Contact
-	CreatedAt              time.Time
-	DeletedAt              time.Time
-	TransferAwayEligibleAt time.Time
-	Domain                 string
-	DomainID               int
-	ExpirationProtected    bool
-	Expires                time.Time
-	ExposeWhois            bool
-	HoldRegistrar          bool
-	Locked                 bool
-	NameServers            []string
-	Privacy                bool
-	RenewAuto              bool
-	RenewDeadline          time.Time
-	Status                 string
-	SubAccountID           string
-	TransferProtected      bool
-	Verifications          Verifications
+	AuthCode               string        `json:"authCode,omitempty"`
+	ContactAdmin           Contact       `json:"contactAdmin,omitempty"`
+	ContactBilling         Contact       `json:"contactBilling,omitempty"`
+	ContactRegistrant      Contact       `json:"contactRegistrant,omitempty"`
+	ContactTech            Contact       `json:"contactTech,omitempty"`
+	CreatedAt              time.Time     `json:"createdAt,omitempty"`
+	DeletedAt              time.Time     `json:"deletedAt,omitempty"`
+	TransferAwayEligibleAt time.Time     `json:"transferAwayEligibleAt,omitempty"`
+	Domain                 string        `json:"domain,omitempty"`
+	DomainID               int           `json:"domainId,omitempty"`
+	ExpirationProtected    bool          `json:"expirationProtected,omitempty"`
+	Expires                time.Time     `json:"expires,omitempty"`
+	ExposeWhois            bool          `json:"exposeWhois,omitempty"`
+	HoldRegistrar          bool          `json:"holdRegistrar,omitempty"`
+	Locked                 bool          `json:"locked,omitempty"`
+	NameServers            []string      `json:"nameServers,omitempty"`
+	Privacy                bool          `json:"privacy,omitempty"`
+	RenewAuto              bool          `json:"renewAuto,omitempty"`
+	RenewDeadline          time.Time     `json:"renewDeadline,omitempty"`
+	Status                 string        `json:"status,omitempty"`
+	SubAccountID           string        `json:"subAccountId,omitempty"`
+	TransferProtected      bool          `json:"transferProtected,omitempty"`
+	Verifications          Verifications `json:"verifications,omitempty"`
 }
 
 // Contact defines the details of a contact
@@ -136,15 +138,20 @@ type AddressMailing struct {
 	State      string `json:"state,omitempty"`
 }
 
+// FullAddress returns the full address (Address + Address2)
+func (am *AddressMailing) FullAddress() string {
+	return am.Address + " " + am.Address2
+}
+
 // Verifications defines who verified purchases, etc..
 type Verifications struct {
-	DomainName DomainName
-	RealName   RealName
+	DomainName DomainName `json:"domainName,omitempty"`
+	RealName   RealName   `json:"realName,omitempty"`
 }
 
 // RealName defines the real name
 type RealName struct {
-	Status string
+	Status string `json:"status,omitempty"`
 }
 
 // DomainName defines a domain name
@@ -154,13 +161,54 @@ type DomainName struct {
 
 // Record defines a DNS record
 type Record struct {
-	Data     string
-	Name     string
-	Port     int
-	Priority int
-	Protocol string
-	Service  string
-	TTL      int
-	Type     string
-	Weight   int
+	Data     string `json:"data,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Port     int    `json:"port,omitempty"`
+	Priority int    `json:"priority,omitempty"`
+	Protocol string `json:"protocol,omitempty"`
+	Service  string `json:"service,omitempty"`
+	TTL      int    `json:"ttl,omitempty"`
+	Type     string `json:"type,omitempty"`
+	Weight   int    `json:"weight,omitempty"`
+}
+
+// DomainSummary is what gets returned when listing all of your domains
+type DomainSummary struct {
+	CreatedAt              time.Time
+	Domain                 string
+	DomainID               int
+	ExpirationProtected    bool
+	Expires                time.Time
+	ExposeWhois            bool
+	HoldRegistrar          bool
+	Locked                 bool
+	NameServers            []string
+	Privacy                bool
+	RenewAuto              bool
+	Renewable              bool
+	Status                 string
+	TransferAwayEligibleAt time.Time
+	TransferProtected      bool
+}
+
+// DomainAvailability holds data about domain availability
+type DomainAvailability struct {
+	Available  bool   `json:"available,omitempty"`
+	Currency   string `json:"currency,omitempty"`
+	Definitive bool   `json:"definitive,omitempty"`
+	Domain     string `json:"domain,omitempty"`
+	Period     int    `json:"period,omitempty"`
+	Price      int    `json:"price,omitempty"`
+}
+
+/** --------
+ * funcs
+ -------- */
+
+func readBody(body io.Reader) ([]byte, error) {
+	content, err := ioutil.ReadAll(body)
+	if err != nil {
+		return nil, exceptions.errorCannotReadBodyContent(err)
+	}
+	return content, nil
 }

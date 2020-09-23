@@ -3,9 +3,7 @@ package godaddygo
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -33,14 +31,14 @@ func (d *domain) GetDetails(ctx context.Context) (DomainDetails, error) {
 func readDomainDetailsResponse(result io.ReadCloser) (DomainDetails, error) {
 	defer result.Close()
 
-	content, err := ioutil.ReadAll(result)
+	content, err := readBody(result)
 	if err != nil {
-		return DomainDetails{}, fmt.Errorf("cannot read body content : %w", err)
+		return DomainDetails{}, err
 	}
 
 	var details DomainDetails
 	if err := json.Unmarshal(content, &details); err != nil {
-		return DomainDetails{}, fmt.Errorf("invalid json response : %w", err)
+		return DomainDetails{}, exceptions.errorInvalidJSONResponse(err)
 	}
 
 	return details, nil

@@ -45,7 +45,7 @@ func (c *Config) makeDo(ctx context.Context, method string, path string, body io
 	}
 
 	if resp.StatusCode != expectedStatus {
-		return resp.Body, fmt.Errorf("%w :expectedStatus %d, got %d", ErrorWrongStatusCode, expectedStatus, resp.StatusCode)
+		return resp.Body, exceptions.errorWrongStatusCode(expectedStatus, resp.StatusCode)
 	}
 
 	return resp.Body, nil

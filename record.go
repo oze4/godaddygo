@@ -41,29 +41,27 @@ func (r *records) FindByType(ctx context.Context, t string) ([]Record, error) {
 
 func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t + "/" + n
+
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot list records of %s : %w", r.c.domainName, err)
 	}
+
 	return readRecordListResponse(result)
 }
 
 func (r *records) Update(ctx context.Context, rec Record) error {
-	/*
-		url := "/domains/"+r.domain+"/records/"+rec.Name
-		result, err := r.c.Put("/domains/"+r.domain+"/records/"+rec.Name, buildUpdateRecordRequestBody(rec))
-		result.Close()
-		if err != nil {
-			return fmt.Errorf("Cannot update record %s : %w", rec.Name, err)
-		}
-	*/
+	/* url := "/domains/"+r.domain+"/records/"+rec.Name
+	result, err := r.c.Put("/domains/"+r.domain+"/records/"+rec.Name, buildUpdateRecordRequestBody(rec))
+	result.Close()
+	if err != nil {
+		return fmt.Errorf("Cannot update record %s : %w", rec.Name, err)
+	} */
 	return nil
 }
 
 func (r *records) Delete(ctx context.Context, rec Record) error {
-	/*
-		return r.c.Delete("/domains/" + r.domain + "/records/" + rec.Name)
-	*/
+	/* return r.c.Delete("/domains/" + r.domain + "/records/" + rec.Name) */
 	return nil
 }
 
