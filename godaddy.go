@@ -1,7 +1,7 @@
 package godaddygo
 
 import (
-    "net/http"
+	"net/http"
 )
 
 // NewConfig creates a default config, allowing you to choose Production or
@@ -20,28 +20,28 @@ func New(c *Config) (Gateway, error) {
 		c.baseURL = devbaseURL
 	default:
 		return nil, ErrorWrongAPIEnv
-    }
-    
+	}
+
 	return newGateway(c), nil
 }
 
 // NewProduction targets GoDaddy production API
 func NewProduction(key string, secret string) Gateway {
 	c := newConfig(key, secret, APIProdEnv)
-    g, _ := New(c)
-    return g
+	g, _ := New(c)
+	return g
 }
 
 // NewDevelopment targets GoDaddy development API
 func NewDevelopment(key string, secret string) Gateway {
-    c := newConfig(key, secret, APIDevEnv)
-    g, _ := New(c)
+	c := newConfig(key, secret, APIDevEnv)
+	g, _ := New(c)
 	return g
 }
 
 // WithClient returns a Gateway using your own `*http.Client`
 func WithClient(conf *Config, client *http.Client) Gateway {
-    conf.client = client
-    g, _ := New(conf)
-    return g
+	conf.client = client
+	g, _ := New(conf)
+	return g
 }
