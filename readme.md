@@ -10,7 +10,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
   - [Basic](#basic-usage)
-  - [Custom Client](#using-custom-client)
+  - [Custom Client](#custom-client)
 - [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
 - [Features](#features)
 
