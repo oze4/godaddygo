@@ -3,7 +3,6 @@ package godaddygo
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -22,7 +21,7 @@ func (r *records) List(ctx context.Context) ([]Record, error) {
 
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot list records of %s : %w", r.c.domainName, err)
+		return nil, exceptions.cannotListRecords(r.c.domainName, err)
 	}
 
 	return readRecordListResponse(result)
@@ -33,7 +32,7 @@ func (r *records) FindByType(ctx context.Context, t string) ([]Record, error) {
 
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot list records of %s : %w", r.c.domainName, err)
+		return nil, exceptions.cannotListRecords(r.c.domainName, err)
 	}
 
 	return readRecordListResponse(result)
@@ -44,7 +43,7 @@ func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) ([]
 
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot list records of %s : %w", r.c.domainName, err)
+		return nil, exceptions.cannotListRecords(r.c.domainName, err)
 	}
 
 	return readRecordListResponse(result)
@@ -69,7 +68,7 @@ func readRecordListResponse(result io.ReadCloser) ([]Record, error) {
 	defer result.Close()
 	content, err := ioutil.ReadAll(result)
 	if err != nil {
-		return []Record{}, fmt.Errorf("cannot read body content : %w", err)
+		return []Record{}, exceptions.cannotReadBodyContent(err)
 	}
 
 	var zone []Record

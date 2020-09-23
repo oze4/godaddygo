@@ -2,7 +2,6 @@ package godaddygo
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net/http"
 )
@@ -31,7 +30,7 @@ type Config struct {
 func (c *Config) makeDo(ctx context.Context, method string, path string, body io.Reader, expectedStatus int) (io.ReadCloser, error) {
 	req, err := http.NewRequest(method, c.baseURL+"/"+c.version+path, body)
 	if err != nil {
-		return nil, fmt.Errorf("Error creating new request: %w", err)
+		return nil, exceptions.creatingRequest(err)
 	}
 
 	req.WithContext(ctx)
@@ -41,11 +40,11 @@ func (c *Config) makeDo(ctx context.Context, method string, path string, body io
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("Error sending request: %w", err)
+		return nil, exceptions.sendingRequest(err)
 	}
 
 	if resp.StatusCode != expectedStatus {
-		return resp.Body, exceptions.errorWrongStatusCode(expectedStatus, resp.StatusCode)
+		return resp.Body, exceptions.wrongStatusCode(expectedStatus, resp.StatusCode)
 	}
 
 	return resp.Body, nil
