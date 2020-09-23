@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func newDefaultConfig(key, secret, env string) *Config {
+func newConfig(key, secret, env string) *Config {
 	return &Config{
 		client: http.DefaultClient,
 		key:    key,
@@ -25,11 +25,6 @@ type Config struct {
 	env        string // env is whether or not we are targeting prod or dev, use APIDevEnv or APIProdEnv
 	version    string // version should be `v1` or `v2`, use APIVersion1 or APIVersion2
 	domainName string // dns zone to target
-}
-
-// WithClient attaches a custom `*http.Client`
-func (c *Config) withClient(client *http.Client) {
-	c.client = client
 }
 
 // makeDo makes an http.Request and sends it
