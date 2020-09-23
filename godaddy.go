@@ -11,6 +11,7 @@ func NewConfig(key, secret, env string) *Config {
 }
 
 // New returns a new Gateway based upon a config
+// Also sets the `baseURL` based upon `env`
 func New(c *Config) (Gateway, error) {
 	switch c.env {
 	case APIProdEnv:
