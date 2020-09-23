@@ -7,12 +7,6 @@ import (
 	"net/http"
 )
 
-// NewConfig creates a default config, allowing you to choose Production or
-// Development GoDaddy API via `APIProdEnv` or `APIDevEnv` constants
-func NewConfig(key, secret, env string) *Config {
-	return newDefaultConfig(key, secret, env)
-}
-
 func newDefaultConfig(key, secret, env string) *Config {
 	return &Config{
 		client: http.DefaultClient,
@@ -34,7 +28,7 @@ type Config struct {
 }
 
 // WithClient attaches a custom `*http.Client`
-func (c *Config) WithClient(client *http.Client) {
+func (c *Config) withClient(client *http.Client) {
 	c.client = client
 }
 
