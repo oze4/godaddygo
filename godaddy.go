@@ -6,7 +6,7 @@ import (
 
 // NewConfig creates a new config
 func NewConfig(key, secret, env string) *Config {
-    return newConfig(key, secret, env)
+	return newConfig(key, secret, env)
 }
 
 // NewProduction targets GoDaddy production API

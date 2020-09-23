@@ -100,8 +100,17 @@ func main() {
 
 	// Target version 1 of the production API
 	godaddy := gateway.V1()
+	
+	// Now have access to all GoDaddy production V1 Gateway endpoints (via `godaddy`)
 
-	// ...use `godaddy` just like in Basic Usage example above
+	// eg: godaddy.Domain("xyz.com").Records().List(ctx)
+	//     godaddy.Domain("xyz.com").Records().Add(ctx, someDNSRecord)
+	//     godaddy.Domain("xyz.com").Records().FindByType(ctx, godaddygo.RecordTypeA)
+	//     godaddy.Domain("xyz.com").GetDetails(ctx)
+	//     godaddy.ListDomains(ctx)
+	//     godaddy.CheckAvailability(ctx, "dom.com")
+	//     godaddy.Purchase(ctx, someDomain)
+	// etc...
 }
 ```
 
