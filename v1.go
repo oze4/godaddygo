@@ -69,11 +69,12 @@ func (v *v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 
 // readListResponse reads http response when listing
 func readListResponse(result io.ReadCloser) ([]string, error) {
-	result.Close()
+	defer result.Close()
 	return nil, nil
 }
 
 // checkAvailability reads the response for checking domain availability
 func checkAvailability(result io.ReadCloser) error {
+	defer result.Close()
 	return nil
 }

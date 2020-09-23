@@ -87,6 +87,6 @@ func buildUpdateRecordRequestBody(rec Record) io.Reader {
 }
 
 func readRecordResponse(result io.ReadCloser) (Record, error) {
-	result.Close()
+	defer result.Close()
 	return Record{}, nil
 }
