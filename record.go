@@ -21,7 +21,7 @@ func (r *records) List(ctx context.Context) ([]Record, error) {
 
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, exceptions.cannotListRecords(r.c.domainName, err)
+		return nil, exception.listingRecords(err, r.c.domainName)
 	}
 
 	return readRecordListResponse(result)
@@ -32,7 +32,7 @@ func (r *records) FindByType(ctx context.Context, t string) ([]Record, error) {
 
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, exceptions.cannotListRecords(r.c.domainName, err)
+		return nil, exception.findingRecordsByType(err, r.c.domainName, t)
 	}
 
 	return readRecordListResponse(result)
@@ -43,7 +43,7 @@ func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) ([]
 
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, exceptions.cannotListRecords(r.c.domainName, err)
+		return nil, exception.findingRecordsByTypeAndName(err, r.c.domainName, t, n)
 	}
 
 	return readRecordListResponse(result)
@@ -68,7 +68,7 @@ func readRecordListResponse(result io.ReadCloser) ([]Record, error) {
 	defer result.Close()
 	content, err := ioutil.ReadAll(result)
 	if err != nil {
-		return []Record{}, exceptions.cannotReadBodyContent(err)
+		return []Record{}, exception.readingBodyContent(err)
 	}
 
 	var zone []Record

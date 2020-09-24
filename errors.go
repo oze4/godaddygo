@@ -5,57 +5,67 @@ import (
 )
 
 var (
-	exceptions = &errs{}
+	exception = &errs{}
 )
 
 type errs struct{}
 
-// wrongStatusCode is when we recieve a bad status code from GoDaddy API
-func (e *errs) wrongStatusCode(expectedStatus, gotStatus int) error {
-	return fmt.Errorf("ErrorWrongStatusCode: expectedStatus %d, got %d", expectedStatus, gotStatus)
+// invalidStatusCode is when we recieve a bad status code from GoDaddy API
+func (e *errs) invalidStatusCode(expectedStatus, gotStatus int, err error) error {
+	return fmt.Errorf("ErrorInvalidStatusCode : expected %d, got %d\n%w", expectedStatus, gotStatus, err)
 }
 
-// wrongAPIVersion is the error you get when an incorrect Gateway version is privided within a config
-func (e *errs) wrongAPIVersion() error {
-	return fmt.Errorf("ErrorWrongAPIVersion")
+// invalidAPIVersion is the error you get when an incorrect Gateway version is privided within a config
+func (e *errs) invalidAPIVersion(err error) error {
+	return fmt.Errorf("ErrorInvalidAPIVersion : %w", err)
 }
 
-// wrongAPIEnv is the error you get when an incorrect Gateway env (production or development) is privided within a config
-func (e *errs) wrongAPIEnv() error {
-	return fmt.Errorf("ErrorWrongAPIEnv: incorrect Gateway env (production or development) privided within config")
+// invalidAPIEnv is the error you get when an incorrect Gateway env (production or development) is privided within a config
+func (e *errs) invalidAPIEnv(err error) error {
+	return fmt.Errorf("ErrorInvalidAPIEnv : invalid env (production or development) provided within config\n\t-Use `APIProdEnv` or `APIDevEnv`\n%w", err)
 }
 
-// cannotReadBodyContent is thrown when we are unable to read body content
-func (e *errs) cannotReadBodyContent(err error) error {
-	return fmt.Errorf("cannot read body content : %w", err)
+// readingBodyContent is thrown when we are unable to read body content
+func (e *errs) readingBodyContent(err error) error {
+	return fmt.Errorf("ErrorCannotReadBodyContent : %w", err)
 }
 
 // invalidJSONResponse is thrown when we are unable to read JSON response
 func (e *errs) invalidJSONResponse(err error) error {
-	return fmt.Errorf("invalid json response : %w", err)
+	return fmt.Errorf("ErrorInvalidJSONResponse : %w", err)
 }
 
 // sendingRequest is thrown when we are unable to send a request
 func (e *errs) sendingRequest(err error) error {
-	return fmt.Errorf("Error sending request: %w", err)
+	return fmt.Errorf("ErrorSendingRequest: %w", err)
 }
 
-// creatingRequest is thrown when we are unable to send a request
-func (e *errs) creatingRequest(err error) error {
-	return fmt.Errorf("Error creating new request: %w", err)
+// creatingNewRequest is thrown when we are unable to send a request
+func (e *errs) creatingNewRequest(err error) error {
+	return fmt.Errorf("ErrorCreatingNewRequest: %w", err)
 }
 
-// cannotListRecords is thrown when we are unable to list DNS records
-func (e *errs) cannotListRecords(domainName string, err error) error {
-	return fmt.Errorf("Cannot list records of %s : %w", domainName, err)
+// listingRecords is thrown when we are unable to list DNS records
+func (e *errs) listingRecords(err error, domainName string) error {
+	return fmt.Errorf("ErrorCannotListRecords : %s\n%w", domainName, err)
 }
 
-// unableToPurchaseDomain is thrown when we are unable to list DNS records
-func (e *errs) unableToPurchaseDomain(domainName string, err error) error {
-	return fmt.Errorf("Cannot purchase domain %s : %w", domainName, err)
+// findingRecordsByType is thrown when we are unable to list DNS records
+func (e *errs) findingRecordsByType(err error, domainName, recordType string) error {
+	return fmt.Errorf("ErrorCannotFindRecords : byType %s of %s\n%w", recordType, domainName, err)
 }
 
-// unableToCheckAvailability is thrown when we are unable to check domain availability
-func (e *errs) unableToCheckAvailability(domainName string, err error) error {
-	return fmt.Errorf("Cannot get availability of domain %s : %w", domainName, err)
+// findingRecordsByTypeAndName is thrown when we are unable to list DNS records
+func (e *errs) findingRecordsByTypeAndName(err error, domainName, recordType, recordName string) error {
+	return fmt.Errorf("ErrorCannotFindRecords : byType %s andName %s of %s\n%w", recordType, recordName, domainName, err)
+}
+
+// purchasingDomain is thrown when we are unable to list DNS records
+func (e *errs) purchasingDomain(err error, domainName string) error {
+	return fmt.Errorf("ErrorCannotPurchaseDomain : %s\n%w", domainName, err)
+}
+
+// checkingAvailability is thrown when we are unable to check domain availability
+func (e *errs) checkingAvailability(err error, domainName string) error {
+	return fmt.Errorf("ErrorCannotCheckAvailability : %s\n%w", domainName, err)
 }

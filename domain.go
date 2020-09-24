@@ -33,12 +33,12 @@ func readDomainDetailsResponse(result io.ReadCloser) (DomainDetails, error) {
 
 	content, err := readBody(result)
 	if err != nil {
-		return DomainDetails{}, err
+		return DomainDetails{}, exception.readingBodyContent(err)
 	}
 
 	var details DomainDetails
 	if err := json.Unmarshal(content, &details); err != nil {
-		return DomainDetails{}, exceptions.invalidJSONResponse(err)
+		return DomainDetails{}, exception.invalidJSONResponse(err)
 	}
 
 	return details, nil

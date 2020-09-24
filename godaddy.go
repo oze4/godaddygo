@@ -36,7 +36,7 @@ func new(c *Config) (Gateway, error) {
 	case APIDevEnv:
 		c.baseURL = devbaseURL
 	default:
-		return nil, exceptions.wrongAPIEnv()
+		return nil, exception.invalidAPIEnv(nil)
 	}
 
 	return newGateway(c), nil

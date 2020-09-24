@@ -208,7 +208,7 @@ type DomainAvailability struct {
 func readBody(body io.Reader) ([]byte, error) {
 	content, err := ioutil.ReadAll(body)
 	if err != nil {
-		return nil, exceptions.cannotReadBodyContent(err)
+		return nil, exception.readingBodyContent(err)
 	}
 	return content, nil
 }

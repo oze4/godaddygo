@@ -45,7 +45,7 @@ func (v *v1) CheckAvailability(ctx context.Context, name string, forTransfer boo
 
 	result, err := v.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return DomainAvailability{}, exceptions.unableToCheckAvailability(name, err)
+		return DomainAvailability{}, exception.checkingAvailability(err, name)
 	}
 
 	return readCheckAvailabilityResponse(result)
@@ -62,7 +62,7 @@ func (v *v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 	url := "/domains/" + v.c.domainName + "/purchase"
 
 	if _, err := v.c.makeDo(ctx, http.MethodPost, url, purchaseRequest, 200); err != nil {
-		return exceptions.unableToPurchaseDomain(dom.Domain, err)
+		return exception.purchasingDomain(err, dom.Domain)
 	}
 
 	return nil
