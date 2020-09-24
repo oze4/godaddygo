@@ -43,6 +43,8 @@ func (c *Config) makeDo(ctx context.Context, method string, path string, body io
 		return nil, exception.sendingRequest(err)
 	}
 
+	defer resp.Body.Close()
+
 	if resp.StatusCode != expectedStatus {
 		return resp.Body, exception.invalidStatusCode(expectedStatus, resp.StatusCode, err)
 	}
