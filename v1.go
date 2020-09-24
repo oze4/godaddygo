@@ -52,18 +52,16 @@ func (v *v1) CheckAvailability(ctx context.Context, name string, forTransfer boo
 
 // PurchaseDomain purchases a domain
 func (v *v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
-	domBytes, err := json.Marshal(dom)
+	url := "/domains/" + v.c.domainName + "/purchase"
+
+	d, err := buildPurchaseDomainRequest(dom)
 	if err != nil {
 		return err
 	}
 
-	purchaseRequest := bytes.NewBuffer(domBytes)
-	url := "/domains/" + v.c.domainName + "/purchase"
-
-	if _, err := v.c.makeDo(ctx, http.MethodPost, url, purchaseRequest, 200); err != nil {
+	if _, err := v.c.makeDo(ctx, http.MethodPost, url, d, 200); err != nil {
 		return exception.purchasingDomain(err, dom.Domain)
 	}
-
 	return nil
 }
 
@@ -99,4 +97,14 @@ func readListDomainsResponse(result io.ReadCloser) ([]DomainSummary, error) {
 	}
 
 	return domains, nil
+}
+
+// buildPurchaseDomainRequest marshals domain details object and returns it as a byte.Buffer
+func buildPurchaseDomainRequest(dom DomainDetails) (*bytes.Buffer, error) {
+	domBytes, err := json.Marshal(dom)
+	if err != nil {
+		return nil, err
+	}
+
+	return bytes.NewBuffer(domBytes), nil
 }
