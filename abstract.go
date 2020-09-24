@@ -61,7 +61,7 @@ type Gateway interface {
 // V1 knows how to interact with GoDaddy Gateway version 1
 type V1 interface {
 	Domain(name string) Domain
-	ListDomains(ctx context.Context) ([]string, error)
+	ListDomains(ctx context.Context) ([]DomainSummary, error)
 	CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error)
 	PurchaseDomain(ctx context.Context, dom DomainDetails) error
 }
@@ -208,7 +208,7 @@ type DomainAvailability struct {
 func readBody(body io.Reader) ([]byte, error) {
 	content, err := ioutil.ReadAll(body)
 	if err != nil {
-		return nil, exception.readingBodyContent(err)
+		return nil, err
 	}
 	return content, nil
 }

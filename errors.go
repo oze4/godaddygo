@@ -45,6 +45,11 @@ func (e *errs) creatingNewRequest(err error) error {
 	return fmt.Errorf("ErrorCreatingNewRequest: %w", err)
 }
 
+// listingDomains is thrown when we are unable to list DNS records
+func (e *errs) listingDomains(err error) error {
+	return fmt.Errorf("ErrorCannotListDomains : %w", err)
+}
+
 // listingRecords is thrown when we are unable to list DNS records
 func (e *errs) listingRecords(err error, domainName string) error {
 	return fmt.Errorf("ErrorCannotListRecords : %s\n%w", domainName, err)

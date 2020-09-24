@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -28,15 +27,15 @@ func (v *v1) Domain(name string) Domain {
 }
 
 // ListDomains returns your domains
-func (v *v1) ListDomains(ctx context.Context) ([]string, error) {
+func (v *v1) ListDomains(ctx context.Context) ([]DomainSummary, error) {
 	url := "/domains"
 
 	result, err := v.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot list domains : %w", err)
+		return nil, exception.listingDomains(err)
 	}
 
-	return readListResponse(result)
+	return readListDomainsResponse(result)
 }
 
 // CheckAvailability checks if a domain is available for purchase
@@ -85,8 +84,19 @@ func readCheckAvailabilityResponse(result io.ReadCloser) (DomainAvailability, er
 	return availability, nil
 }
 
-// readListResponse reads http response when listing
-func readListResponse(result io.ReadCloser) ([]string, error) {
+// readListDomainsResponse reads http response when listing domains
+func readListDomainsResponse(result io.ReadCloser) ([]DomainSummary, error) {
 	defer result.Close()
-	return nil, nil
+
+	content, err := readBody(result)
+	if err != nil {
+		return []DomainSummary{}, err
+	}
+
+	var domains []DomainSummary
+	if err := json.Unmarshal(content, &domains); err != nil {
+		return nil, err
+	}
+
+	return domains, nil
 }
