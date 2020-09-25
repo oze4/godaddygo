@@ -52,8 +52,8 @@ const (
  * interfaces
  ----------- */
 
-// Gateway connects you to the GoDaddy endpoints
-type Gateway interface {
+// API knows which version to target
+type API interface {
 	V1() V1
 	V2() V2
 }

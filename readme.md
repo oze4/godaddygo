@@ -49,13 +49,13 @@ func main() {
 
 	// Target production GoDaddy API
 	// 99% of the time this is what you are looking for
-	gateway, err := godaddygo.NewProduction(key, secret)
+	api, err := godaddygo.NewProduction(key, secret)
 	if err != nil {
 		panic(err.Error())
 	}
 	
 	// Target version 1 of production API
-	godaddy := gateway.V1() 
+	godaddy := api.V1() 
 
 	// Now have access to all GoDaddy production V1 Gateway endpoints (via `godaddy`)
 
@@ -93,13 +93,13 @@ func main() {
 	myClient := &http.Client{}
 
 	// Establish "connection" with API
-	gateway, err := godaddygo.WithClient(myClient, myConfig)
+	api, err := godaddygo.WithClient(myClient, myConfig)
 	if err != nil {
 		panic(err.Error())
 	}
 
 	// Target version 1 of the production API
-	godaddy := gateway.V1()
+	godaddy := api.V1()
 	
 	// Now have access to all GoDaddy production V1 Gateway endpoints (via `godaddy`)
 
