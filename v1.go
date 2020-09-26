@@ -10,9 +10,9 @@ import (
 )
 
 // newV1 is for internal convenience
-func newV1(c *Config) *v1 {
+func newV1(c *Config) v1 {
 	c.version = APIVersion1
-	return &v1{c}
+	return v1{c}
 }
 
 // v1 implements V1
@@ -21,13 +21,13 @@ type v1 struct {
 }
 
 // Domain targets domain endpoint
-func (v *v1) Domain(name string) Domain {
+func (v v1) Domain(name string) Domain {
 	v.c.domainName = name
 	return newDomain(v.c)
 }
 
 // ListDomains returns your domains
-func (v *v1) ListDomains(ctx context.Context) (*[]DomainSummary, error) {
+func (v v1) ListDomains(ctx context.Context) ([]DomainSummary, error) {
 	url := "/domains"
 	result, err := v.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
@@ -38,18 +38,18 @@ func (v *v1) ListDomains(ctx context.Context) (*[]DomainSummary, error) {
 }
 
 // CheckAvailability checks if a domain is available for purchase
-func (v *v1) CheckAvailability(ctx context.Context, name string, forTransfer bool) (*DomainAvailability, error) {
+func (v v1) CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error) {
 	url := "/domains/available?domain=" + name + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
 	result, err := v.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, exception.checkingAvailability(err, name)
+		return DomainAvailability{}, exception.checkingAvailability(err, name)
 	}
 
 	return readCheckAvailabilityResponse(result)
 }
 
 // PurchaseDomain purchases a domain
-func (v *v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
+func (v v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 	url := "/domains/" + v.c.domainName + "/purchase"
 	d, err := buildPurchaseDomainRequest(dom)
 	if err != nil {
@@ -63,35 +63,35 @@ func (v *v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 }
 
 // readCheckAvailabilityResponse reads the response for checking domain availability
-func readCheckAvailabilityResponse(result io.ReadCloser) (*DomainAvailability, error) {
+func readCheckAvailabilityResponse(result io.ReadCloser) (DomainAvailability, error) {
 	defer result.Close()
 	content, err := bodyToBytes(result)
 	if err != nil {
-		return nil, err
+		return DomainAvailability{}, err
 	}
 
 	var availability DomainAvailability
 	if err := json.Unmarshal(content, &availability); err != nil {
-		return nil, err
+		return DomainAvailability{}, err
 	}
 
-	return &availability, nil
+	return availability, nil
 }
 
 // readListDomainsResponse reads http response when listing domains
-func readListDomainsResponse(result io.ReadCloser) (*[]DomainSummary, error) {
+func readListDomainsResponse(result io.ReadCloser) ([]DomainSummary, error) {
 	defer result.Close()
 	content, err := bodyToBytes(result)
 	if err != nil {
-		return nil, err
+		return []DomainSummary{}, err
 	}
 
 	var domains []DomainSummary
 	if err := json.Unmarshal(content, &domains); err != nil {
-		return nil, err
+		return []DomainSummary{}, err
 	}
 
-	return &domains, nil
+	return domains, nil
 }
 
 // buildPurchaseDomainRequest marshals domain details object and returns it as a byte.Buffer

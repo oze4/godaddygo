@@ -15,11 +15,11 @@ type domain struct {
 	c *Config
 }
 
-func (d *domain) Records() Records {
+func (d domain) Records() Records {
 	return newRecords(d.c)
 }
 
-func (d *domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
+func (d domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
 	url := "/domains/" + d.c.domainName
 	result, err := d.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {

@@ -14,11 +14,11 @@ type records struct {
 	c *Config
 }
 
-func newRecords(c *Config) *records {
-	return &records{c}
+func newRecords(c *Config) records {
+	return records{c}
 }
 
-func (r *records) List(ctx context.Context) (*[]Record, error) {
+func (r records) List(ctx context.Context) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records"
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
@@ -28,7 +28,7 @@ func (r *records) List(ctx context.Context) (*[]Record, error) {
 	return readRecordListResponse(result)
 }
 
-func (r *records) FindByType(ctx context.Context, t string) (*[]Record, error) {
+func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
@@ -38,7 +38,7 @@ func (r *records) FindByType(ctx context.Context, t string) (*[]Record, error) {
 	return readRecordListResponse(result)
 }
 
-func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) (*[]Record, error) {
+func (r records) FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t + "/" + n
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
@@ -48,7 +48,7 @@ func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) (*[
 	return readRecordListResponse(result)
 }
 
-func (r *records) Update(ctx context.Context, rec Record) error {
+func (r records) Update(ctx context.Context, rec Record) error {
 	url := "/domains/" + r.c.domainName + "/records/" + rec.Name
 	body, err := buildUpdateRecordRequest([]Record{rec}) // Must be []Record{} !!!
 	if err != nil {
@@ -62,12 +62,12 @@ func (r *records) Update(ctx context.Context, rec Record) error {
 	return nil
 }
 
-func (r *records) Delete(ctx context.Context, rec Record) error {
+func (r records) Delete(ctx context.Context, rec Record) error {
 	/* return r.c.Delete("/domains/" + r.domain + "/records/" + rec.Name) */
 	return nil
 }
 
-func readRecordListResponse(result io.ReadCloser) (*[]Record, error) {
+func readRecordListResponse(result io.ReadCloser) ([]Record, error) {
 	defer result.Close()
 	content, err := ioutil.ReadAll(result)
 	if err != nil {
@@ -79,7 +79,7 @@ func readRecordListResponse(result io.ReadCloser) (*[]Record, error) {
 		return nil, exception.invalidJSONResponse(err)
 	}
 
-	return &zone, nil
+	return zone, nil
 }
 
 // buildUpdateRecordRequest gives us our dns record as io.Reader
@@ -92,8 +92,8 @@ func buildUpdateRecordRequest(rec []Record) (io.Reader, error) {
 	return bytes.NewBuffer(b), nil
 }
 
-func readRecordResponse(result io.ReadCloser) (*Record, error) {
+func readRecordResponse(result io.ReadCloser) (Record, error) {
 	//TODO..
 	defer result.Close()
-	return &Record{}, nil
+	return Record{}, nil
 }
