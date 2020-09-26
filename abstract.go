@@ -17,6 +17,9 @@ const (
 	APIProdEnv = "prod"
 	// APIDevEnv targets the development Gateway
 	APIDevEnv = "dev"
+
+	/** api versions **/
+
 	// APIVersion1 specifies version 1
 	APIVersion1 = "v1"
 	// APIVersion2 specifies version 2
@@ -57,6 +60,8 @@ const (
 	MethodPut = http.MethodPut
 	// MethodPatch is global shortcut for http.MethodPatch
 	MethodPatch = http.MethodPatch
+	// MethodDelete is global shortcut for http.MethodDelete
+	MethodDelete = http.MethodDelete
 )
 
 /** -----------
