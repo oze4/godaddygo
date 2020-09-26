@@ -59,8 +59,8 @@ type API interface {
 // V1 knows how to interact with GoDaddy Gateway version 1
 type V1 interface {
 	Domain(name string) Domain
-	ListDomains(ctx context.Context) ([]DomainSummary, error)
-	CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error)
+	ListDomains(ctx context.Context) (*[]DomainSummary, error)
+	CheckAvailability(ctx context.Context, name string, forTransfer bool) (*DomainAvailability, error)
 	PurchaseDomain(ctx context.Context, dom DomainDetails) error
 }
 
@@ -70,14 +70,14 @@ type V2 interface{}
 // Domain knows how to interact with the Domains GoDaddy Gateway endpoint
 type Domain interface {
 	Records() Records
-	GetDetails(ctx context.Context) (DomainDetails, error)
+	GetDetails(ctx context.Context) (*DomainDetails, error)
 }
 
 // Records knows how to interact with the Records GoDaddy Gateway endpoint
 type Records interface {
-	List(ctx context.Context) ([]Record, error)
-	FindByType(ctx context.Context, t string) ([]Record, error)
-	FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error)
+	List(ctx context.Context) (*[]Record, error)
+	FindByType(ctx context.Context, t string) (*[]Record, error)
+	FindByTypeAndName(ctx context.Context, t string, n string) (*[]Record, error)
 	Update(ctx context.Context, rec Record) error
 	Delete(ctx context.Context, rec Record) error
 }

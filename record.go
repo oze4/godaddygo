@@ -17,7 +17,7 @@ func newRecords(c *Config) *records {
 	return &records{c}
 }
 
-func (r *records) List(ctx context.Context) ([]Record, error) {
+func (r *records) List(ctx context.Context) (*[]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records"
 
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
@@ -28,7 +28,7 @@ func (r *records) List(ctx context.Context) ([]Record, error) {
 	return readRecordListResponse(result)
 }
 
-func (r *records) FindByType(ctx context.Context, t string) ([]Record, error) {
+func (r *records) FindByType(ctx context.Context, t string) (*[]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t
 
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
@@ -39,7 +39,7 @@ func (r *records) FindByType(ctx context.Context, t string) ([]Record, error) {
 	return readRecordListResponse(result)
 }
 
-func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error) {
+func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) (*[]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t + "/" + n
 
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
@@ -70,19 +70,19 @@ func (r *records) Delete(ctx context.Context, rec Record) error {
 	return nil
 }
 
-func readRecordListResponse(result io.ReadCloser) ([]Record, error) {
+func readRecordListResponse(result io.ReadCloser) (*[]Record, error) {
 	defer result.Close()
 	content, err := ioutil.ReadAll(result)
 	if err != nil {
-		return []Record{}, exception.readingBodyContent(err)
+		return nil, exception.readingBodyContent(err)
 	}
 
 	var zone []Record
 	if err := json.Unmarshal(content, &zone); err != nil {
-		return []Record{}, err
+		return nil, err
 	}
 
-	return zone, nil
+	return &zone, nil
 }
 
 // buildUpdateRecordRequest gives us our dns record as io.Reader
@@ -95,7 +95,8 @@ func buildUpdateRecordRequest(rec []Record) (io.Reader, error) {
 	return bytes.NewBuffer(b), nil
 }
 
-func readRecordResponse(result io.ReadCloser) (Record, error) {
+func readRecordResponse(result io.ReadCloser) (*Record, error) {
+	//TODO..
 	defer result.Close()
-	return Record{}, nil
+	return &Record{}, nil
 }
