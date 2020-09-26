@@ -33,18 +33,15 @@ func (c *Config) makeDo(ctx context.Context, method string, path string, body io
 		return nil, exception.creatingNewRequest(err)
 	}
 
-	req.WithContext(ctx)
-
 	req.Header.Set("Authorization", "sso-key "+c.key+":"+c.secret)
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := c.client.Do(req)
+	resp, err := c.client.Do(req.WithContext(ctx))
 	if err != nil {
 		return nil, exception.sendingRequest(err)
 	}
 
 	defer resp.Body.Close()
-
 	if resp.StatusCode != expectedStatus {
 		return resp.Body, exception.invalidStatusCode(expectedStatus, resp.StatusCode, err)
 	}

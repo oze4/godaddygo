@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -19,7 +20,6 @@ func newRecords(c *Config) *records {
 
 func (r *records) List(ctx context.Context) (*[]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records"
-
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.listingRecords(err, r.c.domainName)
@@ -30,7 +30,6 @@ func (r *records) List(ctx context.Context) (*[]Record, error) {
 
 func (r *records) FindByType(ctx context.Context, t string) (*[]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t
-
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.findingRecordsByType(err, r.c.domainName, t)
@@ -41,7 +40,6 @@ func (r *records) FindByType(ctx context.Context, t string) (*[]Record, error) {
 
 func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) (*[]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t + "/" + n
-
 	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.findingRecordsByTypeAndName(err, r.c.domainName, t, n)
@@ -52,7 +50,6 @@ func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) (*[
 
 func (r *records) Update(ctx context.Context, rec Record) error {
 	url := "/domains/" + r.c.domainName + "/records/" + rec.Name
-
 	body, err := buildUpdateRecordRequest([]Record{rec}) // Must be []Record{} !!!
 	if err != nil {
 		return exception.updatingRecord(err, r.c.domainName, rec.Name)
@@ -79,7 +76,7 @@ func readRecordListResponse(result io.ReadCloser) (*[]Record, error) {
 
 	var zone []Record
 	if err := json.Unmarshal(content, &zone); err != nil {
-		return nil, err
+		return nil, exception.invalidJSONResponse(err)
 	}
 
 	return &zone, nil
@@ -89,7 +86,7 @@ func readRecordListResponse(result io.ReadCloser) (*[]Record, error) {
 func buildUpdateRecordRequest(rec []Record) (io.Reader, error) {
 	b, e := json.Marshal(rec)
 	if e != nil {
-		return nil, e
+		return nil, fmt.Errorf("ErrorCannotMarshalRecords : %w", e)
 	}
 
 	return bytes.NewBuffer(b), nil

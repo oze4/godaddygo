@@ -21,7 +21,6 @@ func (d *domain) Records() Records {
 
 func (d *domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
 	url := "/domains/" + d.c.domainName
-
 	result, err := d.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.gettingDomainDetails(err, d.c.domainName)
@@ -32,7 +31,6 @@ func (d *domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
 
 func readDomainDetailsResponse(result io.ReadCloser) (*DomainDetails, error) {
 	defer result.Close()
-
 	content, err := bodyToBytes(result)
 	if err != nil {
 		return nil, exception.readingBodyContent(err)
