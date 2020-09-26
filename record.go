@@ -51,7 +51,7 @@ func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) (*[
 }
 
 func (r *records) Update(ctx context.Context, rec Record) error {
-	url := "/domains/"+r.c.domainName+"/records/"+rec.Name
+	url := "/domains/" + r.c.domainName + "/records/" + rec.Name
 
 	body, err := buildUpdateRecordRequest([]Record{rec}) // Must be []Record{} !!!
 	if err != nil {
