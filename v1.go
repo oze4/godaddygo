@@ -29,7 +29,6 @@ func (v *v1) Domain(name string) Domain {
 // ListDomains returns your domains
 func (v *v1) ListDomains(ctx context.Context) (*[]DomainSummary, error) {
 	url := "/domains"
-
 	result, err := v.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.listingDomains(err)
@@ -41,7 +40,6 @@ func (v *v1) ListDomains(ctx context.Context) (*[]DomainSummary, error) {
 // CheckAvailability checks if a domain is available for purchase
 func (v *v1) CheckAvailability(ctx context.Context, name string, forTransfer bool) (*DomainAvailability, error) {
 	url := "/domains/available?domain=" + name + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
-
 	result, err := v.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.checkingAvailability(err, name)
@@ -53,7 +51,6 @@ func (v *v1) CheckAvailability(ctx context.Context, name string, forTransfer boo
 // PurchaseDomain purchases a domain
 func (v *v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 	url := "/domains/" + v.c.domainName + "/purchase"
-
 	d, err := buildPurchaseDomainRequest(dom)
 	if err != nil {
 		return err
@@ -68,7 +65,6 @@ func (v *v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 // readCheckAvailabilityResponse reads the response for checking domain availability
 func readCheckAvailabilityResponse(result io.ReadCloser) (*DomainAvailability, error) {
 	defer result.Close()
-
 	content, err := bodyToBytes(result)
 	if err != nil {
 		return nil, err
@@ -85,7 +81,6 @@ func readCheckAvailabilityResponse(result io.ReadCloser) (*DomainAvailability, e
 // readListDomainsResponse reads http response when listing domains
 func readListDomainsResponse(result io.ReadCloser) (*[]DomainSummary, error) {
 	defer result.Close()
-
 	content, err := bodyToBytes(result)
 	if err != nil {
 		return nil, err
