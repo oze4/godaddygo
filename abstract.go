@@ -2,6 +2,7 @@ package godaddygo
 
 import (
 	"context"
+	"net/http"
 	"time"
 )
 
@@ -44,6 +45,18 @@ const (
 
 	prodbaseURL = "https://api.godaddy.com"
 	devbaseURL  = "https://api.ote-godaddy.com"
+
+	/** http methods so we don't have to import http everywhere
+	  only doing this for common (or used) methods **/
+
+	// MethodGet is global shortcut for http.MethodGet
+	MethodGet = http.MethodGet
+	// MethodPost is global shortcut for http.MethodPost
+	MethodPost = http.MethodPost
+	// MethodPut is global shortcut for http.MethodPut
+	MethodPut = http.MethodPut
+	// MethodPatch is global shortcut for http.MethodPatch
+	MethodPatch = http.MethodPatch
 )
 
 /** -----------

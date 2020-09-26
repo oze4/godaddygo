@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"io"
-	"net/http"
 	"strconv"
 )
 
@@ -29,7 +28,7 @@ func (v v1) Domain(name string) Domain {
 // ListDomains returns your domains
 func (v v1) ListDomains(ctx context.Context) ([]DomainSummary, error) {
 	url := "/domains"
-	result, err := v.c.makeDo(ctx, http.MethodGet, url, nil, 200)
+	result, err := v.c.makeDo(ctx, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.listingDomains(err)
 	}
@@ -40,7 +39,7 @@ func (v v1) ListDomains(ctx context.Context) ([]DomainSummary, error) {
 // CheckAvailability checks if a domain is available for purchase
 func (v v1) CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error) {
 	url := "/domains/available?domain=" + name + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
-	result, err := v.c.makeDo(ctx, http.MethodGet, url, nil, 200)
+	result, err := v.c.makeDo(ctx, MethodGet, url, nil, 200)
 	if err != nil {
 		return DomainAvailability{}, exception.checkingAvailability(err, name)
 	}
@@ -56,7 +55,7 @@ func (v v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 		return err
 	}
 
-	if _, err := v.c.makeDo(ctx, http.MethodPost, url, d, 200); err != nil {
+	if _, err := v.c.makeDo(ctx, MethodPost, url, d, 200); err != nil {
 		return exception.purchasingDomain(err, dom.Domain)
 	}
 	return nil

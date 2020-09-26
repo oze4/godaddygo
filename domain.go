@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"io"
-	"net/http"
 )
 
 func newDomain(c *Config) domain {
@@ -21,7 +20,7 @@ func (d domain) Records() Records {
 
 func (d domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
 	url := "/domains/" + d.c.domainName
-	result, err := d.c.makeDo(ctx, http.MethodGet, url, nil, 200)
+	result, err := d.c.makeDo(ctx, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.gettingDomainDetails(err, d.c.domainName)
 	}

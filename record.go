@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"net/http"
 )
 
 type records struct {
@@ -20,7 +19,7 @@ func newRecords(c *Config) records {
 
 func (r records) List(ctx context.Context) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records"
-	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
+	result, err := r.c.makeDo(ctx, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.listingRecords(err, r.c.domainName)
 	}
@@ -30,7 +29,7 @@ func (r records) List(ctx context.Context) ([]Record, error) {
 
 func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t
-	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
+	result, err := r.c.makeDo(ctx, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.findingRecordsByType(err, r.c.domainName, t)
 	}
@@ -40,7 +39,7 @@ func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
 
 func (r records) FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t + "/" + n
-	result, err := r.c.makeDo(ctx, http.MethodGet, url, nil, 200)
+	result, err := r.c.makeDo(ctx, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.findingRecordsByTypeAndName(err, r.c.domainName, t, n)
 	}
@@ -55,7 +54,7 @@ func (r records) Update(ctx context.Context, rec Record) error {
 		return exception.updatingRecord(err, r.c.domainName, rec.Name)
 	}
 
-	if _, err = r.c.makeDo(ctx, http.MethodGet, url, body, 200); err != nil {
+	if _, err = r.c.makeDo(ctx, MethodGet, url, body, 200); err != nil {
 		return exception.updatingRecord(err, r.c.domainName, rec.Name)
 	}
 
