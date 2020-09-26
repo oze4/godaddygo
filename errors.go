@@ -74,3 +74,13 @@ func (e *errs) purchasingDomain(err error, domainName string) error {
 func (e *errs) checkingAvailability(err error, domainName string) error {
 	return fmt.Errorf("ErrorCannotCheckAvailability : %s\n%w", domainName, err)
 }
+
+// gettingDomainDetails is thrown when there is an error getting domain details
+func (e *errs) gettingDomainDetails(err error, domainName string) error {
+	return fmt.Errorf("ErrorCannotGetDomainDetails : %s\n%w", domainName, err)
+}
+
+// updatingRecord is thrown when an an error is encountered updating a DNS record
+func (e *errs) updatingRecord(err error, domainName string, recordName string) error {
+	return fmt.Errorf("ErrorUpdatingRecord : record %s of %s\n%w", recordName, domainName, err)
+}

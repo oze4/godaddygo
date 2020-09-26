@@ -1,6 +1,7 @@
 package godaddygo
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"io"
@@ -50,12 +51,17 @@ func (r *records) FindByTypeAndName(ctx context.Context, t string, n string) ([]
 }
 
 func (r *records) Update(ctx context.Context, rec Record) error {
-	/* url := "/domains/"+r.domain+"/records/"+rec.Name
-	result, err := r.c.Put("/domains/"+r.domain+"/records/"+rec.Name, buildUpdateRecordRequestBody(rec))
-	result.Close()
+	url := "/domains/"+r.c.domainName+"/records/"+rec.Name
+
+	body, err := buildUpdateRecordRequest([]Record{rec}) // Must be []Record{} !!!
 	if err != nil {
-		return fmt.Errorf("Cannot update record %s : %w", rec.Name, err)
-	} */
+		return exception.updatingRecord(err, r.c.domainName, rec.Name)
+	}
+
+	if _, err = r.c.makeDo(ctx, http.MethodGet, url, body, 200); err != nil {
+		return exception.updatingRecord(err, r.c.domainName, rec.Name)
+	}
+
 	return nil
 }
 
@@ -79,8 +85,14 @@ func readRecordListResponse(result io.ReadCloser) ([]Record, error) {
 	return zone, nil
 }
 
-func buildUpdateRecordRequestBody(rec Record) io.Reader {
-	return nil
+// buildUpdateRecordRequest gives us our dns record as io.Reader
+func buildUpdateRecordRequest(rec []Record) (io.Reader, error) {
+	b, e := json.Marshal(rec)
+	if e != nil {
+		return nil, e
+	}
+
+	return bytes.NewBuffer(b), nil
 }
 
 func readRecordResponse(result io.ReadCloser) (Record, error) {

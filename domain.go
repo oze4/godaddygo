@@ -24,7 +24,7 @@ func (d *domain) GetDetails(ctx context.Context) (DomainDetails, error) {
 
 	result, err := d.c.makeDo(ctx, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return DomainDetails{}, err
+		return DomainDetails{}, exception.gettingDomainDetails(err, d.c.domainName)
 	}
 
 	return readDomainDetailsResponse(result)
@@ -33,7 +33,7 @@ func (d *domain) GetDetails(ctx context.Context) (DomainDetails, error) {
 func readDomainDetailsResponse(result io.ReadCloser) (DomainDetails, error) {
 	defer result.Close()
 
-	content, err := readBody(result)
+	content, err := bodyToBytes(result)
 	if err != nil {
 		return DomainDetails{}, exception.readingBodyContent(err)
 	}

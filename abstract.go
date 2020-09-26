@@ -2,8 +2,6 @@ package godaddygo
 
 import (
 	"context"
-	"io"
-	"io/ioutil"
 	"time"
 )
 
@@ -199,16 +197,4 @@ type DomainAvailability struct {
 	Domain     string `json:"domain,omitempty"`
 	Period     int    `json:"period,omitempty"`
 	Price      int    `json:"price,omitempty"`
-}
-
-/** --------
- * funcs
- -------- */
-
-func readBody(body io.Reader) ([]byte, error) {
-	content, err := ioutil.ReadAll(body)
-	if err != nil {
-		return nil, err
-	}
-	return content, nil
 }
