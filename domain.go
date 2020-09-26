@@ -7,8 +7,8 @@ import (
 	"net/http"
 )
 
-func newDomain(c *Config) *domain {
-	return &domain{c}
+func newDomain(c *Config) domain {
+	return domain{c}
 }
 
 type domain struct {
