@@ -23,7 +23,7 @@ func (a api) V2() V2 {
 }
 
 func readResponseTo(res io.ReadCloser, to interface{}) error {
-	defer res.Close()
+	// defer res.Close()
 
 	content, err := bodyToBytes(res)
 	if err != nil {
