@@ -1,8 +1,10 @@
 package godaddygo
 
 import (
+	"bytes"
 	"context"
 	"io"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -41,12 +43,19 @@ func (c *Config) makeDo(ctx context.Context, method string, path string, body io
 		return nil, exception.sendingRequest(err)
 	}
 
-	defer resp.Body.Close()
-
 	if resp.StatusCode != expectedStatus {
-		return resp.Body, exception.invalidStatusCode(expectedStatus, resp.StatusCode, err)
+		return nil, exception.invalidStatusCode(expectedStatus, resp.StatusCode, err)
 	}
 
-	respBody := resp.Body
-	return respBody, nil
+	return copyAndCloseBody(resp)
+}
+
+func copyAndCloseBody(resp *http.Response) (io.ReadCloser, error) {
+	response, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	resp.Body.Close()
+	return ioutil.NopCloser(bytes.NewReader(response)), nil
 }
