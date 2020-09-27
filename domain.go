@@ -29,7 +29,6 @@ func (d domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
 }
 
 func readDomainDetailsResponse(result io.ReadCloser) (*DomainDetails, error) {
-	defer result.Close()
 	content, err := bodyToBytes(result)
 	if err != nil {
 		return nil, exception.readingBodyContent(err)

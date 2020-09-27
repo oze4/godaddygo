@@ -63,7 +63,7 @@ func (v v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 
 // readCheckAvailabilityResponse reads the response for checking domain availability
 func readCheckAvailabilityResponse(result io.ReadCloser) (DomainAvailability, error) {
-	defer result.Close()
+	// defer result.Close()
 	content, err := bodyToBytes(result)
 	if err != nil {
 		return DomainAvailability{}, err
