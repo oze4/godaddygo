@@ -28,33 +28,35 @@ func (v v1) Domain(name string) Domain {
 // ListDomains returns your domains
 func (v v1) ListDomains(ctx context.Context) ([]DomainSummary, error) {
 	url := "/domains"
-	result, err := v.c.makeDo(ctx, MethodGet, url, nil, 200)
+
+	response, err := v.c.makeDo(ctx, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.listingDomains(err)
 	}
 
-	return readListDomainsResponse(result)
+	return readListDomainsResponse(response)
 }
 
 // CheckAvailability checks if a domain is available for purchase
 func (v v1) CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error) {
 	url := "/domains/available?domain=" + name + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
-	result, err := v.c.makeDo(ctx, MethodGet, url, nil, 200)
+
+	response, err := v.c.makeDo(ctx, MethodGet, url, nil, 200)
 	if err != nil {
 		return DomainAvailability{}, exception.checkingAvailability(err, name)
 	}
 
-	return readCheckAvailabilityResponse(result)
+	return readCheckAvailabilityResponse(response)
 }
 
 // PurchaseDomain purchases a domain
 func (v v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
-	url := "/domains/" + v.c.domainName + "/purchase"
 	d, err := buildPurchaseDomainRequest(dom)
 	if err != nil {
 		return err
 	}
 
+	url := "/domains/" + v.c.domainName + "/purchase"
 	if _, err := v.c.makeDo(ctx, MethodPost, url, d, 200); err != nil {
 		return exception.purchasingDomain(err, dom.Domain)
 	}
@@ -63,14 +65,8 @@ func (v v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 
 // readCheckAvailabilityResponse reads the response for checking domain availability
 func readCheckAvailabilityResponse(result io.ReadCloser) (DomainAvailability, error) {
-	// defer result.Close()
-	content, err := bodyToBytes(result)
-	if err != nil {
-		return DomainAvailability{}, err
-	}
-
 	var availability DomainAvailability
-	if err := json.Unmarshal(content, &availability); err != nil {
+	if err := readResponseTo(result, &availability); err != nil {
 		return DomainAvailability{}, err
 	}
 
@@ -79,14 +75,8 @@ func readCheckAvailabilityResponse(result io.ReadCloser) (DomainAvailability, er
 
 // readListDomainsResponse reads http response when listing domains
 func readListDomainsResponse(result io.ReadCloser) ([]DomainSummary, error) {
-	defer result.Close()
-	content, err := bodyToBytes(result)
-	if err != nil {
-		return []DomainSummary{}, err
-	}
-
 	var domains []DomainSummary
-	if err := json.Unmarshal(content, &domains); err != nil {
+	if err := readResponseTo(result, &domains); err != nil {
 		return []DomainSummary{}, err
 	}
 

@@ -1,6 +1,7 @@
 package godaddygo
 
 import (
+	"encoding/json"
 	"io"
 	"io/ioutil"
 )
@@ -19,6 +20,21 @@ func (a api) V1() V1 {
 
 func (a api) V2() V2 {
 	return newV2(a.c)
+}
+
+func readResponseTo(res io.ReadCloser, to interface{}) error {
+	defer res.Close()
+	
+	content, err := bodyToBytes(res)
+	if err != nil {
+		return exception.readingBodyContent(err)
+	}
+
+	if err := json.Unmarshal(content, to); err != nil {
+		return exception.invalidJSONResponse(err)
+	}
+
+	return nil	
 }
 
 func bodyToBytes(body io.Reader) ([]byte, error) {
