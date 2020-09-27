@@ -56,11 +56,7 @@ func (v v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 		return err
 	}
 
-	url := "/domains/" + v.c.domainName + "/purchase"
-	if _, err := v.c.makeDo(ctx, MethodPost, url, d, 200); err != nil {
-		return exception.purchasingDomain(err, dom.Domain)
-	}
-	return nil
+	return readPurchaseDomainResponse(ctx, v.c, d)
 }
 
 // readCheckAvailabilityResponse reads the response for checking domain availability
@@ -91,4 +87,13 @@ func buildPurchaseDomainRequest(dom DomainDetails) (*bytes.Buffer, error) {
 	}
 
 	return bytes.NewBuffer(domBytes), nil
+}
+
+func readPurchaseDomainResponse(ctx context.Context, conf *Config, body *bytes.Buffer) error {
+	url := "/domains/" + conf.domainName + "/purchase"
+	if _, err := conf.makeDo(ctx, MethodPost, url, body, 200); err != nil {
+		return exception.purchasingDomain(err, conf.domainName)
+	}
+
+	return nil
 }
