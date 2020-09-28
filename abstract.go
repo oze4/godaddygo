@@ -114,8 +114,6 @@ type Config struct {
 	env        string // env is whether or not we are targeting prod or dev, use APIDevEnv or APIProdEnv
 	version    string // version should be `v1` or `v2`, use APIVersion1 or APIVersion2
 	domainName string // dns zone to target
-	method     string // method is the method we are sending
-	path       string // path is the "suffix" for the url
 
 }
 
