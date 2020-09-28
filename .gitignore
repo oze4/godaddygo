@@ -3,3 +3,4 @@ __test/
 docs/
 cmd/
 _old/
+**.git
