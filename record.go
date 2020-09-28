@@ -18,7 +18,6 @@ func newRecords(c *Config) records {
 
 func (r records) List(ctx context.Context) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records"
-
 	result, err := makeDo(ctx, r.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.listingRecords(err, r.c.domainName)
@@ -29,7 +28,6 @@ func (r records) List(ctx context.Context) ([]Record, error) {
 
 func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t
-
 	result, err := makeDo(ctx, r.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.findingRecordsByType(err, r.c.domainName, t)
@@ -40,7 +38,6 @@ func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
 
 func (r records) FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t + "/" + n
-
 	result, err := makeDo(ctx, r.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.findingRecordsByTypeAndName(err, r.c.domainName, t, n)
@@ -51,7 +48,6 @@ func (r records) FindByTypeAndName(ctx context.Context, t string, n string) ([]R
 
 func (r records) Update(ctx context.Context, rec Record) error {
 	url := "/domains/" + r.c.domainName + "/records/" + rec.Name
-
 	body, err := buildUpdateRecordRequest([]Record{rec}) // Must be []Record{} !!!
 	if err != nil {
 		return exception.updatingRecord(err, r.c.domainName, rec.Name)

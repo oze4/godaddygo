@@ -27,7 +27,6 @@ func (v v1) Domain(name string) Domain {
 // ListDomains returns your domains
 func (v v1) ListDomains(ctx context.Context) ([]DomainSummary, error) {
 	url := "/domains"
-
 	response, err := makeDo(ctx, v.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.listingDomains(err)
@@ -39,7 +38,6 @@ func (v v1) ListDomains(ctx context.Context) ([]DomainSummary, error) {
 // CheckAvailability checks if a domain is available for purchase
 func (v v1) CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error) {
 	url := "/domains/available?domain=" + name + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
-
 	response, err := makeDo(ctx, v.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return DomainAvailability{}, exception.checkingAvailability(err, name)
