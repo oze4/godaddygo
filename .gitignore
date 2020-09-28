@@ -3,7 +3,7 @@
 !*.*
 
 **.git
-**.git-config
+**.git-config/
 
 bin/
 cmd/
