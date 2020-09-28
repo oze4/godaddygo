@@ -1,7 +1,8 @@
+*
+!/**/
+!*.*
+
 bin/
-__test/
-docs/
 cmd/
-_old/
-.git/
-!.git/hooks/*
+
+.DS_Store
