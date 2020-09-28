@@ -3,4 +3,5 @@ __test/
 docs/
 cmd/
 _old/
-**.git
+.git/
+!.git/hooks/*
