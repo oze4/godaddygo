@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 )
 
 type records struct {
@@ -19,7 +18,8 @@ func newRecords(c *Config) records {
 
 func (r records) List(ctx context.Context) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records"
-	result, err := r.c.makeDo(ctx, MethodGet, url, nil, 200)
+
+	result, err := makeDo(ctx, r.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.listingRecords(err, r.c.domainName)
 	}
@@ -29,7 +29,8 @@ func (r records) List(ctx context.Context) ([]Record, error) {
 
 func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t
-	result, err := r.c.makeDo(ctx, MethodGet, url, nil, 200)
+
+	result, err := makeDo(ctx, r.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.findingRecordsByType(err, r.c.domainName, t)
 	}
@@ -39,7 +40,8 @@ func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
 
 func (r records) FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error) {
 	url := "/domains/" + r.c.domainName + "/records/" + t + "/" + n
-	result, err := r.c.makeDo(ctx, MethodGet, url, nil, 200)
+
+	result, err := makeDo(ctx, r.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.findingRecordsByTypeAndName(err, r.c.domainName, t, n)
 	}
@@ -49,12 +51,13 @@ func (r records) FindByTypeAndName(ctx context.Context, t string, n string) ([]R
 
 func (r records) Update(ctx context.Context, rec Record) error {
 	url := "/domains/" + r.c.domainName + "/records/" + rec.Name
+
 	body, err := buildUpdateRecordRequest([]Record{rec}) // Must be []Record{} !!!
 	if err != nil {
 		return exception.updatingRecord(err, r.c.domainName, rec.Name)
 	}
 
-	if _, err = r.c.makeDo(ctx, MethodGet, url, body, 200); err != nil {
+	if _, err = makeDo(ctx, r.c, MethodGet, url, body, 200); err != nil {
 		return exception.updatingRecord(err, r.c.domainName, rec.Name)
 	}
 
@@ -66,16 +69,10 @@ func (r records) Delete(ctx context.Context, rec Record) error {
 	return nil
 }
 
-func readRecordListResponse(result io.ReadCloser) ([]Record, error) {
-	defer result.Close()
-	content, err := ioutil.ReadAll(result)
-	if err != nil {
-		return nil, exception.readingBodyContent(err)
-	}
-
+func readRecordListResponse(r []byte) ([]Record, error) {
 	var zone []Record
-	if err := json.Unmarshal(content, &zone); err != nil {
-		return nil, exception.invalidJSONResponse(err)
+	if err := json.Unmarshal(r, &zone); err != nil {
+		return []Record{}, exception.invalidJSONResponse(err)
 	}
 
 	return zone, nil

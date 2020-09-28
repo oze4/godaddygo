@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"io"
 	"strconv"
 )
 
@@ -29,7 +28,7 @@ func (v v1) Domain(name string) Domain {
 func (v v1) ListDomains(ctx context.Context) ([]DomainSummary, error) {
 	url := "/domains"
 
-	response, err := v.c.makeDo(ctx, MethodGet, url, nil, 200)
+	response, err := makeDo(ctx, v.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.listingDomains(err)
 	}
@@ -41,7 +40,7 @@ func (v v1) ListDomains(ctx context.Context) ([]DomainSummary, error) {
 func (v v1) CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error) {
 	url := "/domains/available?domain=" + name + "&checkType=FAST&forTransfer=" + strconv.FormatBool(forTransfer)
 
-	response, err := v.c.makeDo(ctx, MethodGet, url, nil, 200)
+	response, err := makeDo(ctx, v.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return DomainAvailability{}, exception.checkingAvailability(err, name)
 	}
@@ -56,13 +55,18 @@ func (v v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
 		return err
 	}
 
-	return doAndReadPurchaseDomainResponse(ctx, v.c, d)
+	url := "/domains/" + v.c.domainName + "/purchase"
+	if _, err := makeDo(ctx, v.c, MethodPost, url, d, 200); err != nil {
+		return exception.purchasingDomain(err, v.c.domainName)
+	}
+
+	return nil
 }
 
 // readCheckAvailabilityResponse reads the response for checking domain availability
-func readCheckAvailabilityResponse(result io.ReadCloser) (DomainAvailability, error) {
+func readCheckAvailabilityResponse(r []byte) (DomainAvailability, error) {
 	var availability DomainAvailability
-	if err := readResponseTo(result, &availability); err != nil {
+	if err := json.Unmarshal(r, &availability); err != nil {
 		return DomainAvailability{}, err
 	}
 
@@ -70,9 +74,9 @@ func readCheckAvailabilityResponse(result io.ReadCloser) (DomainAvailability, er
 }
 
 // readListDomainsResponse reads http response when listing domains
-func readListDomainsResponse(result io.ReadCloser) ([]DomainSummary, error) {
+func readListDomainsResponse(r []byte) ([]DomainSummary, error) {
 	var domains []DomainSummary
-	if err := readResponseTo(result, &domains); err != nil {
+	if err := json.Unmarshal(r, &domains); err != nil {
 		return []DomainSummary{}, err
 	}
 
@@ -87,14 +91,4 @@ func buildPurchaseDomainRequest(dom DomainDetails) (*bytes.Buffer, error) {
 	}
 
 	return bytes.NewBuffer(domBytes), nil
-}
-
-// doAndReadPurchaseDomainResponse sends the purchase domain request and processes the return
-func doAndReadPurchaseDomainResponse(ctx context.Context, conf *Config, body *bytes.Buffer) error {
-	url := "/domains/" + conf.domainName + "/purchase"
-	if _, err := conf.makeDo(ctx, MethodPost, url, body, 200); err != nil {
-		return exception.purchasingDomain(err, conf.domainName)
-	}
-
-	return nil
 }

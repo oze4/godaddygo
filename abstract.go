@@ -104,6 +104,21 @@ type Records interface {
  * structs
  -------- */
 
+// Config holds connection options
+// use NewConfig to create a new config
+type Config struct {
+	client     *http.Client
+	key        string // key is the api key
+	secret     string // secret is the api secret
+	baseURL    string // we take care of this
+	env        string // env is whether or not we are targeting prod or dev, use APIDevEnv or APIProdEnv
+	version    string // version should be `v1` or `v2`, use APIVersion1 or APIVersion2
+	domainName string // dns zone to target
+	method     string // method is the method we are sending
+	path       string // path is the "suffix" for the url
+
+}
+
 // DomainDetails defines the details of a domain
 type DomainDetails struct {
 	AuthCode               string        `json:"authCode,omitempty"`

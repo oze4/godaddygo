@@ -3,7 +3,6 @@ package godaddygo
 import (
 	"context"
 	"encoding/json"
-	"io"
 )
 
 func newDomain(c *Config) domain {
@@ -20,7 +19,7 @@ func (d domain) Records() Records {
 
 func (d domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
 	url := "/domains/" + d.c.domainName
-	result, err := d.c.makeDo(ctx, MethodGet, url, nil, 200)
+	result, err := makeDo(ctx, d.c, MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.gettingDomainDetails(err, d.c.domainName)
 	}
@@ -28,14 +27,9 @@ func (d domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
 	return readDomainDetailsResponse(result)
 }
 
-func readDomainDetailsResponse(result io.ReadCloser) (*DomainDetails, error) {
-	content, err := bodyToBytes(result)
-	if err != nil {
-		return nil, exception.readingBodyContent(err)
-	}
-
+func readDomainDetailsResponse(r []byte) (*DomainDetails, error) {
 	var details DomainDetails
-	if err := json.Unmarshal(content, &details); err != nil {
+	if err := json.Unmarshal(r, &details); err != nil {
 		return nil, exception.invalidJSONResponse(err)
 	}
 
