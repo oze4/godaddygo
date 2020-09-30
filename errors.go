@@ -12,7 +12,7 @@ type errs struct{}
 
 // invalidStatusCode is when we recieve a bad status code from GoDaddy API
 func (e errs) invalidStatusCode(expectedStatus, gotStatus int, err error) error {
-	return fmt.Errorf("ErrorInvalidStatusCode : expected %d, got %d\n%w", expectedStatus, gotStatus, err)
+	return fmt.Errorf("ErrorInvalidStatusCode : expected %d, got %d\n%s", expectedStatus, gotStatus, err.Error())
 }
 
 // invalidAPIVersion is the error you get when an incorrect Gateway version is privided within a config
