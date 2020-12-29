@@ -25,7 +25,6 @@ func (r records) List(ctx context.Context) ([]Record, error) {
 	if err != nil {
 		return nil, exception.ListingRecords(err, r.config.domainName)
 	}
-
 	return readRecordListResponse(result)
 }
 
@@ -35,7 +34,6 @@ func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
 	if err != nil {
 		return nil, exception.FindingRecordsByType(err, r.config.domainName, t)
 	}
-
 	return readRecordListResponse(result)
 }
 
@@ -45,7 +43,6 @@ func (r records) FindByTypeAndName(ctx context.Context, t string, n string) ([]R
 	if err != nil {
 		return nil, exception.FindingRecordsByTypeAndName(err, r.config.domainName, t, n)
 	}
-
 	return readRecordListResponse(result)
 }
 
