@@ -4,8 +4,6 @@ import (
 	"context"
 	"net/http"
 	"time"
-
-	"github.com/oze4/godaddygo/internal/exception"
 )
 
 /** ---------
@@ -24,59 +22,59 @@ type RecordType string
 // APIURL represents which URL to target
 type APIURL string
 
-func (e APIEnv) String() (string, error) {
+func (e APIEnv) String() string {
 	switch e {
 	case APIProdEnv:
-		return "prod", nil
+		return "prod"
 	case APIDevEnv:
-		return "dev", nil
+		return "dev"
 	default:
-		return "", exception.InvalidEnumValue(e)
+		return ""
 	}
 }
 
-func (v APIVersion) String() (string, error) {
+func (v APIVersion) String() string {
 	switch v {
 	case APIVersion1:
-		return "v1", nil
+		return "v1"
 	case APIVersion2:
-		return "v2", nil
+		return "v2"
 	default:
-		return "", exception.InvalidEnumValue(v)
+		return ""
 	}
 }
 
-func (u APIURL) String() (string, error) {
+func (u APIURL) String() string {
 	switch u {
 	case prodbaseURL:
-		return "https://api.godaddy.com", nil
+		return "https://api.godaddy.com"
 	case devbaseURL:
-		return "https://api.ote-godaddy.com", nil
+		return "https://api.ote-godaddy.com"
 	default:
-		return "", exception.InvalidEnumValue(u)
+		return ""
 	}
 }
 
-func (r RecordType) String() (string, error) {
+func (r RecordType) String() string {
 	switch r {
 	case RecordTypeA:
-		return "A", nil
+		return "A"
 	case RecordTypeAAAA:
-		return "AAAA", nil
+		return "AAAA"
 	case RecordTypeCNAME:
-		return "CNAME", nil
+		return "CNAME"
 	case RecordTypeMX:
-		return "MX", nil
+		return "MX"
 	case RecordTypeNS:
-		return "NS", nil
+		return "NS"
 	case RecordTypeSOA:
-		return "SOA", nil
+		return "SOA"
 	case RecordTypeSRV:
-		return "SRV", nil
+		return "SRV"
 	case RecordTypeTXT:
-		return "TXT", nil
+		return "TXT"
 	default:
-		return "", exception.InvalidEnumValue(r)
+		return ""
 	}
 }
 

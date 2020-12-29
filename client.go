@@ -11,14 +11,14 @@ import (
 
 // makeDo makes an http.Request and sends it
 func makeDo(ctx context.Context, config *Config, method, path string, body io.Reader, expectStatus int) ([]byte, error) {
-	version, err := config.version.String()
-	if err != nil {
-		return nil, err
+	version := config.version.String()
+	if version == "" {
+		return nil, exception.InvalidValue("version value not allowed")
 	}
 
-	urlBase, err := config.baseURL.String()
-	if err != nil {
-		return nil, err
+	urlBase := config.baseURL.String()
+	if urlBase == "" {
+		return nil, exception.InvalidValue("urlBase value not allowed")
 	}
 
 	fullURL := urlBase + "/" + version + path
@@ -31,9 +31,9 @@ func makeDo(ctx context.Context, config *Config, method, path string, body io.Re
 	req.Header.Set("Authorization", "sso-key "+config.key+":"+config.secret)
 	req.Header.Set("Content-Type", "application/json")
 
-	finalRequest := req.WithContext(ctx)
+	reqWithCtx := req.WithContext(ctx)
 
-	resp, err := config.client.Do(finalRequest)
+	resp, err := config.client.Do(reqWithCtx)
 	if err != nil {
 		return nil, exception.SendingRequest(err)
 	}

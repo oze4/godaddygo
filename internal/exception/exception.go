@@ -6,7 +6,7 @@ import (
 
 // Enum knows how to return a string representation of itself
 type Enum interface {
-	String() (string, error)
+	String() string
 }
 
 // InvalidStatusCode is when we recieve a bad status code from GoDaddy API
@@ -59,7 +59,7 @@ func FindingRecordsByType(err error, domainName, recordType string) error {
 	return fmt.Errorf("ErrorCannotFindRecords : byType %s of %s\n%s", recordType, domainName, err.Error())
 }
 
-// findingRecordsByTypeAndName is thrown when we are unable to list DNS records
+// FindingRecordsByTypeAndName is thrown when we are unable to list DNS records
 func FindingRecordsByTypeAndName(err error, domainName, recordType, recordName string) error {
 	return fmt.Errorf("ErrorCannotFindRecords : byType %s andName %s of %s\n%s", recordType, recordName, domainName, err.Error())
 }
@@ -84,13 +84,7 @@ func UpdatingRecord(err error, domainName string, recordName string) error {
 	return fmt.Errorf("ErrorUpdatingRecord : record %s of %s\n%s", recordName, domainName, err.Error())
 }
 
-// InvalidEnumValue is thrown when an invalid value is being used for an "enum"
-func InvalidEnumValue(enum Enum) error {
-	msg := "error : invalid enum value :"
-	var str string
-	var err error
-	if str, err = enum.String(); err != nil {
-		return fmt.Errorf("%s : additional error encountered : error recieved attempting to resolve enum.String() : %s", msg, err)
-	}
-	return fmt.Errorf("%s : got %s", msg, str)
+// InvalidValue is thrown when an invalid value is being used for an "enum"
+func InvalidValue(message string) error {
+	return fmt.Errorf("invalid value : %s", message)
 }
