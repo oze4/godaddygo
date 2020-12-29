@@ -26,7 +26,6 @@ func (d domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
 	if err != nil {
 		return nil, exception.GettingDomainDetails(err, d.config.domainName)
 	}
-
 	return readDomainDetailsResponse(result)
 }
 
@@ -35,6 +34,5 @@ func readDomainDetailsResponse(r []byte) (*DomainDetails, error) {
 	if err := json.Unmarshal(r, &details); err != nil {
 		return nil, exception.InvalidJSONResponse(err)
 	}
-
 	return &details, nil
 }
