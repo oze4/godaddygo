@@ -10,13 +10,13 @@ import (
 )
 
 // makeDo makes an http.Request and sends it
-func makeDo(ctx context.Context, c *Config, method, path string, body io.Reader, expectStatus int) ([]byte, error) {
-	version, err := c.version.String()
+func makeDo(ctx context.Context, config *Config, method, path string, body io.Reader, expectStatus int) ([]byte, error) {
+	version, err := config.version.String()
 	if err != nil {
 		return nil, err
 	}
 
-	urlBase, err := c.baseURL.String()
+	urlBase, err := config.baseURL.String()
 	if err != nil {
 		return nil, err
 	}
@@ -28,10 +28,10 @@ func makeDo(ctx context.Context, c *Config, method, path string, body io.Reader,
 		return nil, err
 	}
 
-	req.Header.Set("Authorization", "sso-key "+c.key+":"+c.secret)
+	req.Header.Set("Authorization", "sso-key "+config.key+":"+config.secret)
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := c.client.Do(req.WithContext(ctx))
+	resp, err := config.client.Do(req.WithContext(ctx))
 	if err != nil {
 		return nil, exception.SendingRequest(err)
 	}
