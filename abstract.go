@@ -59,28 +59,20 @@ func (u APIURL) String() (string, error) {
 
 func (r RecordType) String() (string, error) {
 	switch r {
-	// RecordTypeA defines A record
 	case RecordTypeA:
 		return "A", nil
-	// RecordTypeAAAA defines AAAA record
 	case RecordTypeAAAA:
 		return "AAAA", nil
-	// RecordTypeCNAME defines CNAME record
 	case RecordTypeCNAME:
 		return "CNAME", nil
-	// RecordTypeMX defines MX record
 	case RecordTypeMX:
 		return "MX", nil
-	// RecordTypeNS defines NS record
 	case RecordTypeNS:
 		return "NS", nil
-	// RecordTypeSOA defines SOA record
 	case RecordTypeSOA:
 		return "SOA", nil
-	// RecordTypeSRV defines SRV record
 	case RecordTypeSRV:
 		return "SRV", nil
-	// RecordTypeTXT defines TXT record
 	case RecordTypeTXT:
 		return "TXT", nil
 	default:
