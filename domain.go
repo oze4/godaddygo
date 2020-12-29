@@ -3,25 +3,28 @@ package godaddygo
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+
+	"github.com/oze4/godaddygo/internal/exception"
 )
 
-func newDomain(c *Config) domain {
-	return domain{c}
+func newDomain(config *Config) domain {
+	return domain{config}
 }
 
 type domain struct {
-	c *Config
+	config *Config
 }
 
 func (d domain) Records() Records {
-	return newRecords(d.c)
+	return newRecords(d.config)
 }
 
 func (d domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
-	url := "/domains/" + d.c.domainName
-	result, err := makeDo(ctx, d.c, MethodGet, url, nil, 200)
+	url := "/domains/" + d.config.domainName
+	result, err := makeDo(ctx, d.config, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, exception.gettingDomainDetails(err, d.c.domainName)
+		return nil, exception.GettingDomainDetails(err, d.config.domainName)
 	}
 
 	return readDomainDetailsResponse(result)
@@ -30,7 +33,7 @@ func (d domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
 func readDomainDetailsResponse(r []byte) (*DomainDetails, error) {
 	var details DomainDetails
 	if err := json.Unmarshal(r, &details); err != nil {
-		return nil, exception.invalidJSONResponse(err)
+		return nil, exception.InvalidJSONResponse(err)
 	}
 
 	return &details, nil

@@ -4,31 +4,111 @@ import (
 	"context"
 	"net/http"
 	"time"
+
+	"github.com/oze4/godaddygo/internal/exception"
 )
+
+/** ---------
+ * enum-like vars
+ --------- */
+
+// APIEnv represents which endpoint to target (dev|prod)
+type APIEnv string
+
+// APIVersion represents which endpoint version to target (v1|v2)
+type APIVersion string
+
+// RecordType represents a DNS record type
+type RecordType string
+
+// APIURL represents which URL to target
+type APIURL string
+
+func (e APIEnv) String() (string, error) {
+	switch e {
+	case APIProdEnv:
+		return "prod", nil
+	case APIDevEnv:
+		return "dev", nil
+	default:
+		return "", exception.InvalidEnumValue(e)
+	}
+}
+
+func (v APIVersion) String() (string, error) {
+	switch v {
+	case APIVersion1:
+		return "v1", nil
+	case APIVersion2:
+		return "v2", nil
+	default:
+		return "", exception.InvalidEnumValue(v)
+	}
+}
+
+func (u APIURL) String() (string, error) {
+	switch u {
+	case prodbaseURL:
+		return "https://api.godaddy.com", nil
+	case devbaseURL:
+		return "https://api.ote-godaddy.com", nil
+	default:
+		return "", exception.InvalidEnumValue(u)
+	}
+}
+
+func (r RecordType) String() (string, error) {
+	switch r {
+	// RecordTypeA defines A record
+	case RecordTypeA:
+		return "A", nil
+	// RecordTypeAAAA defines AAAA record
+	case RecordTypeAAAA:
+		return "AAAA", nil
+	// RecordTypeCNAME defines CNAME record
+	case RecordTypeCNAME:
+		return "CNAME", nil
+	// RecordTypeMX defines MX record
+	case RecordTypeMX:
+		return "MX", nil
+	// RecordTypeNS defines NS record
+	case RecordTypeNS:
+		return "NS", nil
+	// RecordTypeSOA defines SOA record
+	case RecordTypeSOA:
+		return "SOA", nil
+	// RecordTypeSRV defines SRV record
+	case RecordTypeSRV:
+		return "SRV", nil
+	// RecordTypeTXT defines TXT record
+	case RecordTypeTXT:
+		return "TXT", nil
+	default:
+		return "", exception.InvalidEnumValue(r)
+	}
+}
 
 /** ---------
  * constants
  --------- */
 
+// APIEnv enum
 const (
-	/** env vars, used for connection parameters **/
+	// Env variables - which godaddy api to target
+	APIProdEnv APIEnv = "prod"
+	APIDevEnv         = "dev"
 
-	// APIProdEnv targets the production Gateway
-	APIProdEnv = "prod"
-	// APIDevEnv targets the development Gateway
-	APIDevEnv = "dev"
+	// URLs representation of env variable
+	prodbaseURL APIURL = "https://api.godaddy.com"
+	devbaseURL         = "https://api.ote-godaddy.com"
 
-	/** api versions **/
+	// Allowed API Versions - which version of the godaddy api to target
+	APIVersion1 APIVersion = "v1"
+	APIVersion2            = "v2"
 
-	// APIVersion1 specifies version 1
-	APIVersion1 = "v1"
-	// APIVersion2 specifies version 2
-	APIVersion2 = "v2"
-
-	/** dns record types **/
-
+	// DNS records
 	// RecordTypeA defines A record
-	RecordTypeA = "A"
+	RecordTypeA RecordType = "A"
 	// RecordTypeAAAA defines AAAA record
 	RecordTypeAAAA = "AAAA"
 	// RecordTypeCNAME defines CNAME record
@@ -43,25 +123,6 @@ const (
 	RecordTypeSRV = "SRV"
 	// RecordTypeTXT defines TXT record
 	RecordTypeTXT = "TXT"
-
-	/** godaddy api url's **/
-
-	prodbaseURL = "https://api.godaddy.com"
-	devbaseURL  = "https://api.ote-godaddy.com"
-
-	/** http methods so we don't have to import http everywhere
-	  only doing this for common (or used) methods **/
-
-	// MethodGet is global shortcut for http.MethodGet
-	MethodGet = http.MethodGet
-	// MethodPost is global shortcut for http.MethodPost
-	MethodPost = http.MethodPost
-	// MethodPut is global shortcut for http.MethodPut
-	MethodPut = http.MethodPut
-	// MethodPatch is global shortcut for http.MethodPatch
-	MethodPatch = http.MethodPatch
-	// MethodDelete is global shortcut for http.MethodDelete
-	MethodDelete = http.MethodDelete
 )
 
 /** -----------
@@ -108,13 +169,12 @@ type Records interface {
 // use NewConfig to create a new config
 type Config struct {
 	client     *http.Client
-	key        string // key is the api key
-	secret     string // secret is the api secret
-	baseURL    string // we take care of this
-	env        string // env is whether or not we are targeting prod or dev, use APIDevEnv or APIProdEnv
-	version    string // version should be `v1` or `v2`, use APIVersion1 or APIVersion2
-	domainName string // dns zone to target
-
+	key        string     // key is the api key
+	secret     string     // secret is the api secret
+	baseURL    APIURL     // we take care of this
+	env        APIEnv     // env is whether or not we are targeting prod or dev, use APIDevEnv or APIProdEnv
+	version    APIVersion // version should be `v1` or `v2`, use APIVersion1 or APIVersion2
+	domainName string     // dns zone to target
 }
 
 // DomainDetails defines the details of a domain

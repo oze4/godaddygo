@@ -1,26 +1,29 @@
 package godaddygo
 
-func newAPI(c *Config) (api, error) {
-	switch c.env {
-	case APIProdEnv:
-		c.baseURL = prodbaseURL
-	case APIDevEnv:
-		c.baseURL = devbaseURL
-	default:
-		return api{}, exception.invalidAPIEnv(nil)
-	}
+import (
+	"github.com/oze4/godaddygo/internal/exception"
+)
 
-	return api{c}, nil
+func newAPI(config *Config) (api, error) {
+	switch config.env {
+	case APIProdEnv:
+		config.baseURL = prodbaseURL
+	case APIDevEnv:
+		config.baseURL = devbaseURL
+	default:
+		return api{}, exception.InvalidAPIEnv(nil)
+	}
+	return api{config}, nil
 }
 
 type api struct {
-	c *Config
+	config *Config
 }
 
 func (a api) V1() V1 {
-	return newV1(a.c)
+	return newV1(a.config)
 }
 
 func (a api) V2() V2 {
-	return newV2(a.c)
+	return newV2(a.config)
 }

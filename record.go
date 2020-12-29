@@ -6,71 +6,71 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
+
+	"github.com/oze4/godaddygo/internal/exception"
 )
 
 type records struct {
-	c *Config
+	config *Config
 }
 
-func newRecords(c *Config) records {
-	return records{c}
+func newRecords(config *Config) records {
+	return records{config}
 }
 
 func (r records) List(ctx context.Context) ([]Record, error) {
-	url := "/domains/" + r.c.domainName + "/records"
-	result, err := makeDo(ctx, r.c, MethodGet, url, nil, 200)
+	url := "/domains/" + r.config.domainName + "/records"
+	result, err := makeDo(ctx, r.config, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, exception.listingRecords(err, r.c.domainName)
+		return nil, exception.ListingRecords(err, r.config.domainName)
 	}
 
 	return readRecordListResponse(result)
 }
 
 func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
-	url := "/domains/" + r.c.domainName + "/records/" + t
-	result, err := makeDo(ctx, r.c, MethodGet, url, nil, 200)
+	url := "/domains/" + r.config.domainName + "/records/" + t
+	result, err := makeDo(ctx, r.config, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, exception.findingRecordsByType(err, r.c.domainName, t)
+		return nil, exception.FindingRecordsByType(err, r.config.domainName, t)
 	}
 
 	return readRecordListResponse(result)
 }
 
 func (r records) FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error) {
-	url := "/domains/" + r.c.domainName + "/records/" + t + "/" + n
-	result, err := makeDo(ctx, r.c, MethodGet, url, nil, 200)
+	url := "/domains/" + r.config.domainName + "/records/" + t + "/" + n
+	result, err := makeDo(ctx, r.config, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, exception.findingRecordsByTypeAndName(err, r.c.domainName, t, n)
+		return nil, exception.FindingRecordsByTypeAndName(err, r.config.domainName, t, n)
 	}
 
 	return readRecordListResponse(result)
 }
 
 func (r records) Update(ctx context.Context, rec Record) error {
-	url := "/domains/" + r.c.domainName + "/records/" + rec.Name
+	url := "/domains/" + r.config.domainName + "/records/" + rec.Name
 	body, err := buildUpdateRecordRequest([]Record{rec}) // Must be []Record{} !!!
 	if err != nil {
-		return exception.updatingRecord(err, r.c.domainName, rec.Name)
+		return exception.UpdatingRecord(err, r.config.domainName, rec.Name)
 	}
-
-	if _, err = makeDo(ctx, r.c, MethodGet, url, body, 200); err != nil {
-		return exception.updatingRecord(err, r.c.domainName, rec.Name)
+	if _, err = makeDo(ctx, r.config, http.MethodGet, url, body, 200); err != nil {
+		return exception.UpdatingRecord(err, r.config.domainName, rec.Name)
 	}
-
 	return nil
 }
 
 func (r records) Delete(ctx context.Context, rec Record) error {
-	/* return r.c.Delete("/domains/" + r.domain + "/records/" + rec.Name) */
-	return nil
+	/* return r.config.Delete("/domains/" + r.domain + "/records/" + rec.Name) */
+	return fmt.Errorf("records.Delete not implemented")
 }
 
 func readRecordListResponse(r []byte) ([]Record, error) {
 	var zone []Record
 	if err := json.Unmarshal(r, &zone); err != nil {
-		return []Record{}, exception.invalidJSONResponse(err)
+		return []Record{}, exception.InvalidJSONResponse(err)
 	}
-
 	return zone, nil
 }
 
@@ -80,12 +80,12 @@ func buildUpdateRecordRequest(rec []Record) (io.Reader, error) {
 	if e != nil {
 		return nil, fmt.Errorf("ErrorCannotMarshalRecords : %w", e)
 	}
-
 	return bytes.NewBuffer(b), nil
 }
 
 func readRecordResponse(result io.ReadCloser) (Record, error) {
 	//TODO..
 	defer result.Close()
-	return Record{}, nil
+	// return Record{}, nil
+	return Record{}, fmt.Errorf("readRecordResponse not implemented")
 }

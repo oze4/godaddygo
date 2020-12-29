@@ -6,19 +6,18 @@ import (
 )
 
 const (
-	// maxHTTPClientTimeout in seconds is the defalt max http client timeout
+	// MaxHTTPClientTimeout in seconds is the defalt max http client timeout
 	// https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779
 	// 1 minute by default
-	maxHTTPClientTimeout = time.Second * 60
+	MaxHTTPClientTimeout = time.Second * 60
 )
 
 // NewConfig creates a new config
-func NewConfig(key, secret, env string) *Config {
-	client := &http.Client{
-		Timeout: maxHTTPClientTimeout,
-	}
+func NewConfig(key, secret string, env APIEnv) *Config {
 	return &Config{
-		client: client,
+		client: &http.Client{
+			Timeout: MaxHTTPClientTimeout,
+		},
 		key:    key,
 		secret: secret,
 		env:    env,
