@@ -31,7 +31,9 @@ func makeDo(ctx context.Context, config *Config, method, path string, body io.Re
 	req.Header.Set("Authorization", "sso-key "+config.key+":"+config.secret)
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := config.client.Do(req.WithContext(ctx))
+	finalRequest := req.WithContext(ctx)
+
+	resp, err := config.client.Do(finalRequest)
 	if err != nil {
 		return nil, exception.SendingRequest(err)
 	}
