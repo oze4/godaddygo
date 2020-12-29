@@ -106,23 +106,15 @@ const (
 	APIVersion1 APIVersion = "v1"
 	APIVersion2            = "v2"
 
-	// DNS records
-	// RecordTypeA defines A record
-	RecordTypeA RecordType = "A"
-	// RecordTypeAAAA defines AAAA record
-	RecordTypeAAAA = "AAAA"
-	// RecordTypeCNAME defines CNAME record
-	RecordTypeCNAME = "CNAME"
-	// RecordTypeMX defines MX record
-	RecordTypeMX = "MX"
-	// RecordTypeNS defines NS record
-	RecordTypeNS = "NS"
-	// RecordTypeSOA defines SOA record
-	RecordTypeSOA = "SOA"
-	// RecordTypeSRV defines SRV record
-	RecordTypeSRV = "SRV"
-	// RecordTypeTXT defines TXT record
-	RecordTypeTXT = "TXT"
+	// DNS record types
+	RecordTypeA     RecordType = "A"
+	RecordTypeAAAA             = "AAAA"
+	RecordTypeCNAME            = "CNAME"
+	RecordTypeMX               = "MX"
+	RecordTypeNS               = "NS"
+	RecordTypeSOA              = "SOA"
+	RecordTypeSRV              = "SRV"
+	RecordTypeTXT              = "TXT"
 )
 
 /** -----------
