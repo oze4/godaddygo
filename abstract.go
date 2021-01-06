@@ -137,6 +137,7 @@ type Domain interface {
 // Records knows how to interact with the Records GoDaddy Gateway endpoint
 type Records interface {
 	List(ctx context.Context) ([]Record, error)
+	Add(ctx context.Context, rec []Record) error
 	FindByType(ctx context.Context, t string) ([]Record, error)
 	FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error)
 	Update(ctx context.Context, rec Record) error

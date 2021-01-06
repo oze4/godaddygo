@@ -28,6 +28,18 @@ func (r records) List(ctx context.Context) ([]Record, error) {
 	return readRecordListResponse(result)
 }
 
+func (r records) Add(ctx context.Context, rec []Record) error {
+	url := "/domains/" + r.config.domainName + "/records"
+	body, err := buildUpdateRecordRequest(rec)
+	if err != nil {
+		return exception.AddingRecords(err, r.config.domainName, rec[0].Name)
+	}
+	if _, err := makeDo(ctx, r.config, http.MethodPatch, url, body, 200); err != nil {
+		return exception.AddingRecords(err, r.config.domainName, rec[0].Name)
+	}
+	return nil
+}
+
 func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
 	url := "/domains/" + r.config.domainName + "/records/" + t
 	result, err := makeDo(ctx, r.config, http.MethodGet, url, nil, 200)

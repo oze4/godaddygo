@@ -79,6 +79,11 @@ func GettingDomainDetails(err error, domainName string) error {
 	return fmt.Errorf("ErrorCannotGetDomainDetails : %s\n%s", domainName, err.Error())
 }
 
+// AddingRecords is thrown when an an error is encountered adding DNS record
+func AddingRecords(err error, domainName string, recordName string) error {
+	return fmt.Errorf("ErrorAddingRecords : record %s of %s\n%s", recordName, domainName, err.Error())
+}
+
 // UpdatingRecord is thrown when an an error is encountered updating a DNS record
 func UpdatingRecord(err error, domainName string, recordName string) error {
 	return fmt.Errorf("ErrorUpdatingRecord : record %s of %s\n%s", recordName, domainName, err.Error())
