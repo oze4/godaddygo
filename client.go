@@ -38,7 +38,11 @@ func makeDo(ctx context.Context, config *Config, method, path string, body io.Re
 		return nil, exception.SendingRequest(err)
 	}
 	if resp.StatusCode != expectStatus {
-		return nil, exception.InvalidStatusCode(expectStatus, resp.StatusCode, err)
+		strerr, err := copyAndCloseBody(resp.Body)
+		if err != nil {
+			strerr = []byte(err.Error())
+		}
+		return nil, exception.InvalidStatusCode(expectStatus, resp.StatusCode, string(strerr))
 	}
 	return copyAndCloseBody(resp.Body)
 }

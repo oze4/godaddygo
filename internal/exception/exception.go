@@ -10,8 +10,8 @@ type Enum interface {
 }
 
 // InvalidStatusCode is when we recieve a bad status code from GoDaddy API
-func InvalidStatusCode(expectedStatus, gotStatus int, err error) error {
-	return fmt.Errorf("ErrorInvalidStatusCode : expected %d, got %d\n%s", expectedStatus, gotStatus, err.Error())
+func InvalidStatusCode(expectedStatus, gotStatus int, err string) error {
+	return fmt.Errorf("ErrorInvalidStatusCode : expected %d, got %d\n%s", expectedStatus, gotStatus, err)
 }
 
 // InvalidAPIVersion is the error you get when an incorrect Gateway version is privided within a config
@@ -77,6 +77,11 @@ func CheckingAvailability(err error, domainName string) error {
 // GettingDomainDetails is thrown when there is an error getting domain details
 func GettingDomainDetails(err error, domainName string) error {
 	return fmt.Errorf("ErrorCannotGetDomainDetails : %s\n%s", domainName, err.Error())
+}
+
+// AddingRecords is thrown when an an error is encountered adding DNS record
+func AddingRecords(err error, domainName string, recordName string) error {
+	return fmt.Errorf("ErrorAddingRecords : record %s of %s\n%s", recordName, domainName, err.Error())
 }
 
 // UpdatingRecord is thrown when an an error is encountered updating a DNS record
