@@ -10,8 +10,8 @@ type Enum interface {
 }
 
 // InvalidStatusCode is when we recieve a bad status code from GoDaddy API
-func InvalidStatusCode(expectedStatus, gotStatus int, err error) error {
-	return fmt.Errorf("ErrorInvalidStatusCode : expected %d, got %d\n%s", expectedStatus, gotStatus, err.Error())
+func InvalidStatusCode(expectedStatus, gotStatus int, err string) error {
+	return fmt.Errorf("ErrorInvalidStatusCode : expected %d, got %d\n%s", expectedStatus, gotStatus, err)
 }
 
 // InvalidAPIVersion is the error you get when an incorrect Gateway version is privided within a config
