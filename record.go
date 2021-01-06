@@ -58,14 +58,38 @@ func (r records) FindByTypeAndName(ctx context.Context, t string, n string) ([]R
 	return readRecordListResponse(result)
 }
 
-func (r records) Update(ctx context.Context, rec Record) error {
-	url := "/domains/" + r.config.domainName + "/records/" + rec.Name
-	body, err := buildUpdateRecordRequest([]Record{rec}) // Must be []Record{} !!!
+func (r records) ReplaceByType(ctx context.Context, t string, rec []Record) error {
+	url := "/domains/" + r.config.domainName + "/records/" + t
+	body, err := buildUpdateRecordRequest(rec)
 	if err != nil {
-		return exception.UpdatingRecord(err, r.config.domainName, rec.Name)
+		return exception.AddingRecords(err, r.config.domainName, rec[0].Name)
 	}
-	if _, err = makeDo(ctx, r.config, http.MethodGet, url, body, 200); err != nil {
-		return exception.UpdatingRecord(err, r.config.domainName, rec.Name)
+	if _, err := makeDo(ctx, r.config, http.MethodPut, url, body, 200); err != nil {
+		return exception.AddingRecords(err, r.config.domainName, rec[0].Name)
+	}
+	return nil
+}
+
+func (r records) ReplaceByTypeAndName(ctx context.Context, t string, n string, rec []Record) error {
+	url := "/domains/" + r.config.domainName + "/records/" + t + "/" + n
+	body, err := buildUpdateRecordRequest(rec)
+	if err != nil {
+		return exception.AddingRecords(err, r.config.domainName, rec[0].Name)
+	}
+	if _, err := makeDo(ctx, r.config, http.MethodPut, url, body, 200); err != nil {
+		return exception.AddingRecords(err, r.config.domainName, rec[0].Name)
+	}
+	return nil
+}
+
+func (r records) Update(ctx context.Context, rec []Record) error {
+	url := "/domains/" + r.config.domainName + "/records"
+	body, err := buildUpdateRecordRequest(rec)
+	if err != nil {
+		return exception.UpdatingRecord(err, r.config.domainName, rec[0].Name)
+	}
+	if _, err = makeDo(ctx, r.config, http.MethodPut, url, body, 200); err != nil {
+		return exception.UpdatingRecord(err, r.config.domainName, rec[0].Name)
 	}
 	return nil
 }
