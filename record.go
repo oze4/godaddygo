@@ -95,8 +95,19 @@ func (r records) Update(ctx context.Context, rec []Record) error {
 }
 
 func (r records) Delete(ctx context.Context, rec Record) error {
-	/* return r.config.Delete("/domains/" + r.domain + "/records/" + rec.Name) */
-	return fmt.Errorf("records.Delete not implemented")
+	url := "/domains/" + r.config.domainName + "/records/" + rec.Type + "/" + rec.Name
+
+	switch RecordType(rec.Type) {
+	case RecordTypeA, RecordTypeAAAA, RecordTypeCNAME, RecordTypeMX, RecordTypeSRV, RecordTypeTXT:
+	default:
+		err = fmt.Errorf("unsupported DNS Record Type for deleting")
+		return exception.DeletingRecord(err, r.config.domainName, rec.Name, rec.Type)
+	}
+
+	if _, err := makeDo(ctx, r.config, http.MethodDelete, url, nil, 204); err != nil {
+		return exception.DeletingRecord(err, r.config.domainName, rec.Name, rec.Type)
+	}
+	return nil
 }
 
 func readRecordListResponse(r []byte) ([]Record, error) {
