@@ -100,7 +100,7 @@ func (r records) Delete(ctx context.Context, rec Record) error {
 	switch RecordType(rec.Type) {
 	case RecordTypeA, RecordTypeAAAA, RecordTypeCNAME, RecordTypeMX, RecordTypeSRV, RecordTypeTXT:
 	default:
-		err = fmt.Errorf("unsupported DNS Record Type for deleting")
+		err := fmt.Errorf("unsupported DNS Record Type for deleting")
 		return exception.DeletingRecord(err, r.config.domainName, rec.Name, rec.Type)
 	}
 
