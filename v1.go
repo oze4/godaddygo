@@ -1,10 +1,10 @@
 package godaddygo
 
 import (
-	"net/http"
 	"bytes"
 	"context"
 	"encoding/json"
+	"net/http"
 	"strconv"
 
 	"github.com/oze4/godaddygo/internal/exception"

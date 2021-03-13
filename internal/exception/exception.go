@@ -89,6 +89,11 @@ func UpdatingRecord(err error, domainName string, recordName string) error {
 	return fmt.Errorf("ErrorUpdatingRecord : record %s of %s\n%s", recordName, domainName, err.Error())
 }
 
+// DeletingRecord is thrown when an error is encountered deleting a DNS record
+func DeletingRecord(err error, domainName string, recordName string, recordType string) error {
+	return fmt.Errorf("ErrorDeletingRecord : type %s record %s of %s\n%s", recordType, recordName, domainName, err.Error())
+}
+
 // InvalidValue is thrown when an invalid value is being used for an "enum"
 func InvalidValue(message string) error {
 	return fmt.Errorf("invalid value : %s", message)
