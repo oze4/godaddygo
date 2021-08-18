@@ -145,6 +145,7 @@ Please see [here](https://developer.godaddygo.com/doc) for more information on G
   - [x] Get specific DNS record
   - [x] Set DNS record(s)
   - [x] Add/create DNS record(s)
+  - [x] Delete/remove DNS record(s)
   - [x] Purchase domain
   - [x] Purchase privacy for domain
   - [x] Remove privacy for domain
