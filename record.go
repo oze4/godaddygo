@@ -49,11 +49,15 @@ func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
 	return readRecordListResponse(result)
 }
 
-func (r records) FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error) {
-	url := "/domains/" + r.config.domainName + "/records/" + t + "/" + n
+func (r records) FindByTypeAndName(ctx context.Context, t RecordType, n string) ([]Record, error) {
+	if !t.IsValid() {
+		err := fmt.Errorf("error FindByTypeAndName : invalid record type")
+		return nil, exception.FindingRecordsByTypeAndName(err, r.config.domainName, t.String(), n)
+	}
+	url := "/domains/" + r.config.domainName + "/records/" + t.String() + "/" + n
 	result, err := makeDo(ctx, r.config, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, exception.FindingRecordsByTypeAndName(err, r.config.domainName, t, n)
+		return nil, exception.FindingRecordsByTypeAndName(err, r.config.domainName, t.String(), n)
 	}
 	return readRecordListResponse(result)
 }
@@ -70,14 +74,18 @@ func (r records) ReplaceByType(ctx context.Context, t string, rec []Record) erro
 	return nil
 }
 
-func (r records) ReplaceByTypeAndName(ctx context.Context, t string, n string, rec []Record) error {
-	url := "/domains/" + r.config.domainName + "/records/" + t + "/" + n
-	body, err := buildUpdateRecordRequest(rec)
+func (r records) ReplaceByTypeAndName(ctx context.Context, t RecordType, n string, recs []Record) error {
+	if !t.IsValid() {
+		err := fmt.Errorf("error ReplaceByTypeAndNane : invalid record type")
+		return exception.AddingRecords(err, r.config.domainName, recs[0].Name)
+	}
+	url := "/domains/" + r.config.domainName + "/records/" + t.String() + "/" + n
+	body, err := buildUpdateRecordRequest(recs)
 	if err != nil {
-		return exception.AddingRecords(err, r.config.domainName, rec[0].Name)
+		return exception.AddingRecords(err, r.config.domainName, recs[0].Name)
 	}
 	if _, err := makeDo(ctx, r.config, http.MethodPut, url, body, 200); err != nil {
-		return exception.AddingRecords(err, r.config.domainName, rec[0].Name)
+		return exception.AddingRecords(err, r.config.domainName, recs[0].Name)
 	}
 	return nil
 }

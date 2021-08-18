@@ -32,9 +32,9 @@ type Records interface {
 	List(ctx context.Context) ([]Record, error)
 	Add(ctx context.Context, rec []Record) error
 	FindByType(ctx context.Context, t string) ([]Record, error)
-	FindByTypeAndName(ctx context.Context, t string, n string) ([]Record, error)
+	FindByTypeAndName(ctx context.Context, t RecordType, n string) ([]Record, error)
 	ReplaceByType(ctx context.Context, t string, rec []Record) error
-	ReplaceByTypeAndName(ctx context.Context, t string, n string, rec []Record) error
+	ReplaceByTypeAndName(ctx context.Context, t RecordType, n string, rec []Record) error
 	Update(ctx context.Context, rec []Record) error
 	Delete(ctx context.Context, rec Record) error
 }
