@@ -18,8 +18,7 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
-        run: go fmt .
-
+      - run: go fmt .
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "chore(gh_action): : go fmt"
