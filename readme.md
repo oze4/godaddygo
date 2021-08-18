@@ -63,11 +63,12 @@ func main() {
 	// Get domain details
 	dom.GetDetails(ctx)
 	// Domain records
-	domRecs := myDomain.Records()
+	domRecs := dom.Records()
 	domRecs.List(ctx)
 	domRecs.Add(ctx, someDNSRecord)
 	domRecs.FindByType(ctx, godaddygo.RecordTypeA)
-	// View all domains for your account
+	
+        // View all domains for your account
 	godaddy.ListDomains(ctx)
 	// Check availability for domain
 	godaddy.CheckAvailability(ctx, "baz.bar")
@@ -114,11 +115,12 @@ func main() {
 	// Get domain details
 	dom.GetDetails(ctx)
 	// Domain records
-	domRecs := myDomain.Records()
+	domRecs := dom.Records()
 	domRecs.List(ctx)
 	domRecs.Add(ctx, someDNSRecord)
 	domRecs.FindByType(ctx, godaddygo.RecordTypeA)
-	// View all domains for your account
+	
+        // View all domains for your account
 	godaddy.ListDomains(ctx)
 	// Check availability for domain
 	godaddy.CheckAvailability(ctx, "baz.bar")
