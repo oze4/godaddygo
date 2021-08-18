@@ -137,7 +137,7 @@ fooRecs.FindByType(ctx, godaddygo.RecordTypeA)
 
 // Account related tasks
 
-  // View all domains for your account
+// View all domains for your account
 godaddy.ListDomains(ctx)
 // Check availability for domain you don't own
 godaddy.CheckAvailability(ctx, "fizz.buzz")
