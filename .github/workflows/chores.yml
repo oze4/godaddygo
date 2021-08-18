@@ -22,7 +22,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: format
-      - run: |
+        run: |
         go fmt .
 
       - name: commit formatted code
