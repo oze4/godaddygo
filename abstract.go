@@ -132,9 +132,9 @@ func (r RecordType) String() string {
 
 // IsDeletable determines if the given record can be deleted or not
 func (r RecordType) IsDeletable() bool {
-    switch r {
+	switch r {
 	case RecordTypeA, RecordTypeAAAA, RecordTypeCNAME, RecordTypeMX, RecordTypeSRV, RecordTypeTXT:
-        return true
+		return true
 	default:
 		return false
 	}
@@ -144,4 +144,3 @@ func (r RecordType) IsDeletable() bool {
 func (r RecordType) IsValid() bool {
 	return r.String() != ""
 }
-
