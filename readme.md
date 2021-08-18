@@ -14,7 +14,6 @@
 	- [Basic Usage](#basic-usage)
 	- [Custom Client](#custom-client)
 - [Extended Example](#extended-example)
-		- [Regardless of your client, how you actually use this package will be the same either way.](#regardless-of-your-client-how-you-actually-use-this-package-will-be-the-same-either-way)
 - [Features](#features)
 
 ---
