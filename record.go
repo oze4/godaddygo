@@ -66,8 +66,8 @@ func (r records) FindByTypeAndName(ctx context.Context, t RecordType, n string) 
 	return readRecordListResponse(result)
 }
 
-func (r records) ReplaceByType(ctx context.Context, t string, rec []Record) error {
-	url := "/domains/" + r.config.domainName + "/records/" + t
+func (r records) ReplaceByType(ctx context.Context, t RecordType, rec []Record) error {
+	url := "/domains/" + r.config.domainName + "/records/" + t.String()
 	body, err := buildUpdateRecordRequest(rec)
 	if err != nil {
 		return exception.AddingRecords(err, r.config.domainName, rec[0].Name)

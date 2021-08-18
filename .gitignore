@@ -9,3 +9,5 @@ bin/
 cmd/
 
 .DS_Store
+
+.env

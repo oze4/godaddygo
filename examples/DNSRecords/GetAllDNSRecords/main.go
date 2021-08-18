@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/oze4/godaddygo"
@@ -12,7 +13,7 @@ func main() {
 	prodSecret := "-"
 	targetDomain := "dom.com"
 	// Connect to production Gateway
-	api := godaddygo.ConnectProduction(prodKey, prodSecret)
+	api, _ := godaddygo.NewProduction(prodKey, prodSecret)
 	// Target version 1 of the production GoDaddy Gateway
 	prodv1 := api.V1()
 	// Set our domain
@@ -20,7 +21,7 @@ func main() {
 	// Target `records` for this domain
 	records := domain.Records()
 	// Get all records
-	dnsrecords, err := records.GetAll() // -> *[]DNSRecord
+	dnsrecords, err := records.List(context.Background())
 	if err != nil {
 		panic(err.Error())
 	}
