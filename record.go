@@ -95,17 +95,17 @@ func (r records) Update(ctx context.Context, rec []Record) error {
 }
 
 func (r records) Delete(ctx context.Context, rec Record) error {
-	url := "/domains/" + r.config.domainName + "/records/" + rec.Type + "/" + rec.Name
-
-	switch RecordType(rec.Type) {
-	case RecordTypeA, RecordTypeAAAA, RecordTypeCNAME, RecordTypeMX, RecordTypeSRV, RecordTypeTXT:
-	default:
-		err := fmt.Errorf("unsupported DNS Record Type for deleting")
-		return exception.DeletingRecord(err, r.config.domainName, rec.Name, rec.Type)
+	if !rec.Type.IsValid() {
+		err := fmt.Errorf("invalid record type")
+		return exception.DeletingRecord(err, r.config.domainName, rec.Name, rec.Type.String())
 	}
-
+	if !rec.Type.IsDeletable() {
+		err := fmt.Errorf("unsupported DNS Record Type for deleting")
+		return exception.DeletingRecord(err, r.config.domainName, rec.Name, rec.Type.String())
+	}
+	url := "/domains/" + r.config.domainName + "/records/" + rec.Type.String() + "/" + rec.Name
 	if _, err := makeDo(ctx, r.config, http.MethodDelete, url, nil, 204); err != nil {
-		return exception.DeletingRecord(err, r.config.domainName, rec.Name, rec.Type)
+		return exception.DeletingRecord(err, r.config.domainName, rec.Name, rec.Type.String())
 	}
 	return nil
 }
