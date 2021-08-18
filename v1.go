@@ -23,7 +23,7 @@ type v1 struct {
 
 // Domain targets domain endpoint
 func (v v1) Domain(name string) Domain {
-	 v.config.domainName = name
+	v.config.domainName = name
 	return newDomain(v.config)
 }
 
