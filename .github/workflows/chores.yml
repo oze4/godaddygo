@@ -11,21 +11,15 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: format code
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
-
-      - name: setup
       - uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
+        run: go fmt .
 
-      - name: format
-        run: |
-        go fmt .
-
-      - name: commit formatted code
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "chore(gh_action): : go fmt"
