@@ -1,10 +1,11 @@
 name: Chores
 
-push:
-  branches:
-    - master
-    - main
-  pull_request:
+on: 
+  push:
+    branches:
+      - master
+      - main
+    pull_request:
 
 jobs:
   format:
