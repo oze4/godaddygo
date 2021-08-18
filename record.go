@@ -40,11 +40,15 @@ func (r records) Add(ctx context.Context, rec []Record) error {
 	return nil
 }
 
-func (r records) FindByType(ctx context.Context, t string) ([]Record, error) {
-	url := "/domains/" + r.config.domainName + "/records/" + t
+func (r records) FindByType(ctx context.Context, t RecordType) ([]Record, error) {
+	if !t.IsValid() {
+		err := fmt.Errorf("error FindByType : invalid record type")
+		return nil, exception.FindingRecordsByType(err, r.config.domainName, t.String())
+	}
+	url := "/domains/" + r.config.domainName + "/records/" + t.String()
 	result, err := makeDo(ctx, r.config, http.MethodGet, url, nil, 200)
 	if err != nil {
-		return nil, exception.FindingRecordsByType(err, r.config.domainName, t)
+		return nil, exception.FindingRecordsByType(err, r.config.domainName, t.String())
 	}
 	return readRecordListResponse(result)
 }
