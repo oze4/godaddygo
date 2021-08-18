@@ -21,7 +21,7 @@ func (d domain) Records() Records {
 }
 
 func (d domain) GetDetails(ctx context.Context) (*DomainDetails, error) {
-	url := "/domains/" + d.config.domainName
+	 url := "/domains/" + d.config.domainName
 	result, err := makeDo(ctx, d.config, http.MethodGet, url, nil, 200)
 	if err != nil {
 		return nil, exception.GettingDomainDetails(err, d.config.domainName)
