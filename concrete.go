@@ -5,9 +5,6 @@ import (
 	"time"
 )
 
-//
-// Constants
-//
 const (
 	// Env variables - which godaddy api to target
 	APIProdEnv APIEnv = "prod"
@@ -38,10 +35,6 @@ const (
 	StatusActive    = "ACTIVE"
 	StatusCancelled = "CANCELLED"
 )
-
-//
-// Structs
-//
 
 // Config holds connection options. Use `.NewConfig` to create a new config
 type Config struct {
