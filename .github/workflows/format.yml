@@ -1,27 +1,5 @@
 name: Chores
 
-on:
-  push:
-    branches:
-      - master
-      - main
-  pull_request:
-
-jobs:
-  format:
-    name: checkout
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-      with:
-        fetch-depth: 0
-    - name: format
-      uses: sladyn98/auto-go-format@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-name: Chores
-
 push:
   branches:
     - master
