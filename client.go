@@ -18,7 +18,7 @@ func makeDo(ctx context.Context, config *Config, method, path string, body io.Re
 		return nil, exception.InvalidValue("urlBase value not allowed")
 	}
 
-	 version := config.version.String()
+	version := config.version.String()
 	urlBase := config.baseURL.String()
 	fullURL := urlBase + "/" + version + path
 
