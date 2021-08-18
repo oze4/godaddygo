@@ -11,16 +11,15 @@ import (
 
 // makeDo makes an http.Request and sends it
 func makeDo(ctx context.Context, config *Config, method, path string, body io.Reader, expectStatus int) ([]byte, error) {
-	version := config.version.String()
-	if version == "" {
+	if !config.version.IsValid() {
 		return nil, exception.InvalidValue("version value not allowed")
 	}
-
-	urlBase := config.baseURL.String()
-	if urlBase == "" {
+	if !config.baseURL.IsValid() {
 		return nil, exception.InvalidValue("urlBase value not allowed")
 	}
 
+	version := config.version.String()
+	urlBase := config.baseURL.String()
 	fullURL := urlBase + "/" + version + path
 
 	req, err := http.NewRequest(method, fullURL, body)
@@ -38,12 +37,14 @@ func makeDo(ctx context.Context, config *Config, method, path string, body io.Re
 		return nil, exception.SendingRequest(err)
 	}
 	if resp.StatusCode != expectStatus {
+		// Get error message, if any, from body
 		strerr, err := copyAndCloseBody(resp.Body)
 		if err != nil {
 			strerr = []byte(err.Error())
 		}
 		return nil, exception.InvalidStatusCode(expectStatus, resp.StatusCode, string(strerr))
 	}
+
 	return copyAndCloseBody(resp.Body)
 }
 

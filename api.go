@@ -5,13 +5,12 @@ import (
 )
 
 func newAPI(config *Config) (api, error) {
-	switch config.env {
-	case APIProdEnv:
-		config.baseURL = prodbaseURL
-	case APIDevEnv:
-		config.baseURL = devbaseURL
-	default:
+	if !config.env.IsValid() {
 		return api{}, exception.InvalidAPIEnv(nil)
+	}
+	config.baseURL = prodbaseURL
+	if config.env == APIDevEnv {
+		config.baseURL = devbaseURL
 	}
 	return api{config}, nil
 }

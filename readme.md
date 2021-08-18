@@ -6,13 +6,14 @@
 
 # Table of Contents
 
-- [Intro](#intro)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Basic](#basic-usage)
-  - [Custom Client](#custom-client)
-- [Examples](https://github.com/oze4/godaddygo/tree/master/examples)
-- [Features](#features)
+- [godaddygo](#godaddygo)
+- [Table of Contents](#table-of-contents)
+	- [Intro](#intro)
+	- [Installation](#installation)
+	- [Usage](#usage)
+		- [Basic Usage](#basic-usage)
+		- [Custom Client](#custom-client)
+	- [Features](#features)
 
 ---
 
@@ -58,14 +59,21 @@ func main() {
 	godaddy := api.V1() 
 
 	// Now have access to all GoDaddy production V1 Gateway endpoints (via `godaddy`)
+  dom := godaddy.Domain("foo.bar")
+	// Get domain details
+	dom.GetDetails(ctx)
+	// Domain records
+	domRecs := myDomain.Records()
+	domRecs.List(ctx)
+	domRecs.Add(ctx, someDNSRecord)
+	domRecs.FindByType(ctx, godaddygo.RecordTypeA)
+	// View all domains for your account
+	godaddy.ListDomains(ctx)
+	// Check availability for domain
+	godaddy.CheckAvailability(ctx, "baz.bar")
+	// Purchase domain
+	godaddy.Purchase(ctx, myNewDomain)
 
-	// eg: godaddy.Domain("xyz.com").Records().List(ctx)
-	//     godaddy.Domain("xyz.com").Records().Add(ctx, someDNSRecord)
-	//     godaddy.Domain("xyz.com").Records().FindByType(ctx, godaddygo.RecordTypeA)
-	//     godaddy.Domain("xyz.com").GetDetails(ctx)
-	//     godaddy.ListDomains(ctx)
-	//     godaddy.CheckAvailability(ctx, "dom.com")
-	//     godaddy.Purchase(ctx, someDomain)
 	// etc...
 }
 ```

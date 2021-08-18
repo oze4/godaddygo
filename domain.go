@@ -8,11 +8,6 @@ import (
 	"github.com/oze4/godaddygo/internal/exception"
 )
 
-const (
-	StatusActive    = "ACTIVE"
-	StatusCancelled = "CANCELLED"
-)
-
 func newDomain(config *Config) domain {
 	return domain{config}
 }
