@@ -13,23 +13,25 @@
 - [Usage](#usage)
 	- [Basic Usage](#basic-usage)
 	- [Custom Client](#custom-client)
+- [Extended Example](#extended-example)
+		- [Regardless of your client, how you actually use this package will be the same either way.](#regardless-of-your-client-how-you-actually-use-this-package-will-be-the-same-either-way)
 - [Features](#features)
 
 ---
 
 # Intro
 
- - See [here](#features) for more on which features this package currently supports
- - Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddygo.com/doc)
+- See [here](#features) for more on which features this package currently supports
+- Whenever we reference endpoints, [this is what we are referring to](https://developer.godaddygo.com/doc)
 
-<br /> 
+<br />
 
 <small>Pull requests welcome! We would like to eventually support each GoDaddy Gateway endpoint, not just domain/DNS related tasks</small>
 
 # Installation
 
- - `go get -u github.com/oze4/godaddygo`
- - See [here](https://developer.godaddygo.com/) for more on how to obtain an Gateway key and Gateway secret from GoDaddy (click 'Gateway Keys')
+- `go get -u github.com/oze4/godaddygo`
+- See [here](https://developer.godaddygo.com/) for more on how to obtain an Gateway key and Gateway secret from GoDaddy (click 'Gateway Keys')
 
 # Usage
 
@@ -54,28 +56,13 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	
-	// Target version 1 of production API
-	godaddy := api.V1() 
 
-	// Now have access to all GoDaddy production V1 Gateway endpoints (via `godaddy`)
-	dom := godaddy.Domain("foo.bar")
-	// Get domain details
-	dom.GetDetails(ctx)
-	// Domain records
-	domRecs := dom.Records()
-	domRecs.List(ctx)
-	domRecs.Add(ctx, someDNSRecord)
-	domRecs.FindByType(ctx, godaddygo.RecordTypeA)
-	
-        // View all domains for your account
-	godaddy.ListDomains(ctx)
-	// Check availability for domain
-	godaddy.CheckAvailability(ctx, "baz.bar")
-	// Purchase domain
-	godaddy.Purchase(ctx, myNewDomain)
+	// Target version 1 of the production API
+	godaddy := api.V1()
 
-	// etc...
+	//
+	// See `Extended Example` section below for more
+	//
 }
 ```
 
@@ -94,7 +81,7 @@ func main() {
 	key := "<your_key>"
 	secret := "<your_secret>"
 	// Target production API (godaddygo.APIDevEnv | godaddygo.APIProdEnv)
-	target := godaddygo.APIProdEnv 
+	target := godaddygo.APIProdEnv
 
 	// Build new config
 	myConfig := godaddygo.NewConfig(key, secret, target)
@@ -110,25 +97,55 @@ func main() {
 	// Target version 1 of the production API
 	godaddy := api.V1()
 
-	// Now have access to all GoDaddy production V1 Gateway endpoints (via `godaddy`)
-	dom := godaddy.Domain("foo.bar")
-	// Get domain details
-	dom.GetDetails(ctx)
-	// Domain records
-	domRecs := dom.Records()
-	domRecs.List(ctx)
-	domRecs.Add(ctx, someDNSRecord)
-	domRecs.FindByType(ctx, godaddygo.RecordTypeA)
-	
-        // View all domains for your account
-	godaddy.ListDomains(ctx)
-	// Check availability for domain
-	godaddy.CheckAvailability(ctx, "baz.bar")
-	// Purchase domain
-	godaddy.Purchase(ctx, myNewDomain)
-
-	// etc...
+	//
+	// See `Extended Example` section below for more
+	//
 }
+```
+
+# Extended Example
+
+### Regardless of your client, how you actually use this package will be the same either way.
+
+```go
+/* We are continuing from within `main()`
+ * ... pretend code from above is here,
+ * regardless of your client */
+
+// We now have access to "all" GoDaddy production
+// version 1 gateway endpoints (via `godaddy`)
+
+// !! the following is pseudo code !!
+
+foo := godaddy.Domain("foo.com")
+bar := godaddy.Domain("bar.com")
+// ...more domains...
+
+// Get domain details
+foo.GetDetails(ctx)
+bar.GetDetails(ctxtwo)
+
+// Anything you can do with `foo`
+// you can do with `bar`
+
+// Domain records
+fooRecs := foo.Records()
+// Do stuff with records
+fooRecs.List(ctx)
+fooRecs.Add(ctx, someDNSRecord)
+fooRecs.FindByType(ctx, godaddygo.RecordTypeA)
+
+// Account related tasks
+
+  // View all domains for your account
+godaddy.ListDomains(ctx)
+// Check availability for domain you don't own
+godaddy.CheckAvailability(ctx, "fizz.buzz")
+// Purchase domain (this hasn't been tested - it should use the card you have on file)
+// I'm not sure what happens when you don't have a card on file =/ lmk
+godaddy.Purchase(ctx, myNewDomain)
+
+// etc...
 ```
 
 # Features
