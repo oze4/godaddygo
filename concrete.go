@@ -13,7 +13,7 @@ const (
 
 	// URLs representation of env variable
 	prodbaseURL APIURL = "https://api.godaddy.com"
-	 devbaseURL         = "https://api.ote-godaddy.com"
+	devbaseURL         = "https://api.ote-godaddy.com"
 
 	// Allowed API Versions - which version of the godaddy api to target
 	APIVersion1 APIVersion = "v1"
