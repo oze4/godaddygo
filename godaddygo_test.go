@@ -12,7 +12,7 @@ import (
 )
 
 type creds struct {
-	Key string
+	Key    string
 	Secret string
 }
 
@@ -23,7 +23,7 @@ func getKeySecretFromEnvVars() (*creds, error) {
 	}
 
 	return &creds{
-		Key: os.Getenv("GODADDY_API_KEY"),
+		Key:    os.Getenv("GODADDY_API_KEY"),
 		Secret: os.Getenv("GODADDY_API_SECRET"),
 	}, nil
 }
