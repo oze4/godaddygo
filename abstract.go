@@ -39,6 +39,14 @@ type Records interface {
 	Delete(ctx context.Context, rec Record) error
 }
 
+// Consent is needed when purhasing a domain
+type Consent interface {
+	Agree(yesIAmSure bool) error
+	AgreedAt() string
+	AgreedBy() string
+	AgreementKeys() ([]string, error)
+}
+
 //
 // APIEnv represents which endpoint to target (dev|prod)
 //

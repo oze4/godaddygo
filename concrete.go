@@ -75,14 +75,8 @@ type DomainDetails struct {
 	Verifications          Verifications `json:"verifications,omitempty"`
 }
 
-// Consent is needed when purhasing a domain
-type Consent struct {
-	AgreedAt      string   `json:"agreedAt,omitempty"`
-	AgreedBy      string   `json:"agreedBy,omitempty"`
-	AgreementKeys []string `json:"agreementKeys,omitempty"`
-}
-
 // Contact defines the details of a contact
+// Contact.Phone should be in the following format : "+1.9993335555"
 type Contact struct {
 	AddressMailing AddressMailing `json:"addressMailing,omitempty"`
 	Email          string         `json:"email,omitempty"`

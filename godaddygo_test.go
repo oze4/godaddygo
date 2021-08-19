@@ -46,11 +46,6 @@ func setupTests() {
 	}
 	gd := api.V1()
 	ctx := context.Background()
-	consent := Consent{
-		AgreedAt: time.Now().Format(time.RFC3339),
-		AgreedBy: "Me",
-		AgreementKeys: []string{},
-	}
 	address := AddressMailing{
 		Address: "123 road",
 		City: "city",
@@ -67,6 +62,10 @@ func setupTests() {
 		Organization: "xyzOrg",
 		AddressMailing: address,
 	}
+
+	consent := NewConsent(time.Now().Format(time.RFC3339), "me")
+	consent.Agree(true)
+
 	purchReq := PurchaseRequest{
 		Consent: consent,
 		ContactAdmin: contact,
