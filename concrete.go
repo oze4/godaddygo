@@ -75,17 +75,24 @@ type DomainDetails struct {
 	Verifications          Verifications `json:"verifications,omitempty"`
 }
 
+// Consent is needed when purhasing a domain
+type Consent struct {
+	AgreedAt      string   `json:"agreedAt,omitempty"`
+	AgreedBy      string   `json:"agreedBy,omitempty"`
+	AgreementKeys []string `json:"agreementKeys,omitempty"`
+}
+
 // Contact defines the details of a contact
 type Contact struct {
-	AddressMailing AddressMailing
-	Email          string
-	Fax            string
-	JobTitle       string
-	NameFirst      string
-	NameLast       string
-	NameMiddle     string
-	Organization   string
-	Phone          string
+	AddressMailing AddressMailing `json:"addressMailing,omitempty"`
+	Email          string         `json:"email,omitempty"`
+	Fax            string         `json:"fax,omitempty"`
+	JobTitle       string         `json:"jobTitle,omitempty"`
+	NameFirst      string         `json:"nameFirst,omitempty"`
+	NameLast       string         `json:"nameLast,omitempty"`
+	NameMiddle     string         `json:"nameMiddle,omitempty"`
+	Organization   string         `json:"organization,omitempty"`
+	Phone          string         `json:"phone,omitempty"`
 }
 
 // AddressMailing defines a mailing address
@@ -116,7 +123,7 @@ type RealName struct {
 
 // DomainName defines a domain name
 type DomainName struct {
-	Status string
+	Status string `json:"status,omitempty"`
 }
 
 // Record defines a DNS record
@@ -134,21 +141,21 @@ type Record struct {
 
 // DomainSummary is what gets returned when listing all of your domains
 type DomainSummary struct {
-	CreatedAt              time.Time
-	Domain                 string
-	DomainID               int
-	ExpirationProtected    bool
-	Expires                time.Time
-	ExposeWhois            bool
-	HoldRegistrar          bool
-	Locked                 bool
-	NameServers            []string
-	Privacy                bool
-	RenewAuto              bool
-	Renewable              bool
-	Status                 string
-	TransferAwayEligibleAt time.Time
-	TransferProtected      bool
+	CreatedAt              time.Time `json:"createdAt,omitempty"`
+	Domain                 string    `json:"domain,omitempty"`
+	DomainID               int       `json:"domainId,omitempty"`
+	ExpirationProtected    bool      `json:"expirationProtected,omitempty"`
+	Expires                time.Time `json:"expires,omitempty"`
+	ExposeWhois            bool      `json:"exposeWhois,omitempty"`
+	HoldRegistrar          bool      `json:"holdRegistrar,omitempty"`
+	Locked                 bool      `json:"locked,omitempty"`
+	NameServers            []string  `json:"nameServers,omitempty"`
+	Privacy                bool      `json:"privacy,omitempty"`
+	RenewAuto              bool      `json:"renewAuto,omitempty"`
+	Renewable              bool      `json:"renewable,omitempty"`
+	Status                 string    `json:"status,omitempty"`
+	TransferAwayEligibleAt time.Time `json:"transferAwayEligibleAt,omitempty"`
+	TransferProtected      bool      `json:"transferProtected,omitempty"`
 }
 
 // DomainAvailability holds data about domain availability
@@ -159,4 +166,23 @@ type DomainAvailability struct {
 	Domain     string `json:"domain,omitempty"`
 	Period     int    `json:"period,omitempty"`
 	Price      int    `json:"price,omitempty"`
+}
+
+// PurchaseRequest is needed when purchasing a domain
+type PurchaseRequest struct {
+	Consent           Consent  `json:"consent,omitempty"`
+	ContactAdmin      Contact  `json:"contactAdmin,omitempty"`
+	ContactBilling    Contact  `json:"contactBilling,omitempty"`
+	ContactRegistrant Contact  `json:"contactRegistrant,omitempty"`
+	ContactTech       Contact  `json:"contactTech,omitempty"`
+	Domain            string   `json:"domain,omitempty"`
+	NameServers       []string `json:"nameServers,omitempty"`
+	Period            int      `json:"period,omitempty"`    // Min 1, Max 10, Default 1
+	Privacy           bool     `json:"privacy,omitempty"`   // Default false
+	RenewAuto         bool     `json:"renewAuto,omitempty"` // Default true
+}
+
+// IsValidPeriod determines if given PurchaseRequest contains a valid Period
+func (p PurchaseRequest) IsValidPeriod() bool {
+	return p.Period >= 1 && p.Period <= 10
 }

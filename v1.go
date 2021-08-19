@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -48,14 +49,14 @@ func (v v1) CheckAvailability(ctx context.Context, name string, forTransfer bool
 }
 
 // PurchaseDomain purchases a domain
-func (v v1) PurchaseDomain(ctx context.Context, dom DomainDetails) error {
-	d, err := buildPurchaseDomainRequest(dom)
+func (v v1) PurchaseDomain(ctx context.Context, p PurchaseRequest) error {
+	d, err := buildPurchaseDomainRequest(p)
 	if err != nil {
 		return err
 	}
-	url := "/domains/" + v.config.domainName + "/purchase"
+	url := "/domains/purchase"
 	if _, err := makeDo(ctx, v.config, http.MethodPost, url, d, 200); err != nil {
-		return exception.PurchasingDomain(err, v.config.domainName)
+		return exception.PurchasingDomain(err, p.Domain)
 	}
 	return nil
 }
@@ -79,8 +80,11 @@ func readListDomainsResponse(r []byte) ([]DomainSummary, error) {
 }
 
 // buildPurchaseDomainRequest marshals domain details object and returns it as a byte.Buffer
-func buildPurchaseDomainRequest(dom DomainDetails) (*bytes.Buffer, error) {
-	domBytes, err := json.Marshal(dom)
+func buildPurchaseDomainRequest(p PurchaseRequest) (*bytes.Buffer, error) {
+	if !p.IsValidPeriod() {
+		return nil, fmt.Errorf("invalid Period provided : min 1 max 10")
+	}
+	domBytes, err := json.Marshal(p)
 	if err != nil {
 		return nil, err
 	}

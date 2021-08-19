@@ -15,7 +15,7 @@ type V1 interface {
 	Domain(name string) Domain
 	ListDomains(ctx context.Context) ([]DomainSummary, error)
 	CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error)
-	PurchaseDomain(ctx context.Context, dom DomainDetails) error
+	PurchaseDomain(ctx context.Context, p PurchaseRequest) error
 }
 
 // V2 knows how to interact with GoDaddy Gateway version 2

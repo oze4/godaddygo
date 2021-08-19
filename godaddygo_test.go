@@ -3,12 +3,19 @@ package godaddygo
 import (
 	"context"
 	"fmt"
+	"time"
+
 	// "net/http"
 	"os"
 	// "reflect"
 	"testing"
 
 	"github.com/joho/godotenv"
+)
+
+// Constants
+const (
+	EnvReadFailure string = "unable to read env vars"
 )
 
 type creds struct {
@@ -23,15 +30,70 @@ func getKeySecretFromEnvVars() (*creds, error) {
 	}
 
 	return &creds{
-		Key: os.Getenv("GODADDY_API_KEY"),
-		Secret: os.Getenv("GODADDY_API_SECRET"),
+		Key: os.Getenv("GODADDY_OTE_API_KEY"),
+		Secret: os.Getenv("GODADDY_OTE_API_SECRET"),
 	}, nil
+}
+
+func setupTests() {
+	c, e := getKeySecretFromEnvVars()
+	if e != nil {
+		panic(EnvReadFailure)
+	}
+	api, err := NewDevelopment(c.Key, c.Secret)
+	if err != nil {
+		panic(err)
+	}
+	gd := api.V1()
+	ctx := context.Background()
+	consent := Consent{
+		AgreedAt: time.Now().Format(time.RFC3339),
+		AgreedBy: "Me",
+		AgreementKeys: []string{},
+	}
+	address := AddressMailing{
+		Address: "123 road",
+		City: "city",
+		PostalCode: "11111",
+		Country: "US",
+		State: "CA",
+	}
+	contact := Contact{
+		NameFirst: "Firstname",
+		NameLast: "Lastname",
+		Email: "fl@doesntexist.com",
+		JobTitle: "title",
+		Phone: "+1.8323350311",
+		Organization: "xyzOrg",
+		AddressMailing: address,
+	}
+	purchReq := PurchaseRequest{
+		Consent: consent,
+		ContactAdmin: contact,
+		ContactBilling: contact,
+		ContactRegistrant: contact,
+		ContactTech: contact,
+		Domain: "test.com",
+		Period: 1,
+		Privacy: false,
+		RenewAuto: false,
+	}
+
+	purchErr := gd.PurchaseDomain(ctx, purchReq)
+	if purchErr != nil {
+		panic(purchErr)
+	}
+	fmt.Println()
+}
+
+func TestSetup(t *testing.T) {
+	setupTests()
 }
 
 func TestHelloWorld(t *testing.T) {
 	_, e := getKeySecretFromEnvVars()
 	if e != nil {
-		t.Fatalf("unable to read env vars")
+		t.Fatalf(EnvReadFailure)
 	}
 }
 
