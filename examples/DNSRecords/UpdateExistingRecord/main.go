@@ -21,9 +21,14 @@ func main() {
 	// Target `records` for this domain
 	records := domain.Records()
 	// Update existing record
-	if err := records.SetValue("A", "echo", "1.2.3.4"); err != nil {
-		panic(err.Error())
+	recordToUpdate := godaddygo.Record{
+		Name: "echo",
+		Type: godaddygo.RecordTypeA,
+		Data: "1.2.3.4",
+		TTL: 360,
 	}
-
+	if err := records.Update(context.Background(), []godaddygo.Record{recordToUpdate}); err != nil {
+		panic("Unable to update record : " + err.Error())
+	}
 	fmt.Println("Success! Updated record")
 }
