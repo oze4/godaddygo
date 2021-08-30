@@ -4,6 +4,12 @@ import (
 	"github.com/oze4/godaddygo/internal/exception"
 )
 
+// API knows which version to target
+type API interface {
+	V1() V1
+	V2() V2
+}
+
 func newAPI(config *Config) (api, error) {
 	if !config.env.IsValid() {
 		return api{}, exception.InvalidAPIEnv(nil)

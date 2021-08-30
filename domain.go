@@ -8,6 +8,12 @@ import (
 	"github.com/oze4/godaddygo/internal/exception"
 )
 
+// Domain knows how to interact with the Domains GoDaddy Gateway endpoint
+type Domain interface {
+	Records() Records
+	GetDetails(ctx context.Context) (*DomainDetails, error)
+}
+
 func newDomain(config *Config) domain {
 	return domain{config}
 }

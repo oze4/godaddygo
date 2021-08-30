@@ -1,5 +1,8 @@
 package godaddygo
 
+// V2 knows how to interact with GoDaddy Gateway version 2
+type V2 interface{}
+
 // newV2 is for internal convenience
 func newV2(config *Config) v2 {
 	config.version = APIVersion2

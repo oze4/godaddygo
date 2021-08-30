@@ -44,8 +44,10 @@ func setupTests() {
 	if err != nil {
 		panic(err)
 	}
+
 	gd := api.V1()
 	ctx := context.Background()
+
 	address := AddressMailing{
 		Address: "123 road",
 		City: "city",
@@ -53,6 +55,7 @@ func setupTests() {
 		Country: "US",
 		State: "CA",
 	}
+
 	contact := Contact{
 		NameFirst: "Firstname",
 		NameLast: "Lastname",
@@ -78,11 +81,11 @@ func setupTests() {
 		RenewAuto: false,
 	}
 
-	purchErr := gd.PurchaseDomain(ctx, purchReq)
+	receipt, purchErr := gd.PurchaseDomain(ctx, purchReq)
 	if purchErr != nil {
 		panic(purchErr)
 	}
-	fmt.Println()
+	fmt.Println(receipt)
 }
 
 func TestSetup(t *testing.T) {

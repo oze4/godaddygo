@@ -30,15 +30,26 @@ SOFTWARE.
 
 
 PURCHASE A DOMAIN AT YOUR OWN RISK!!!
- */
+*/
+
+// Consent is needed when purhasing a domain
+type Consent interface {
+	Agree(yesIAmSure bool) error
+	AgreedAt() string
+	AgreedBy() string
+	AgreementKeys() ([]string, error)
+}
 
 // NewConsent begins the agreement process
 // Per GoDaddy, `agreedAt` must be in `iso-datetime` format (RFC3339)
-func NewConsent(agreedAt, agreedBy string) Consent {
+func newConsent(agreedAt, agreedBy string, privacy, forTransfer bool, tlds []string) Consent {
 	return &consent{
 		isAgreed: false,
 		agreedAt: agreedAt,
 		agreedBy: agreedBy,
+		privacy: privacy,
+		forTransfer: forTransfer,
+		tlds: tlds,
 	}
 }
 
@@ -47,6 +58,9 @@ type consent struct {
 	agreedBy      string
 	agreementKeys []string
 	isAgreed      bool
+	privacy       bool
+	forTransfer   bool
+	tlds []string
 }
 
 func (c *consent) Agree(yesIAmSure bool) error {
@@ -72,4 +86,8 @@ func (c *consent) AgreementKeys() ([]string, error) {
 		return nil, fmt.Errorf("you must call `Consent.Agree(bool)` before we can get your agreement documents")
 	}
 	return c.agreementKeys, nil
+}
+
+func buildDomainAgreementKeysRequest(c consent, cfg *Config) {
+
 }

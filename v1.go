@@ -11,6 +11,14 @@ import (
 	"github.com/oze4/godaddygo/internal/exception"
 )
 
+// V1 knows how to interact with GoDaddy Gateway version 1
+type V1 interface {
+	Domain(name string) Domain
+	ListDomains(ctx context.Context) ([]DomainSummary, error)
+	CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error)
+	PurchaseDomain(ctx context.Context, p PurchaseRequest) (PurchaseReceipt, error)
+}
+
 // newV1 is for internal convenience
 func newV1(config *Config) v1 {
 	config.version = APIVersion1
@@ -20,6 +28,10 @@ func newV1(config *Config) v1 {
 // v1 implements V1
 type v1 struct {
 	config *Config
+}
+
+func (v v1) Consent(agreedAt, agreedBy string, privacy, forTransfer bool, tlds []string) Consent {
+	return newConsent(agreedAt, agreedBy, privacy, forTransfer, tlds)
 }
 
 // Domain targets domain endpoint
@@ -49,16 +61,16 @@ func (v v1) CheckAvailability(ctx context.Context, name string, forTransfer bool
 }
 
 // PurchaseDomain purchases a domain
-func (v v1) PurchaseDomain(ctx context.Context, p PurchaseRequest) error {
+func (v v1) PurchaseDomain(ctx context.Context, p PurchaseRequest) (PurchaseReceipt, error) {
 	d, err := buildPurchaseDomainRequest(p)
 	if err != nil {
-		return err
+		return PurchaseReceipt{}, err
 	}
 	url := "/domains/purchase"
 	if _, err := makeDo(ctx, v.config, http.MethodPost, url, d, 200); err != nil {
-		return exception.PurchasingDomain(err, p.Domain)
+		return PurchaseReceipt{}, exception.PurchasingDomain(err, p.Domain)
 	}
-	return nil
+	return PurchaseReceipt{}, nil
 }
 
 // readCheckAvailabilityResponse reads the response for checking domain availability

@@ -1,55 +1,38 @@
 package godaddygo
 
-import (
-	"context"
+// This is a comment so my IDE quits complaining to me
+const (
+	// Env variables - which godaddy api to target
+	APIProdEnv APIEnv = "prod"
+	APIDevEnv         = "dev"
+
+	// URLs representation of env variable
+	prodbaseURL APIURL = "https://api.godaddy.com"
+	devbaseURL         = "https://api.ote-godaddy.com"
+
+	// Allowed API Versions - which version of the godaddy api to target
+	APIVersion1 APIVersion = "v1"
+	APIVersion2            = "v2"
+
+	// DNS record types
+	RecordTypeA     RecordType = "A"
+	RecordTypeAAAA             = "AAAA"
+	RecordTypeCNAME            = "CNAME"
+	RecordTypeMX               = "MX"
+	RecordTypeNS               = "NS"
+	RecordTypeSOA              = "SOA"
+	RecordTypeSRV              = "SRV"
+	RecordTypeTXT              = "TXT"
+
+	// Domain statuses (added "Domain" prefix to legacy constants)
+	DomainStatusActive    = "ACTIVE"
+	DomainStatusCancelled = "CANCELLED"
+	// Legacy Domain statuses (to support rename)
+	StatusActive    = "ACTIVE"
+	StatusCancelled = "CANCELLED"
 )
 
-// API knows which version to target
-type API interface {
-	V1() V1
-	V2() V2
-}
-
-// V1 knows how to interact with GoDaddy Gateway version 1
-type V1 interface {
-	Domain(name string) Domain
-	ListDomains(ctx context.Context) ([]DomainSummary, error)
-	CheckAvailability(ctx context.Context, name string, forTransfer bool) (DomainAvailability, error)
-	PurchaseDomain(ctx context.Context, p PurchaseRequest) error
-}
-
-// V2 knows how to interact with GoDaddy Gateway version 2
-type V2 interface{}
-
-// Domain knows how to interact with the Domains GoDaddy Gateway endpoint
-type Domain interface {
-	Records() Records
-	GetDetails(ctx context.Context) (*DomainDetails, error)
-}
-
-// Records knows how to interact with the Records GoDaddy Gateway endpoint
-type Records interface {
-	List(ctx context.Context) ([]Record, error)
-	Add(ctx context.Context, rec []Record) error
-	FindByType(ctx context.Context, t RecordType) ([]Record, error)
-	FindByTypeAndName(ctx context.Context, t RecordType, n string) ([]Record, error)
-	ReplaceByType(ctx context.Context, t RecordType, rec []Record) error
-	ReplaceByTypeAndName(ctx context.Context, t RecordType, n string, rec []Record) error
-	Update(ctx context.Context, rec []Record) error
-	Delete(ctx context.Context, rec Record) error
-}
-
-// Consent is needed when purhasing a domain
-type Consent interface {
-	Agree(yesIAmSure bool) error
-	AgreedAt() string
-	AgreedBy() string
-	AgreementKeys() ([]string, error)
-}
-
-//
 // APIEnv represents which endpoint to target (dev|prod)
-//
 type APIEnv string
 
 func (e APIEnv) String() string {
@@ -68,9 +51,7 @@ func (e APIEnv) IsValid() bool {
 	return e.String() != ""
 }
 
-//
 // APIVersion represents which endpoint version to target (v1|v2)
-//
 type APIVersion string
 
 func (v APIVersion) String() string {
@@ -89,9 +70,7 @@ func (v APIVersion) IsValid() bool {
 	return v.String() != ""
 }
 
-//
 // APIURL represents which URL to target
-//
 type APIURL string
 
 func (u APIURL) String() string {
@@ -110,9 +89,7 @@ func (u APIURL) IsValid() bool {
 	return u.String() != ""
 }
 
-//
 // RecordType represents a DNS record type
-//
 type RecordType string
 
 func (r RecordType) String() string {
