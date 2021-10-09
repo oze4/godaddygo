@@ -30,7 +30,7 @@
 # Installation
 
 - `go get -u github.com/oze4/godaddygo`
-- See [here](https://developer.godaddygo.com/) for more on how to obtain an Gateway key and Gateway secret from GoDaddy (click 'Gateway Keys')
+- See [here](https://developer.godaddy.com/) for more on how to obtain an Gateway key and Gateway secret from GoDaddy (click 'Gateway Keys')
 
 # Usage
 
