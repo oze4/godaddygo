@@ -78,23 +78,25 @@ func (r records) ReplaceByType(ctx context.Context, t RecordType, rec []Record) 
 	return nil
 }
 
-func (r records) ReplaceByTypeAndName(ctx context.Context, t RecordType, n string, recs []Record) error {
+func (r records) ReplaceByTypeAndName(ctx context.Context, t RecordType, n string, newRecord Record) error {
 	if !t.IsValid() {
 		err := fmt.Errorf("error ReplaceByTypeAndNane : invalid record type")
-		return exception.AddingRecords(err, r.config.domainName, recs[0].Name)
+		return exception.AddingRecords(err, r.config.domainName, newRecord.Name)
 	}
 	url := "/domains/" + r.config.domainName + "/records/" + t.String() + "/" + n
-	body, err := buildUpdateRecordRequest(recs)
+	body, err := buildUpdateRecordRequest([]Record{newRecord})
 	if err != nil {
-		return exception.AddingRecords(err, r.config.domainName, recs[0].Name)
+		return exception.AddingRecords(err, r.config.domainName, newRecord.Name)
 	}
 	if _, err := makeDo(ctx, r.config, http.MethodPut, url, body, 200); err != nil {
-		return exception.AddingRecords(err, r.config.domainName, recs[0].Name)
+		return exception.AddingRecords(err, r.config.domainName, newRecord.Name)
 	}
 	return nil
 }
 
 func (r records) Update(ctx context.Context, rec []Record) error {
+	return fmt.Errorf("not implemented : please use ReplaceByTypeAndName instead")
+	/*
 	url := "/domains/" + r.config.domainName + "/records"
 	body, err := buildUpdateRecordRequest(rec)
 	if err != nil {
@@ -104,6 +106,7 @@ func (r records) Update(ctx context.Context, rec []Record) error {
 		return exception.UpdatingRecord(err, r.config.domainName, rec[0].Name)
 	}
 	return nil
+	*/
 }
 
 func (r records) Delete(ctx context.Context, rec Record) error {

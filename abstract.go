@@ -34,7 +34,7 @@ type Records interface {
 	FindByType(ctx context.Context, t RecordType) ([]Record, error)
 	FindByTypeAndName(ctx context.Context, t RecordType, n string) ([]Record, error)
 	ReplaceByType(ctx context.Context, t RecordType, rec []Record) error
-	ReplaceByTypeAndName(ctx context.Context, t RecordType, n string, rec []Record) error
+	ReplaceByTypeAndName(ctx context.Context, t RecordType, n string, rec Record) error
 	Update(ctx context.Context, rec []Record) error
 	Delete(ctx context.Context, rec Record) error
 }

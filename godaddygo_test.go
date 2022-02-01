@@ -55,6 +55,52 @@ func TestDomainDetails(t *testing.T) {
 	}
 }
 
+func TestRecordFindByType(t *testing.T) {
+	c, e := getKeySecretFromEnvVars()
+	if e != nil {
+		t.Fatalf("unable to read env vars")
+	}
+	api, err := NewProduction(c.Key, c.Secret)
+	if err != nil {
+		t.Fatalf("error during NewDevelopment call : %s", err)
+	}
+	gd := api.V1()
+	dom := gd.Domain("ostrike.com")
+	recs := dom.Records()
+	results, err := recs.FindByType(context.Background(), RecordTypeA)
+	if err != nil {
+		t.Fatalf("error in TestRecordFindByType : %s", err)
+	}
+	for _, result := range results {
+		t.Log(result)
+	}
+}
+
+func TestRecordReplaceByTypeAndName(t *testing.T) {
+	c, e := getKeySecretFromEnvVars()
+	if e != nil {
+		t.Fatalf("unable to read env vars")
+	}
+	api, err := NewProduction(c.Key, c.Secret)
+	if err != nil {
+		t.Fatalf("error during NewDevelopment call : %s", err)
+	}
+	gd := api.V1()
+	dom := gd.Domain("ostrike.com")
+	recs := dom.Records()
+	newrecord := Record{
+		Data: "1.0.0.0",
+	}
+	if err := recs.ReplaceByTypeAndName(context.Background(), RecordTypeA, "echo", newrecord); err != nil {
+		t.Fatalf("error in TestRecordReplaceByTypeAndName : %s", err)
+	}
+	reccheck, err := recs.FindByTypeAndName(context.Background(), RecordTypeA, "echo")
+	if err != nil {
+		t.Fatalf("error in TestRecordReplaceByTypeAndName : %s", err)
+	}
+	t.Log(reccheck)
+}
+
 /*
 func TestNewConfig(t *testing.T) {
 	type args struct {

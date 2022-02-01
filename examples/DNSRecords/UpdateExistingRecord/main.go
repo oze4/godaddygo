@@ -9,9 +9,9 @@ import (
 
 func main() {
 	// Your info...
-	prodKey := "// your prod key"
-	prodSecret := "// your prod secret"
-	targetDomain := "dom.com"
+	prodKey := "-"
+	prodSecret := "-"
+	targetDomain := "-"
 	// Connect to production Gateway
 	api, _ := godaddygo.NewProduction(prodKey, prodSecret)
 	// Target version 1 of the production GoDaddy Gateway
@@ -19,16 +19,15 @@ func main() {
 	// Set our domain
 	domain := prodv1.Domain(targetDomain)
 	// Target `records` for this domain
-	records := domain.Records()
+	recs := domain.Records()
 	// Update existing record
-	recordToUpdate := godaddygo.Record{
-		Name: "echo",
-		Type: godaddygo.RecordTypeA,
-		Data: "1.2.3.4",
-		TTL: 360,
+	newrecord := godaddygo.Record{
+		Data: "1.1.0.0",
 	}
-	if err := records.Update(context.Background(), []godaddygo.Record{recordToUpdate}); err != nil {
-		panic("Unable to update record : " + err.Error())
+	existingRecordName := "-"
+	existingRecordType := godaddygo.RecordTypeA
+	if err := recs.ReplaceByTypeAndName(context.Background(), existingRecordType, existingRecordName, newrecord); err != nil {
+		fmt.Printf("error in TestRecordReplaceByTypeAndName : %s\n", err)
 	}
-	fmt.Println("Success! Updated record")
+	fmt.Println("success!")
 }
