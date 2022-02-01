@@ -97,15 +97,15 @@ func (r records) ReplaceByTypeAndName(ctx context.Context, t RecordType, n strin
 func (r records) Update(ctx context.Context, rec []Record) error {
 	return fmt.Errorf("not implemented : please use ReplaceByTypeAndName instead")
 	/*
-	url := "/domains/" + r.config.domainName + "/records"
-	body, err := buildUpdateRecordRequest(rec)
-	if err != nil {
-		return exception.UpdatingRecord(err, r.config.domainName, rec[0].Name)
-	}
-	if _, err = makeDo(ctx, r.config, http.MethodPut, url, body, 200); err != nil {
-		return exception.UpdatingRecord(err, r.config.domainName, rec[0].Name)
-	}
-	return nil
+		url := "/domains/" + r.config.domainName + "/records"
+		body, err := buildUpdateRecordRequest(rec)
+		if err != nil {
+			return exception.UpdatingRecord(err, r.config.domainName, rec[0].Name)
+		}
+		if _, err = makeDo(ctx, r.config, http.MethodPut, url, body, 200); err != nil {
+			return exception.UpdatingRecord(err, r.config.domainName, rec[0].Name)
+		}
+		return nil
 	*/
 }
 
